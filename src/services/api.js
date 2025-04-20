@@ -1,6 +1,7 @@
 import axiosInstance from "../config/axios_conf";
 
 // Hotel APIs
+export const getAllHotels = () => axiosInstance.get("/hotels/");
 export const createHotel = (data) => axiosInstance.post("/hotels/create/", data);
 export const updateHotel = (id, data) => axiosInstance.put(`/hotels/update/${id}/`, data);
 export const getHotelDetail = (id) => axiosInstance.get(`/hotels/detail/${id}/`);
@@ -8,6 +9,7 @@ export const deleteHotel = (id) => axiosInstance.delete(`/hotels/delete/${id}/`)
 export const filterHotelsByStars = (stars) => axiosInstance.get(`/hotels/hotelfilter/${stars}/`);
 
 // Room APIs
+export const getAllRooms = () => axiosInstance.get("/hotels/roomlist/");
 export const createRoom = (data) => axiosInstance.post("/hotels/roomcreate/", data);
 export const updateRoom = (id, data) => axiosInstance.put(`/hotels/roomupdate/${id}/`, data);
 export const deleteRoom = (id) => axiosInstance.delete(`/hotels/roomdelete/${id}/`);
@@ -33,6 +35,7 @@ export const deleteNotification = (id) => axiosInstance.delete(`/hotels/notifica
 export const sendConfirmEmail = (data) => axiosInstance.post("/hotels/send-email/", data);
 
 // Reviews APIs
+export const getAllReviews = () => axiosInstance.get("/reviews/");
 export const createReview = (data) => axiosInstance.post("/reviews/create/", data);
 export const getReviewDetail = (id) => axiosInstance.get(`/reviews/details/${id}/`);
 export const getHotelReviews = (hotelId) => axiosInstance.get(`/reviews/hotelsreviews/${hotelId}/`);
