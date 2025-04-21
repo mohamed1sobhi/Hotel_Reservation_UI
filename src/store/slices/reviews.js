@@ -7,7 +7,7 @@ export const fetchReviews = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllReviews();
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Fetch Reviews Error:', error);
       return rejectWithValue(error.response?.data?.message || "Something went wrong");
@@ -21,7 +21,7 @@ export const addReview = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await createReview(data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Create Review Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to create review");
@@ -35,7 +35,7 @@ export const fetchReviewDetail = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await getReviewDetail(id);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Fetch Review Detail Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch review details");
@@ -49,7 +49,7 @@ export const fetchHotelReviews = createAsyncThunk(
   async (hotelId, { rejectWithValue }) => {
     try {
       const response = await getHotelReviews(hotelId);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Fetch Hotel Reviews Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch hotel reviews");

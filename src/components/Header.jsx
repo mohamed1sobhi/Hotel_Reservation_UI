@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import  LogoutButton  from "./logout";
+import { useEffect } from "react";
 const Header = () => {
     return (
     <nav className="navbar navbar-expand-lg p-3 border shadow-sm ">
@@ -28,10 +30,13 @@ const Header = () => {
                     <Link className="nav-link fw-bold text-dark" aria-current="page" to="/">Rooms</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link fw-bold text-dark " to="/">Offers</Link>
+                    <Link className="nav-link fw-bold text-dark " to="/register">Register</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link fw-bold text-dark btn px-3" style={{background:"#E8DFD5"}} aria-disabled="true">Login</Link>
+                            <LogoutButton />
+                    </li>
+                    <li className="nav-item">
+                            <Link className="nav-link fw-bold text-dark btn px-3" style={{background:"#E8DFD5"}} to="/login" aria-disabled="true">Login</Link>
                     </li>
                 </ul>
             </div>

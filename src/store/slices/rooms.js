@@ -14,7 +14,7 @@ export const fetchRooms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllRooms();
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Fetch Rooms Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch rooms");
@@ -28,7 +28,7 @@ export const addRoom = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await createRoom(data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Create Room Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to create room");
@@ -42,7 +42,7 @@ export const editRoom = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     try {
       const response = await updateRoom(id, data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Update Room Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to update room");
@@ -70,7 +70,7 @@ export const fetchRoomDetail = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await getRoomDetail(id);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Fetch Room Detail Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch room details");
@@ -84,7 +84,7 @@ export const filterRooms = createAsyncThunk(
   async (roomType, { rejectWithValue }) => {
     try {
       const response = await filterRoomsByType(roomType);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Filter Rooms Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to filter rooms");

@@ -7,7 +7,7 @@ export const addBooking = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await createBooking(data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Create Booking Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to create booking");
@@ -21,7 +21,7 @@ export const fetchBookingDetail = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await getBookingDetail(id);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Fetch Booking Detail Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch booking detail");
