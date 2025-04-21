@@ -1,5 +1,4 @@
 import AllHotels from "../components/allHotels";
-import AllReviews from "../components/allReviews";
 import AllRooms from "../components/allRooms";
 import Header from "../components/Common/Header";
 function Home() {
