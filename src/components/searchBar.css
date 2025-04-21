@@ -1,0 +1,10 @@
+/* CustomStyles.css */
+.custom-form-control {
+    box-shadow: 0 0 4px #E8DFD5; /* example: red shadow */
+    border: 1px solid #ccc; /* optional, just to match bootstrap style */
+  }
+  
+  .custom-form-control:focus {
+    box-shadow: 0 0 0 3px #E8DFD5;
+    border-color:#e8ddd0;
+  }
