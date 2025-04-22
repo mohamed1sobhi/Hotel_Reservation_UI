@@ -9,7 +9,7 @@ function Home() {
             <Search />
             <AllHotels />
             <AllRooms />
-            <AllReviews />
+            {/* <AllReviews /> */}
         </div>
     );
 }

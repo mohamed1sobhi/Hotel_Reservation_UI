@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews } from '../../store/slices/reviews';
 import { Link } from 'react-router-dom';
-import Header from '../../components/Common/Header';
+import Header from '../../components/Header';
 // import Footer from '../../components/Common/Footer';
 // import Loader from '../../components/Common/Loader';
 

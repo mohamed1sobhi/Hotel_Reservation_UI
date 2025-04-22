@@ -18,7 +18,7 @@ const Header = () => {
                     <Link className="nav-link fw-bold text-dark " to="#">Hotels</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link fw-bold text-dark " aria-disabled="true">About Us</Link>
+                    <Link className="nav-link fw-bold text-dark " aria-disabled="true" to="/about">About Us</Link>
                     </li>
                 </ul>
                 <div className="text-center">
