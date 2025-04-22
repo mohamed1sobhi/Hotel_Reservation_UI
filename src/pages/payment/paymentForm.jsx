@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPayment } from './redux/slices/payments';
+import { addPayment } from '../../store/slices/payments';
 
 const CreatePayment = () => {
   const dispatch = useDispatch();

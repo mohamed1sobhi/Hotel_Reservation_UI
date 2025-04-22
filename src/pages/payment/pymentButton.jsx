@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { processSinglePayment } from './redux/slices/payments';
+import { processSinglePayment } from '../../store/slices/payments';
 
 const ProcessPayment = ({ paymentId }) => {
   const dispatch = useDispatch();
