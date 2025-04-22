@@ -4,7 +4,6 @@ import { fetchReviews } from '../../store/slices/reviews';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 
-
 const ReviewList = () => {
   const dispatch = useDispatch();
   const { reviews, loading, error } = useSelector((state) => state.reviews);
