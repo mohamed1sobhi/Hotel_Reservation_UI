@@ -8,6 +8,10 @@ import HotelReviews from './pages/Review/HotelReviews';
 import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
 import RegisterUserForm from './pages/register';
+import CreatePayment from './pages/payment/PaymentForm';
+import PaymentsList from './pages/payment/paymentList';
+import PaymentSettings from './pages/payment/paymentSettings';
+import 
 
 function App() {
 

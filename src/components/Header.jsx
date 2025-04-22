@@ -15,10 +15,10 @@ const Header = () => {
                     <Link className="nav-link fw-bold text-dark " aria-current="page" to="/">Home</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link fw-bold text-dark " to="#">Hotels</Link>
+                    <Link className="nav-link fw-bold text-dark " to="/contact">Contact Us</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link fw-bold text-dark " aria-disabled="true">About Us</Link>
+                    <Link className="nav-link fw-bold text-dark " aria-disabled="true" to="/about">About Us</Link>
                     </li>
                 </ul>
                 <div className="text-center">
@@ -27,7 +27,7 @@ const Header = () => {
                 </div>
                 <ul className="navbar-nav p-2 gap-5">
                     <li className="nav-item">
-                    <Link className="nav-link fw-bold text-dark" aria-current="page" to="/">Rooms</Link>
+                    <Link className="nav-link fw-bold text-dark" aria-current="page" to="/reviews">Reviews</Link>
                     </li>
                     <li className="nav-item">
                     <Link className="nav-link fw-bold text-dark " to="/register">Register</Link>
