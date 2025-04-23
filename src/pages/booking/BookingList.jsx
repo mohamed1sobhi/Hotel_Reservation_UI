@@ -71,7 +71,7 @@ const BookingsList = () => {
                     <button
                       className="btn btn-sm d-flex align-items-center justify-content-center fw-bold"
                       style={{ backgroundColor: '#CD9A5E', color: 'white', flex: 1 }}
-                      onClick={() => navigate(`/booking/${booking.id}`)}
+                      onClick={() => navigate(`/my-bookings/${booking.id}`)}
                     >
                       <FaEye className="me-2" /> View
                     </button>
@@ -85,7 +85,7 @@ const BookingsList = () => {
                         opacity: ['confirmed', 'cancelled'].includes(booking.status) ? 0.6 : 1,
                         cursor: ['confirmed', 'cancelled'].includes(booking.status) ? 'not-allowed' : 'pointer'
                       }}
-                      onClick={() => navigate(`/bookings/${booking.id}/edit`)}
+                      onClick={() => navigate(`/my-bookings/${booking.id}/edit`)}
                       disabled={['confirmed', 'cancelled'].includes(booking.status)}
                     >
                       <FaEdit className="me-2" /> Edit

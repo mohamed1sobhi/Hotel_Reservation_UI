@@ -1,91 +1,108 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateBooking, fetchBookingDetail } from '../../store/slices/booking';  // Import the update action
 import axios from 'axios';
 import { FaCalendarAlt, FaDoorOpen } from 'react-icons/fa';
 
 const EditBooking = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = localStorage.getItem('access');
-  const user = localStorage.getItem('user'); // Or wherever your user data is stored
+  const user = JSON.parse(localStorage.getItem('user')); // Assuming user is stored as a JSON string
+
+  const selectedBooking = useSelector((state) => state.bookings.selectedBooking);
+  const loading = useSelector((state) => state.bookings.loading);
+  const error = useSelector((state) => state.bookings.error);
 
   const [formData, setFormData] = useState({
     check_in: '',
     check_out: '',
     room: '',
   });
-  const [rooms, setRooms] = useState([]);
-  const [errors, setErrors] = useState([]);
+
   const [statusError, setStatusError] = useState('');
-  const [bookingNotFound, setBookingNotFound] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [errors, setErrors] = useState([]); // Define the errors state
 
   useEffect(() => {
     if (!token || !user) {
-        console.log('User not logged in, redirecting to login...');
-        navigate('/login');
+      console.log('User not logged in, redirecting to login...');
+      navigate('/login');
     }
 
-    axios.get(`/api/bookings/${id}/`)
-      .then(res => {
-        const data = res.data;
-        if (data.user !== user) {
-          // Check if the logged-in user matches the booking user
-          setStatusError("⚠️ You cannot edit this booking. It's not your booking.");
-        } else if (['confirmed', 'cancelled'].includes(data.status)) {
-          setStatusError("⛔ Cannot edit a confirmed or cancelled booking.");
-        } else {
-          setFormData({
-            check_in: data.check_in,
-            check_out: data.check_out,
-            room: data.room,
-          });
-        }
-      })
-      .catch(() => setStatusError("⚠️ Failed to load booking."));
+    dispatch(fetchBookingDetail(id));  // Fetch the booking details when component mounts
 
     axios.get('/api/rooms/')
-      .then(res => setRooms(res.data));
-  }, [id, user, navigate]);
+      .then(res => setRooms(res.data))
+      .catch((err) => console.log("Failed to load rooms", err));
+  }, [id, user, token, navigate, dispatch]);
 
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (selectedBooking) {
+      if (selectedBooking.user !== user.id) {
+        setStatusError("⚠️ You cannot edit this booking. It's not your booking.");
+      } else if (['confirmed', 'cancelled'].includes(selectedBooking.status)) {
+        setStatusError("⛔ Cannot edit a confirmed or cancelled booking.");
+      } else {
+        setFormData({
+          check_in: selectedBooking.check_in,
+          check_out: selectedBooking.check_out,
+          room: selectedBooking.room.id,  // Assuming room has an id
+        });
+      }
+    }
+  }, [selectedBooking, user]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors([]);
-    axios.put(`/api/bookings/${id}/`, formData)
-      .then(() => navigate('/bookings'))
-      .catch(err => {
+
+    const updatedData = {
+      check_in: formData.check_in,
+      check_out: formData.check_out,
+      room: formData.room,
+    };
+
+    // Dispatch update booking action
+    dispatch(updateBooking({ id, data: updatedData }))
+      .then(() => {
+        navigate('/bookings');  // Redirect after successful update
+      })
+      .catch((err) => {
         const data = err.response?.data;
         if (typeof data === 'string') {
-          setErrors([data]);
+          setErrors([data]); // Set the error messages
         } else if (typeof data === 'object') {
           const messages = Object.values(data).flat();
-          setErrors(messages);
+          setErrors(messages); // Handle object errors
         } else {
-          setErrors(['Update failed. Please check your inputs.']);
+          setErrors(['Update failed. Please check your inputs.']); // General error
         }
       });
   };
 
+  if (loading) return <p>Loading...</p>;
   if (statusError) {
     return (
+      console.log(user),
+      console.log(selectedBooking),
+      console.log(selectedBooking.user),
       <div className="container text-center mt-5">
         <div className="alert alert-danger">{statusError}</div>
       </div>
     );
   }
-
-  if (bookingNotFound) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="alert alert-warning">
-          <p>No booking available to edit. Please check your booking details.</p>
-        </div>
-      </div>
-    );
-  }
+  if (error) return <p>Error: {error}</p>;
+  
 
   return (
     <div className="container py-5" style={{ backgroundColor: '#F4EFE6', minHeight: '100vh' }}>
@@ -113,7 +130,7 @@ const EditBooking = () => {
                   type="date"
                   name="check_in"
                   value={formData.check_in}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className="form-control"
                   required
                 />
@@ -127,7 +144,7 @@ const EditBooking = () => {
                   type="date"
                   name="check_out"
                   value={formData.check_out}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className="form-control"
                   required
                 />
@@ -140,12 +157,12 @@ const EditBooking = () => {
                 <select
                   name="room"
                   value={formData.room}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className="form-select"
                   required
                 >
                   <option value="">-- Select Room --</option>
-                  {rooms.map(room => (
+                  {Array.isArray(rooms) && rooms.map(room => (
                     <option key={room.id} value={room.id}>
                       {room.name} – ${room.price_per_night}/night
                     </option>

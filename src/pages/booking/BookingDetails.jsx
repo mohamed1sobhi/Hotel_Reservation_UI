@@ -1,55 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { deleteBooking } from '../../store/slices/booking';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBookingDetail, deleteBooking } from '../../store/slices/booking';
 import { FaCalendarAlt, FaArrowRight, FaTrash, FaEdit, FaMoneyBillWave, FaCheckCircle } from 'react-icons/fa';
 import { format } from 'date-fns';
 
 const BookingDetails = () => {
   const { id } = useParams();
-  const [booking, setBooking] = useState(null);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  // Redux states for booking and loading/error
+  const booking = useSelector((state) => state.bookings.selectedBooking);
+  const loading = useSelector((state) => state.bookings.loading);
+  const error = useSelector((state) => state.bookings.error);
+
   const token = localStorage.getItem('access');
   const user = localStorage.getItem('user'); // Or wherever your user data is stored
 
   useEffect(() => {
     if (!token || !user) {
-        console.log('User not logged in, redirecting to login...');
-        navigate('/login');
+      console.log('User not logged in, redirecting to login...');
+      navigate('/login');
+    } else {
+      dispatch(fetchBookingDetail(id)); // Dispatch Redux action to fetch booking detail
     }
-    else {
-      axios.get(`/api/bookings/${id}/`)
-        .then(res => setBooking(res.data))
-        .catch(() => setError('Failed to load booking details'));
-    }
-  }, [id, navigate]);
+  }, [id, navigate, dispatch, token, user]);
 
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete this booking?')) {
       dispatch(deleteBooking(id));
-      navigate('/bookings');
+      navigate('/my-bookings');
     }
   };
 
   const calculateNights = () => {
+    if (!booking) return 0;
     const start = new Date(booking.check_in);
     const end = new Date(booking.check_out);
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
+
+  if (loading) {
+    return <div className="text-center mt-4">Loading...</div>;
+  }
 
   if (error) {
     return <div className="alert alert-danger text-center mt-4">{error}</div>;
   }
 
   if (!booking) {
-    return <div className="text-center mt-4">Loading...</div>;
+    return <div className="text-center mt-4">Booking not found</div>;
   }
 
-  const formattedCheckInDate = format(new Date(booking.check_in), 'MMM dd, yyyy');
-  const formattedCheckOutDate = format(new Date(booking.check_out), 'MMM dd, yyyy');
+  const formattedCheckInDate = booking.check_in
+    ? format(new Date(booking.check_in), 'MMM dd, yyyy')
+    : 'Invalid date';
+
+  const formattedCheckOutDate = booking.check_out
+    ? format(new Date(booking.check_out), 'MMM dd, yyyy')
+    : 'Invalid date';
 
   return (
     <div className="container py-5" style={{ fontFamily: 'Segoe UI, sans-serif' }}>
@@ -104,7 +114,7 @@ const BookingDetails = () => {
             <button
               className="btn text-white flex-fill"
               style={{ backgroundColor: '#CD9A5E' }}
-              onClick={() => navigate(`/bookings/${id}/edit`)}
+              onClick={() => navigate(`/my-bookings/${id}/edit`)}
             >
               <FaEdit className="me-2" />Edit Booking
             </button>
@@ -112,10 +122,11 @@ const BookingDetails = () => {
             <button
               className="btn text-white flex-fill"
               style={{ backgroundColor: '#B45F3A' }}
-              onClick={handleDelete}
+              onClick={() => handleDelete(booking.id)}
             >
               <FaTrash className="me-2" />Delete Booking
             </button>
+            
           </div>
         </div>
       </div>
