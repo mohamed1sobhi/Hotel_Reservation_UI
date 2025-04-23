@@ -13,6 +13,10 @@ import RegisterUserForm from './pages/register';
 import CreatePayment from './pages/payment/PaymentForm';
 import PaymentsList from './pages/payment/paymentList';
 import PaymentSettings from './pages/payment/paymentSettings';
+import AddBooking from './pages/booking/AddBooking';
+import BookingsList from './pages/booking/BookingList';
+import BookingDetails from './pages/booking/BookingDetails.jsx';
+import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
 
 function App() {
@@ -21,7 +25,7 @@ function App() {
   return (
 
 <div className="d-flex flex-column min-vh-100">
-  <main className="flex-grow-1">
+  <main className="flex-grow-1 mb-5">
     {
     <BrowserRouter>
      <Routes>
@@ -33,6 +37,10 @@ function App() {
      <Route path="/reviews" element={<ReviewList />} />
      <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
      <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
+     <Route path="/booking" element={<AddBooking />} />
+     <Route path="/my-bookings" element={<BookingsList />} />
+     <Route path="/booking/:id" element={<BookingDetails />} />
+     <Route path="/bookings/:id/edit" element={<EditBooking />} />
    </Routes>
    </BrowserRouter>
     }
