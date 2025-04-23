@@ -42,8 +42,22 @@ export const getHotelReviews = (hotelId) => axiosInstance.get(`/reviews/hotelsre
 
 
 // Bookings APIs
-export const createBooking = (data) => axiosInstance.post("/bookings/create/", data);
-export const getBookingDetail = (id) => axiosInstance.get(`/bookings/details/${id}/`);
+// Create a new booking
+export const createBooking = (data) => axiosInstance.post("/bookings/", data);
+
+// Get all bookings
+export const getAllBookings = () => axiosInstance.get("/bookings/");
+
+// Get booking detail
+export const getBookingDetail = (id) => axiosInstance.get(`/bookings/${id}/`);
+
+// Update a booking
+export const updateBooking = (id, data) => axiosInstance.put(`/bookings/${id}/`, data);
+
+// Delete a booking
+export const deleteBooking = (id) => axiosInstance.delete(`/bookings/${id}/`);
+
+
 
 
 // Get all payments
