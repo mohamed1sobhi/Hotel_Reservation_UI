@@ -47,10 +47,10 @@ export const getBookingDetail = (id) => axiosInstance.get(`/bookings/details/${i
 
 
 // Get all payments
-export const getAllPayments = () => axiosInstance.get("/payments/");
+export const getAllPayments = () => axiosInstance.get("/payments/create");
 
 // Create a new payment
-export const createPayment = (data) => axiosInstance.post("/payments/", data);
+export const createPayment = (data) => axiosInstance.post("/payments/create", data);
 
 // Get single payment by id
 export const getPayment = (id) => axiosInstance.get(`/payments/${id}/`);

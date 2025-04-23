@@ -1,5 +1,6 @@
 // src/components/Search.jsx
 import React, { useState } from "react";
+import "./searchBar.css"; // Assuming you have a CSS file for styling
 
 const Search = ({ hotels, setFilteredHotels }) => {
   const [searchTerm, setSearchTerm] = useState("");

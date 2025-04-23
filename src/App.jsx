@@ -8,9 +8,7 @@ import HotelReviews from './pages/Review/HotelReviews';
 import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
 import RegisterUserForm from './pages/register';
-import CreatePayment from './pages/payment/paymentForm';
-import PaymentsList from './pages/payment/paymentList';
-import PaymentSettings from './pages/payment/paymentSettings';
+import BookingForm from './pages/booking/create';
 
 function App() {
 
@@ -26,6 +24,7 @@ function App() {
       <Route path="/reviews" element={<ReviewList />} />
       <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
       <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
+      <Route path="/booking" element={<BookingForm />} />
     </Routes>
     </BrowserRouter>
       
