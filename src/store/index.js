@@ -7,6 +7,7 @@ import BookingsReducer from './slices/booking';
 import PaymentReducer from './slices/payments';
 import ImageReducer from './slices/images';
 import AccountReducer from './slices/accounts';
+import roomImagesReducer from "./slices/room_images";
 // import registerReducer from './slices/register';
 
 const store = configureStore({
@@ -19,6 +20,7 @@ const store = configureStore({
     payments: PaymentReducer,
     images: ImageReducer,
     accounts: AccountReducer,
+    roomImages: roomImagesReducer,
   },
 });
 

@@ -1,7 +1,10 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+ 
+import React, {useEffect} from 'react'
 import Home from './pages/Home'
+import All_hotels from  './pages/Hotel/All_hotels'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
@@ -18,10 +21,11 @@ import BookingsList from './pages/booking/BookingList';
 import BookingDetails from './pages/booking/BookingDetails.jsx';
 import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
+import RoomsPage from './pages/Hotel/Rooms'
 
 function App() {
 
-
+      
   return (
 
 <div className="d-flex flex-column min-vh-100">
@@ -41,6 +45,8 @@ function App() {
      <Route path="/my-bookings" element={<BookingsList />} />
      <Route path="/my-bookings/:id" element={<BookingDetails />} />
      <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
+     <Route path='/hotels' element={< All_hotels />} ></Route>
+    <Route path="/hotels/:hotelId/rooms" element={<RoomsPage/>} />
    </Routes>
    </BrowserRouter>
     }
