@@ -37,10 +37,10 @@ function App() {
      <Route path="/reviews" element={<ReviewList />} />
      <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
      <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
-     <Route path="/booking" element={<AddBooking />} />
+     <Route path="/bookings" element={<AddBooking />} />
      <Route path="/my-bookings" element={<BookingsList />} />
-     <Route path="/booking/:id" element={<BookingDetails />} />
-     <Route path="/bookings/:id/edit" element={<EditBooking />} />
+     <Route path="/my-bookings/:id" element={<BookingDetails />} />
+     <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
    </Routes>
    </BrowserRouter>
     }
