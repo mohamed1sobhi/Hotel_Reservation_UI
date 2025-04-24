@@ -9,6 +9,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import ReviewList from './pages/Review/ReviewList';
+import ReviewDetail from './pages/Review/ReviewDetail';
 import HotelReviews from './pages/Review/HotelReviews';
 import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
@@ -41,6 +42,7 @@ function App() {
      <Route path="/about" element={<AboutUs />} />
      <Route path="/contact" element={<ContactUs />} />
      <Route path="/reviews" element={<ReviewList />} />
+     <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
      <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
      <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
      <Route path="/bookings" element={<AddBooking />} />

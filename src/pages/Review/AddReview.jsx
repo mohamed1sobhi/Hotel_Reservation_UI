@@ -16,10 +16,10 @@ const AddReview = () => {
   const [formData, setFormData] = useState({
     hotel: hotelId,
     rating: 5,
-    // title: '',
+    title: '',    
     comment: '',
-    // user_name: '', 
-    // stay_date: ''
+    user_name: '',  
+    stay_date: ''   
   });
 
   useEffect(() => {
@@ -27,6 +27,7 @@ const AddReview = () => {
       const fetchHotelData = async () => {
         try {
           const hotelData = await getHotelDetail(hotelId);
+          console.log('Hotel data received:', hotelData); 
           setHotel(hotelData);
         } catch (err) {
           console.error('Error fetching hotel:', err);
@@ -50,12 +51,22 @@ const AddReview = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!formData.user_name || !formData.title || !formData.comment || !formData.stay_date) {
+      alert('Please fill all required fields');
+      return;
+    }
+    
+    const payload = {
+      ...formData,
+      hotel: hotelId,  
+    };
+    
     try {
-      await dispatch(addReview(formData)).unwrap();
+      await dispatch(addReview(payload)).unwrap();
       navigate(`/hotels/${hotelId}/reviews`);
     } catch (err) {
       console.error('Failed to submit review:', err);
-      console.error('Error details:', err.response?.data); // Log the error details
+      alert('Failed to submit review. Please try again later.');
     }
   };
   
@@ -79,7 +90,7 @@ const AddReview = () => {
     return stars;
   };
 
-//   if (hotelLoading) return <Loader />;
+  // if (hotelLoading) return <Loader />;
 
   return (
     <div style={{ backgroundColor: '#F9F5F1', minHeight: '100vh' }}>
@@ -285,7 +296,6 @@ const AddReview = () => {
           </div>
         </form>
       </div>
-      {/* <Footer /> */}
     </div>
   );
 };

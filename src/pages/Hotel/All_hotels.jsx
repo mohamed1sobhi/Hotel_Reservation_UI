@@ -229,6 +229,9 @@ console.log("hotels", hotels);
                     <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/createimage/${hotel.id}`)}>
                       add image
                     </button>
+                    <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/hotels/${hotel.id}/reviews`)}>
+                      view reviews
+                    </button>
                   </div>
 
                   <div className="card-footer d-flex justify-content-between align-items-center">
