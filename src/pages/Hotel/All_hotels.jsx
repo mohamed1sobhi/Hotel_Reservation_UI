@@ -6,11 +6,14 @@ import { Star, Map, Phone, Calendar, Search } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 import HotelFormModal from "../../components/HotelFormModal";
 import { useNavigate } from "react-router-dom";
-
+import {fetchRooms } from '../../store/slices/rooms';
+import { fetchRoomsByHotel } from '../../store/slices/rooms';
+  
 export default function HotelListingPage() {
   const dispatch = useDispatch();
   const { hotels, loading: hotelsLoading, error: hotelsError } = useSelector(state => state.hotels);
   const { images, loading: imagesLoading } = useSelector(state => state.images);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStars, setFilterStars] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,9 +26,12 @@ export default function HotelListingPage() {
 
   useEffect(() => {
     dispatch(fetchHotels());
+    // dispatch(fetchRooms());
+    // dispatch(fetchRoomsByHotel(4));
     dispatch(fetchImages());
   }, [dispatch]);
-
+  console.log("images", images);
+console.log("hotels", hotels);
   const handleStarFilter = (stars) => {
     setFilterStars(stars);
     dispatch(filterHotels(stars));
@@ -68,7 +74,7 @@ export default function HotelListingPage() {
         })
         .catch((error) => {
           console.error("Error updating hotel:", error);
-          alert("Failed to update hotel. Please try again.");
+          alert(error);
         });
     } else {
       dispatch(addHotel(formData))
@@ -78,7 +84,7 @@ export default function HotelListingPage() {
         })
         .catch((error) => {
           console.error("Error adding hotel:", error);
-          alert("Failed to add hotel. Please try again.");
+          alert(error);
         });
     }
     setShowModal(false);
@@ -178,7 +184,7 @@ export default function HotelListingPage() {
                 <div className="card h-100 shadow-sm">
                   {mainImage && (
                     <img
-                      src={`http://127.0.0.1:8000${mainImage}`}
+                      src={`http://127.0.0.1:8000${mainImage}/`}
                       alt={hotel.name}
                       className="card-img-top"
                       style={{ objectFit: 'cover', height: '200px' }}
@@ -192,22 +198,22 @@ export default function HotelListingPage() {
 
                   <div className="card-body">
                     <h5 className="card-title fw-bold">{hotel.name}</h5>
-                    <p className="card-text text-muted mb-1">
+                    {/* <p className="card-text text-muted mb-1">
                       <Map size={16} className="me-2" />
                       {hotel.location}
-                    </p>
+                    </p> */}
                     {hotel.phone && (
                       <p className="card-text text-muted mb-1">
                         <Phone size={16} className="me-2" />
                         {hotel.phone}
                       </p>
                     )}
-                    {hotel.availability && (
+                    {/* {hotel.availability && (
                       <p className="card-text text-muted">
                         <Calendar size={16} className="me-2" />
                         {hotel.availability === "available" ? "Available now" : hotel.availability}
                       </p>
-                    )}
+                    )} */}
                     <button
                       className="btn btn-sm btn-warning me-2"
                       onClick={() => handleEditHotel(hotel)}
@@ -219,6 +225,9 @@ export default function HotelListingPage() {
                       onClick={() => handleDeleteHotel(hotel.id)}
                     >
                       Delete
+                    </button>
+                    <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/createimage/${hotel.id}`)}>
+                      add image
                     </button>
                   </div>
 
@@ -233,7 +242,7 @@ export default function HotelListingPage() {
                         borderRadius: "20px",
                         border: "none",
                       }}
-                      onClick={() => navigate(`/hotels/${hotel.id}/rooms`)}
+                      onClick={() => navigate(`/hotels/${hotel.id}`)}
                     >
                       Show Rooms
                     </button>

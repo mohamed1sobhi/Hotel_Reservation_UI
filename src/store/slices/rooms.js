@@ -19,6 +19,7 @@ export const fetchRooms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllRooms();
+      console.log('Fetch Rooms Response:', response);
       return response.data;
     } catch (error) {
       console.error('Fetch Rooms Error:', error);
@@ -103,7 +104,8 @@ export const fetchRoomsByHotel = createAsyncThunk(
   async (hotelId, { rejectWithValue }) => {
     try {
       const response = await getRoomsByHotel(hotelId);
-      return response;
+      console.log('Fetch Rooms By Hotel Response:', response);
+      return response.data;
     } catch (error) {
       console.error("Fetch Rooms By Hotel Error:", error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch rooms for the hotel");

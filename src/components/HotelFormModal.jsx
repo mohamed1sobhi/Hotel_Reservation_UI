@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 const HotelFormModal = ({ show, onClose, onSubmit, initialData }) => {
+  const user = localStorage.getItem("user");
   const [formData, setFormData] = useState({
+    user_id: user ? JSON.parse(user).id : "1",
     name: "",
     description: "",
-    location: "",
     address: "",
     stars: 0,
     price_range: "",
@@ -34,7 +35,7 @@ const HotelFormModal = ({ show, onClose, onSubmit, initialData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.location || !formData.address || !formData.stars) {
+    if (!formData.name  || !formData.address || !formData.stars) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -48,12 +49,9 @@ const HotelFormModal = ({ show, onClose, onSubmit, initialData }) => {
     const preparedData = { ...formData, stars: Number(formData.stars) };
     console.log("Submitting Hotel Data:", preparedData);
     onSubmit(preparedData);
-
-    // إعادة تعيين الحقول
     setFormData({
       name: "",
       description: "",
-      location: "",
       address: "",
       stars: 0,
       price_range: "",
@@ -79,7 +77,6 @@ const HotelFormModal = ({ show, onClose, onSubmit, initialData }) => {
               {[
                 { label: "Name", name: "name", type: "text" },
                 { label: "Description", name: "description", type: "text" },
-                { label: "Location", name: "location", type: "text" },
                 { label: "Address", name: "address", type: "text" },
                 { label: "Email", name: "email", type: "email" },
                 { label: "Price Range", name: "price_range", type: "text" },

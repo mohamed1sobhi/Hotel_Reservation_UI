@@ -22,7 +22,7 @@ const Header = () => {
                     </li>
                 </ul>
                 <div className="text-center">
-                    <Link className="navbar-brand fw-bold text-dark fs-3" to="/payment">Hidden brand</Link>
+                    <Link className="navbar-brand fw-bold text-dark fs-3" to="/hotels">Hidden brand</Link>
                     <p className=" nav-link fw-bold text-secondary">Hotel & Resort </p>
                 </div>
                 <ul className="navbar-nav p-2 gap-5">

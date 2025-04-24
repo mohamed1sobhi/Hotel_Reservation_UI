@@ -4,13 +4,14 @@ import { fetchRoomsByHotel } from "../../store/slices/rooms";
 import { useParams } from "react-router-dom";
 
 export default function RoomsPage() {
-    const { hotelId } = useParams();
+
+    const { id } = useParams();
     const dispatch = useDispatch();
     const { rooms, loading, error } = useSelector((state) => state.rooms);
-    const { roomImages  } = useSelector((state) => state.roomImages);
+  
     useEffect(() => {
-        dispatch(fetchRoomsByHotel(hotelId));
-    }, [dispatch, hotelId]);
+        dispatch(fetchRoomsByHotel(id));
+    }, [dispatch, id]);
 
     if (loading) {
         return (

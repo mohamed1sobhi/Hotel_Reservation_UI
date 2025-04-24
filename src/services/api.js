@@ -24,7 +24,7 @@ export const filterRoomsByType = (roomType) => axiosInstance.get(`/hotels/roomfi
 export const getRoomsByHotel = (hotelId) => axiosInstance.get(`/hotels/rooms/${hotelId}/`);
 //ROom Images APIS
 
-export const createRoomImage = (formData) => axiosInstance.post("/hotels/roomcreateimage/", formData, {
+export const createRoomImage = (data) => axiosInstance.post("/hotels/roomcreateimage/", data, {
   headers: { "Content-Type": "multipart/form-data" }
 }); 
 export const updateRoomImage = (id, formData) => axiosInstance.put(`/hotels/roomupdateimage/${id}/`, formData, {
@@ -102,3 +102,7 @@ export const getAllPaymentSettings = () => axiosInstance.get("/payment-settings/
 
 // Update payment settings (Create if not exists)
 export const updatePaymentSetting = (data) => axiosInstance.put("/payment-settings/", data);
+
+// // ------ User APIs ------
+// export const getAllUsers = () => axiosInstance.get("/users/");
+// export const registerUser = (data) => axiosInstance.post("/users/register/", data);

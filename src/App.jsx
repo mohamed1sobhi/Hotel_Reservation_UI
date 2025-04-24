@@ -1,4 +1,4 @@
-import React from 'react'
+ 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
  
@@ -12,16 +12,18 @@ import ReviewList from './pages/Review/ReviewList';
 import HotelReviews from './pages/Review/HotelReviews';
 import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
-import RegisterUserForm from './pages/register';
-import BookingForm from './pages/booking/create';
-import PaymentsList from './pages/payment/paymentList';
-import PaymentSettings from './pages/payment/paymentSettings';
+// import RegisterUserForm from './pages/register';
+// import BookingForm from './pages/booking/create';
+// import PaymentsList from './pages/payment/paymentList';
+// import PaymentSettings from './pages/payment/paymentSettings';
 import AddBooking from './pages/booking/AddBooking';
 import BookingsList from './pages/booking/BookingList';
 import BookingDetails from './pages/booking/BookingDetails.jsx';
 import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
-import RoomsPage from './pages/Hotel/Rooms'
+import RoomsPage from './pages/Hotel/Rooms';
+import ImageForm from './components/ImageForm.jsx';
+
 
 function App() {
 
@@ -35,7 +37,7 @@ function App() {
      <Routes>
      <Route path='/' element={<Home />} ></Route>
      <Route path='/login' element={<Login />} ></Route>
-     <Route path='/register' element={<RegisterUserForm />} ></Route>
+     {/* <Route path='/register' element={<RegisterUserForm />} ></Route> */}
      <Route path="/about" element={<AboutUs />} />
      <Route path="/contact" element={<ContactUs />} />
      <Route path="/reviews" element={<ReviewList />} />
@@ -46,7 +48,8 @@ function App() {
      <Route path="/my-bookings/:id" element={<BookingDetails />} />
      <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
      <Route path='/hotels' element={< All_hotels />} ></Route>
-    <Route path="/hotels/:hotelId/rooms" element={<RoomsPage/>} />
+    <Route path="/hotels/:id" element={<RoomsPage/>} />
+    <Route path = "/createImage/:Id" element = {<  ImageForm />} /> 
    </Routes>
    </BrowserRouter>
     }
