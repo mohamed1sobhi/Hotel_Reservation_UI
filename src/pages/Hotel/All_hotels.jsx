@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchImages } from '../../store/slices/images';
+// import { fetchImages } from '../../store/slices/images';
 import { fetchHotels, filterHotels, addHotel, editHotel, removeHotel } from '../../store/slices/hotels';
 import { Star, Map, Phone, Calendar, Search } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 import HotelFormModal from "../../components/HotelFormModal";
 import { useNavigate } from "react-router-dom";
-import {fetchRooms } from '../../store/slices/rooms';
+// import {fetchRooms } from '../../store/slices/rooms';
 import { fetchRoomsByHotel } from '../../store/slices/rooms';
   
 export default function HotelListingPage() {
   const dispatch = useDispatch();
-  const { hotels, loading: hotelsLoading, error: hotelsError } = useSelector(state => state.hotels);
-  const { images, loading: imagesLoading } = useSelector(state => state.images);
+  const { hotels, loading, error} = useSelector(state => state.hotels);
+  // const { images, loading: imagesLoading } = useSelector(state => state.images);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStars, setFilterStars] = useState(0);
@@ -28,10 +28,12 @@ export default function HotelListingPage() {
     dispatch(fetchHotels());
     // dispatch(fetchRooms());
     // dispatch(fetchRoomsByHotel(4));
-    dispatch(fetchImages());
+    // dispatch(fetchImages());
   }, [dispatch]);
-  console.log("images", images);
-console.log("hotels", hotels);
+  // console.log("images", images);
+// console.log("hotels images", hotels[0].image);
+ 
+  // console.log("hotels", hotels);
   const handleStarFilter = (stars) => {
     setFilterStars(stars);
     dispatch(filterHotels(stars));
@@ -97,7 +99,7 @@ console.log("hotels", hotels);
       )
     : hotels;
 
-  if (hotelsLoading || imagesLoading) {
+  if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100">
         <div className="spinner-border text-primary" role="status"></div>
@@ -105,11 +107,11 @@ console.log("hotels", hotels);
     );
   }
 
-  if (hotelsError) {
+  if (error) {
     return (
       <div className="container py-4">
         <div className="alert alert-danger">
-          <p>Error: {hotelsError}</p>
+          <p>Error: {error}</p>
           <button
             className="btn btn-primary mt-2"
             onClick={() => dispatch(fetchHotels())}
@@ -168,28 +170,35 @@ console.log("hotels", hotels);
       </div>
 
       {/* Hotel Cards Grid */}
-      {filteredHotels.length === 0 ? (
+      {hotels.length === 0  ? (
         <div className="text-center py-5">
           <h2 className="text-muted">No hotels found</h2>
           <p className="text-secondary">Try adjusting your search criteria</p>
         </div>
       ) : (
         <div className="row g-4">
-          {filteredHotels.map(hotel => {
-            const hotelImages = images.filter(img => img.hotel === hotel.id);
-            const mainImage = hotelImages.length > 0 ? hotelImages[0].image : null;
-
+          {hotels.map(hotel => {
+           const firstImage = 
+            hotel.image.length > 0 
+            ? hotel.image[0].image 
+             : hotel.name; // fallback to name if no image
+     
+            
             return (
               <div key={hotel.id} className="col-md-6 col-lg-4">
                 <div className="card h-100 shadow-sm">
-                  {mainImage && (
+                  
                     <img
-                      src={`http://127.0.0.1:8000${mainImage}/`}
+                      src={
+                        firstImage.startsWith("/media/")
+                          ? "http://127.0.0.1:8000/" + firstImage
+                          : firstImage
+                      }
                       alt={hotel.name}
                       className="card-img-top"
                       style={{ objectFit: 'cover', height: '200px' }}
                     />
-                  )}
+                
                   <div className="position-absolute top-0 end-0 m-2 bg-white rounded px-2 py-1">
                     {Array(hotel.stars || 0).fill().map((_, i) => (
                       <Star key={i} size={16} fill="gold" color="gold" />
@@ -198,22 +207,14 @@ console.log("hotels", hotels);
 
                   <div className="card-body">
                     <h5 className="card-title fw-bold">{hotel.name}</h5>
-                    {/* <p className="card-text text-muted mb-1">
-                      <Map size={16} className="me-2" />
-                      {hotel.location}
-                    </p> */}
+                  
                     {hotel.phone && (
                       <p className="card-text text-muted mb-1">
                         <Phone size={16} className="me-2" />
                         {hotel.phone}
                       </p>
                     )}
-                    {/* {hotel.availability && (
-                      <p className="card-text text-muted">
-                        <Calendar size={16} className="me-2" />
-                        {hotel.availability === "available" ? "Available now" : hotel.availability}
-                      </p>
-                    )} */}
+             
                     <button
                       className="btn btn-sm btn-warning me-2"
                       onClick={() => handleEditHotel(hotel)}

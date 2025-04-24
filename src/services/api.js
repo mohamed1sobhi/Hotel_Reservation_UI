@@ -10,18 +10,20 @@ export const updateHotel = (id, data) => {
   console.log(`Updating Hotel with ID ${id} and Data:`, data);
   return axiosInstance.put(`/hotels/update/${id}/`, data);
 };
-export const getHotelDetail = (id) => axiosInstance.get(`/hotels/detail/${id}/`);
+export const getHotelDetail = (id) => axiosInstance.get(`/hotels/detail/${id}/`);  // pre
 export const deleteHotel = (id) => axiosInstance.delete(`/hotels/delete/${id}/`);
 export const filterHotelsByStars = (stars) => axiosInstance.get(`/hotels/hotelfilter/${stars}/`);
 
 // Room APIs
-export const getAllRooms = () => axiosInstance.get("/hotels/roomlist/");
+// export const getAllRooms = () => axiosInstance.get("/hotels/roomlist/"); 
 export const createRoom = (data) => axiosInstance.post("/hotels/roomcreate/", data);
+export const createRoomType = (data) => axiosInstance.post("/hotels/roomtypecreate/", data);
 export const updateRoom = (id, data) => axiosInstance.put(`/hotels/roomupdate/${id}/`, data);
 export const deleteRoom = (id) => axiosInstance.delete(`/hotels/roomdelete/${id}/`);
 export const getRoomDetail = (id) => axiosInstance.get(`/hotels/roomdetail/${id}/`);
 export const filterRoomsByType = (roomType) => axiosInstance.get(`/hotels/roomfilter/${roomType}/`);
-export const getRoomsByHotel = (hotelId) => axiosInstance.get(`/hotels/rooms/${hotelId}/`);
+export const getRoomsByHotel = (hotelId) => axiosInstance.get(`/hotels/rooms/${hotelId}/`); //dn
+
 //ROom Images APIS
 
 export const createRoomImage = (data) => axiosInstance.post("/hotels/roomcreateimage/", data, {
@@ -32,7 +34,7 @@ export const updateRoomImage = (id, formData) => axiosInstance.put(`/hotels/room
 });
 export const deleteRoomImage = (id) => axiosInstance.delete(`/hotels/roomdeleteimage/${id}/`);
 export const listRoomImages = () => axiosInstance.get(`/hotels/roomlistimages/`);
- 
+
   
 // Image APIs
 export const createHotelImage = (formData) => axiosInstance.post("/hotels/createimage/", formData, {
