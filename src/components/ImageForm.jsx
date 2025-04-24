@@ -6,82 +6,53 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 const ImageForm = () => {
-
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.images);
-    const { Id } = useParams();
-    
-    const [formData, setFormData] = useState({
-        image: "", 
-        hotel_id: Id ,
-    });
-    
-    // useEffect(() => {
-         
-    //     setFormData({
-    //         image: existingImage.image || "",
-    //         hotel_id: existingImage.hotel_id || id,
-    //     });
-      
-    // }, [id]);
-    console.log("id", Id);
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-        }));
-    };  
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setFormData((prev) => ({
-                ...prev,
-                image: file,
-            }));
-        }
+    const { Id } = useParams(); 
+    console.log(Id);
+    const [imageFile, setImageFile] = useState(null);
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+  
+      if (!imageFile) {
+        alert('Please select an image to upload.');
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('hotel_id', Id); // set from URL param
+      formData.append('image', imageFile);
+  
+      dispatch(addImage(formData));
     };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        const preparedData = new FormData();
-        preparedData.append("image", formData.image);
-        preparedData.append("hotel_id", formData.hotel_id);
-    
-        dispatch(addImage(preparedData))
-            .unwrap()
-            .then(() => {
-                setFormData({
-                    image: "",
-                    hotel_id: id,
-                });
-                alert("Image added successfully");
-            })
-            .catch((err) => {
-                console.error("Upload failed:", err);
-            });
-    };
-    
+  
     return (
+      <div className="max-w-md mx-auto p-4 bg-white shadow rounded-xl">
+        <h2 className="text-xl font-semibold mb-4">Upload Image for Hotel #{Id}</h2>
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="image">Image:</label>
-                <input
-                    type="file"
-                    id="image"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <button type="submit" disabled={loading}>
-            Add Image
-            </button>
-            {error && <p>{error}</p>}
+          <div className="mb-4">
+            <label htmlFor="image" className="block text-sm font-medium">Select Image</label>
+            <input
+              type="file"
+              id="image"
+              accept="image/png, image/jpeg"
+              onChange={(e) => setImageFile(e.target.files[0])}
+              className="mt-1 block w-full"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? 'Uploading...' : 'Upload Image'}
+          </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </form>
+      </div>
     );
-}
-export default ImageForm;
-//     error: null,
+  };
+  
+  export default ImageForm;

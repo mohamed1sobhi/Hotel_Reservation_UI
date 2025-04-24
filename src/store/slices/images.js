@@ -27,8 +27,8 @@ export const addImage = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await createHotelImage(formData);
-      console.log('Create Image Response:', response);
-      return response;
+      console.log('Create Image Response:', response.data);
+      return response.data;
     } catch (error) {
       console.error('Create Image Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to create image");
