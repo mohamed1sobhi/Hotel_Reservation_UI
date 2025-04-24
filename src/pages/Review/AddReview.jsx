@@ -4,8 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { addReview } from '../../store/slices/reviews';
 import { getHotelDetail } from '../../services/api';
 import Header from '../../components/Header';
-// import Footer from '../../components/Common/Footer';
-// import Loader from '../../components/Common/Loader';
 
 const AddReview = () => {
   const { hotelId } = useParams();

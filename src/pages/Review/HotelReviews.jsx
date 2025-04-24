@@ -4,9 +4,6 @@ import { useParams, Link } from 'react-router-dom';
 import { fetchHotelReviews } from '../../store/slices/reviews';
 import { getHotelDetail } from '../../services/api';
 import Header from '../../components/Header';
-// import Footer from '../../components/Common/Footer';
-// import Loader from '../../components/Common/Loader';
-
 const HotelReviews = () => {
   const { hotelId } = useParams();
   const dispatch = useDispatch();

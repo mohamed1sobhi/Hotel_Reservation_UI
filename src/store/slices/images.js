@@ -12,7 +12,8 @@ export const fetchImages = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await listHotelImages();
-      return response;
+      console.log('Fetch Images Response:', response);
+      return response.data;
     } catch (error) {
       console.error('Fetch Images Error:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch images");
@@ -26,6 +27,7 @@ export const addImage = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await createHotelImage(formData);
+      console.log('Create Image Response:', response);
       return response;
     } catch (error) {
       console.error('Create Image Error:', error);
