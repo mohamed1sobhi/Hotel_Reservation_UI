@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { 
+import {
   getAllUsers,
   getUserDetail,
+  getCurrentUser,
   updateUser,
   deleteUser,
   registerUser,
-  updateCurrentUser
-} from "../../services/api"; 
+  updateCurrentUser,
+} from "../../services/api";
 
 // Async thunks
 
@@ -17,8 +18,10 @@ export const fetchUsers = createAsyncThunk(
       const response = await getAllUsers();
       return response.data;
     } catch (error) {
-      console.error('Fetch Users Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch users");
+      console.error("Fetch Users Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch users"
+      );
     }
   }
 );
@@ -30,8 +33,25 @@ export const fetchUserDetail = createAsyncThunk(
       const response = await getUserDetail(id);
       return response.data;
     } catch (error) {
-      console.error('Fetch User Detail Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch user detail");
+      console.error("Fetch User Detail Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch user detail"
+      );
+    }
+  }
+);
+
+export const fetchCurrentUser = createAsyncThunk(
+  "accounts/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getCurrentUser();
+      return response.data;
+    } catch (error) {
+      console.error("Fetch Current User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch current user"
+      );
     }
   }
 );
@@ -43,8 +63,10 @@ export const editUser = createAsyncThunk(
       const response = await updateUser(id, data);
       return response.data;
     } catch (error) {
-      console.error('Edit User Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to update user");
+      console.error("Edit User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update user"
+      );
     }
   }
 );
@@ -56,8 +78,10 @@ export const removeUser = createAsyncThunk(
       await deleteUser(id);
       return id;
     } catch (error) {
-      console.error('Delete User Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to delete user");
+      console.error("Delete User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete user"
+      );
     }
   }
 );
@@ -69,8 +93,10 @@ export const createUser = createAsyncThunk(
       const response = await registerUser(data);
       return response.data;
     } catch (error) {
-      console.error('Register User Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to register user");
+      console.error("Register User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to register user"
+      );
     }
   }
 );
@@ -82,8 +108,10 @@ export const editCurrentUser = createAsyncThunk(
       const response = await updateCurrentUser(data);
       return response.data;
     } catch (error) {
-      console.error('Update Current User Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to update current user");
+      console.error("Update Current User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update current user"
+      );
     }
   }
 );
@@ -100,7 +128,11 @@ const initialState = {
 const accountsSlice = createSlice({
   name: "accounts",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError(state) {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Fetch users
@@ -131,6 +163,20 @@ const accountsSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Fetch current user detail
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userDetail = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // Edit user
       .addCase(editUser.pending, (state) => {
         state.loading = true;
@@ -138,7 +184,9 @@ const accountsSlice = createSlice({
       })
       .addCase(editUser.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.users.findIndex(user => user.id === action.payload.id);
+        const index = state.users.findIndex(
+          (user) => user.id === action.payload.id
+        );
         if (index !== -1) {
           state.users[index] = action.payload;
         }
@@ -155,7 +203,7 @@ const accountsSlice = createSlice({
       })
       .addCase(removeUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = state.users.filter(user => user.id !== action.payload);
+        state.users = state.users.filter((user) => user.id !== action.payload);
       })
       .addCase(removeUser.rejected, (state, action) => {
         state.loading = false;
@@ -193,3 +241,4 @@ const accountsSlice = createSlice({
 });
 
 export default accountsSlice.reducer;
+export const { clearError } = accountsSlice.actions;

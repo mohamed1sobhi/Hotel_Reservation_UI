@@ -64,42 +64,41 @@ const RegisterUserForm = ({ existingUser = null, onSuccess }) => {
     <div>
       <h2>{existingUser ? "Edit User" : "Register New User"}</h2>
       <form onSubmit={handleSubmit}>
-
-        <input 
-          type="text" 
-          name="username" 
+        <input
+          type="text"
+          name="username"
           placeholder="Username"
-          value={formData.username} 
+          value={formData.username}
           onChange={handleChange}
-          required 
+          required
         />
 
-        <input 
-          type="email" 
-          name="email" 
+        <input
+          type="email"
+          name="email"
           placeholder="Email"
-          value={formData.email} 
+          value={formData.email}
           onChange={handleChange}
-          required 
+          required
         />
 
-        <input 
-          type="text" 
-          name="phone" 
+        <input
+          type="text"
+          name="phone"
           placeholder="Phone"
-          value={formData.phone} 
+          value={formData.phone}
           onChange={handleChange}
         />
 
         {/* Only show password input when creating a user */}
         {!existingUser && (
-          <input 
-            type="password" 
-            name="password" 
+          <input
+            type="password"
+            name="password"
             placeholder="Password"
-            value={formData.password} 
+            value={formData.password}
             onChange={handleChange}
-            required 
+            required
           />
         )}
 
@@ -111,10 +110,16 @@ const RegisterUserForm = ({ existingUser = null, onSuccess }) => {
         </select>
 
         <button type="submit" disabled={loading}>
-          {loading ? (existingUser ? "Updating..." : "Registering...") : (existingUser ? "Update User" : "Register")}
+          {loading
+            ? existingUser
+              ? "Updating..."
+              : "Registering..."
+            : existingUser
+            ? "Update User"
+            : "Register"}
         </button>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
     </div>
   );
