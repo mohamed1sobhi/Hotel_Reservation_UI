@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addBooking } from '../../store/slices/booking';
 import { getAllHotels } from '../../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHotel, faBed, faCalendarAlt, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
+import { faHotel, faBed, faCalendarAlt, faMoneyBillWave, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 const AddBooking = () => {
@@ -80,8 +80,9 @@ const AddBooking = () => {
       setCheckOut('');
       setTotalPrice(0);
       setRooms([]);
+      navigate('/my-bookings');
     } catch (err) {
-      const messages = typeof err === 'object' ? Object.values(err).flat().join(' | ') : 'Unexpected error.';
+      const messages = typeof err === 'object' ? Object.values(err).flat().join(' | ') : 'Invalid data.';
       setError(messages);
     }
   };
@@ -95,6 +96,17 @@ const AddBooking = () => {
         fontFamily: 'Segoe UI, sans-serif',
         color: '#2C1E1E'
       }}>
+        <div className="mb-4">
+          <button
+            type="button"
+            className="btn btn-outline-secondary d-flex align-items-center"
+            onClick={() => navigate('/')}
+          >
+            <FontAwesomeIcon icon={faHome} className="me-2" />
+            Home
+          </button>
+        </div>
+
         <h2 className="text-center mb-4" style={{ color: '#CD9A5E', fontWeight: 'bold' }}>
           <FontAwesomeIcon icon={faHotel} className="me-2" />
           Book Your Stay

@@ -91,6 +91,12 @@ const EditBooking = () => {
     }
   }, [formData.check_in, formData.check_out, formData.roomPrice]);
 
+  useEffect(() => {
+    if (errors.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [errors]);
+
   const calculateTotalPrice = (checkIn, checkOut, roomPrice) => {
     const start = new Date(checkIn);
     const end = new Date(checkOut);
@@ -108,41 +114,47 @@ const EditBooking = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
+    // Reset errors
+    setErrors([]);
+    setStatusError('');
+
+    // Validate dates before submitting
+    const { check_in, check_out, room } = formData;
+    if (!check_in || !check_out || !room) {
+      setErrors(['All fields are required']);
+      return;
+    }
+
+    if (new Date(check_in) >= new Date(check_out)) {
+      setErrors(['Check-out date must be after check-in date']);
+      return;
+    }
+
     const updatedData = {
-      check_in: formData.check_in,
-      check_out: formData.check_out,
-      room: formData.room,
+      check_in,
+      check_out,
+      room,
     };
-  
-    dispatch(updateBooking({ id, data: updatedData, headers }))
+
+    dispatch(updateBooking({ id, data: updatedData }))
+      .unwrap()
       .then(() => {
         navigate('/my-bookings');
       })
       .catch((err) => {
-        console.log(err.response); // Log the error response to see more details.
-        const data = err.response?.data;
-        if (typeof data === 'string') {
-          setErrors([data]);
-        } else if (typeof data === 'object') {
-          const messages = Object.values(data).flat();
+        console.error("Update Booking Error:", err);
+
+        if (typeof err === 'string') {
+          setErrors([err]);
+        } else if (typeof err === 'object') {
+          const messages = Object.values(err).flat();
           setErrors(messages);
         } else {
           setErrors(['Update failed. Please check your inputs.']);
         }
       });
   };
-  
-
-  if (loading) return <p>Loading...</p>;
-  if (statusError) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="alert alert-danger">{statusError}</div>
-      </div>
-    );
-  }
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="container py-5" style={{ backgroundColor: '#F4EFE6', minHeight: '100vh' }}>
@@ -162,6 +174,25 @@ const EditBooking = () => {
             )}
 
             <form onSubmit={handleSubmit}>
+
+              {/* Buttons for navigation */}
+              <div className="text-center my-4 ">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary me-3"
+                  onClick={() => navigate(`/my-bookings/${id}`)}
+                >
+                  🔍 Booking Details
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-dark"
+                  onClick={() => navigate('/my-bookings')}
+                >
+                  📋 Your Bookings List
+                </button>
+              </div>
+
               {/* Hotel */}
               <div className="mb-3">
                 <label className="form-label fw-semibold text-dark">

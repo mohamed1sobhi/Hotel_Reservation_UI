@@ -17,10 +17,19 @@ export const fetchAllBookings = createAsyncThunk('bookings/fetchAll', async () =
   return response.data;
 });
 
-export const addBooking = createAsyncThunk('bookings/add', async (data) => {
-  const response = await createBooking(data);
-  return response.data;
+export const addBooking = createAsyncThunk('bookings/add', async (data, { rejectWithValue }) => {
+  try {
+    const response = await createBooking(data);
+    return response.data;
+  } catch (err) {
+    // Ensure the error is properly passed to the frontend
+    if (err.response && err.response.data) {
+      return rejectWithValue(err.response.data); // Send the error data to the frontend
+    }
+    return rejectWithValue('An unexpected error occurred. Please try again later.');
+  }
 });
+
 
 export const deleteBooking = createAsyncThunk('bookings/delete', async (id) => {
   await deleteBookingAPI(id);
@@ -32,11 +41,17 @@ export const fetchBookingDetail = createAsyncThunk('bookings/fetchDetail', async
   return response.data;
 });
 
-// Thunks for async actions
-export const updateBooking = createAsyncThunk('bookings/update', async ({ id, data }) => {
-  const response = await updateBookingAPI(id, data);  // Call the API to update booking
-  return response.data;  // Return the updated booking data
-});
+export const updateBooking = createAsyncThunk(
+  'bookings/updateBooking',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await updateBookingAPI(id, data);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || 'Update failed');
+    }
+  }
+);
 
 
 
@@ -69,8 +84,14 @@ const bookingSlice = createSlice({
     });
     builder.addCase(addBooking.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      // If the action has a payload (from rejectWithValue), set it as the error
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error.message; // fallback to default error message
+      }
     });
+    
     
     builder.addCase(deleteBooking.fulfilled, (state, action) => {
       state.bookings = state.bookings.filter((b) => b.id !== action.payload);
