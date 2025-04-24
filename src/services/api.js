@@ -35,10 +35,10 @@ export const deleteNotification = (id) => axiosInstance.delete(`/hotels/notifica
 export const sendConfirmEmail = (data) => axiosInstance.post("/hotels/send-email/", data);
 
 // Reviews APIs
-export const getAllReviews = () => axiosInstance.get("/reviews/getall/");
-export const createReview = (data) => axiosInstance.post("/reviews/create/", data);
-export const getReviewDetail = (id) => axiosInstance.get(`/reviews/details/${id}/`);
-export const getHotelReviews = (hotelId) => axiosInstance.get(`/reviews/hotelsreviews/${hotelId}/`);
+export const getAllReviews = () => axiosInstance.get("/reviews/");
+export const createReview = (data) => axiosInstance.post("/reviews/", data);
+export const getReviewDetail = (id) => axiosInstance.get(`/reviews/${id}/`);
+export const getHotelReviews = (hotelId) => axiosInstance.get(`/hotels/${hotelId}/reviews/`);
 
 
 // Bookings APIs

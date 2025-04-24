@@ -24,6 +24,7 @@ export const addReview = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error('Create Review Error:', error);
+      console.error('Error details:', error.response?.data);
       return rejectWithValue(error.response?.data?.message || "Failed to create review");
     }
   }

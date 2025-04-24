@@ -16,12 +16,12 @@ const AddReview = () => {
   const [hotel, setHotel] = useState(null);
   const [hotelLoading, setHotelLoading] = useState(true);
   const [formData, setFormData] = useState({
-    hotel_id: hotelId,
+    hotel: hotelId,
     rating: 5,
-    title: '',
+    // title: '',
     comment: '',
-    user_name: '', 
-    stay_date: ''
+    // user_name: '', 
+    // stay_date: ''
   });
 
   useEffect(() => {
@@ -57,6 +57,7 @@ const AddReview = () => {
       navigate(`/hotels/${hotelId}/reviews`);
     } catch (err) {
       console.error('Failed to submit review:', err);
+      console.error('Error details:', err.response?.data); // Log the error details
     }
   };
   
