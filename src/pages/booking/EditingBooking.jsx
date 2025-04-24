@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookingDetail, updateBooking } from '../../store/slices/booking';
 import { getAllHotels } from '../../services/api'; // Assuming you have an API file with this function.
 import { FaCalendarAlt, FaBed, FaMoneyBillWave, FaHotel } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const EditBooking = () => {
   const { id } = useParams();
@@ -11,13 +12,9 @@ const EditBooking = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const headers = {
-    Authorization: `Bearer ${token}`
-  };
+
 
   const selectedBooking = useSelector((state) => state.bookings.selectedBooking);
-  const loading = useSelector((state) => state.bookings.loading);
-  const error = useSelector((state) => state.bookings.error);
 
   const [formData, setFormData] = useState({
     check_in: '',
@@ -140,7 +137,16 @@ const EditBooking = () => {
     dispatch(updateBooking({ id, data: updatedData }))
       .unwrap()
       .then(() => {
-        navigate('/my-bookings');
+        toast.success('Booking updated successfully!', {
+          style: {
+            background: '#CD9A5E', // Warm gold
+            color: '#fff',         // White text
+            fontWeight: 'bold',
+          }
+        });        
+        setTimeout(() => {
+          navigate('/my-bookings');
+        }, 1000); 
       })
       .catch((err) => {
         console.error("Update Booking Error:", err);
@@ -226,7 +232,9 @@ const EditBooking = () => {
                 >
                   <option value="">Select Room</option>
                   {rooms.map((r) => (
-                    <option key={r.id} value={r.id}>{r.name} – ${r.price_per_night}/night</option>
+                    <option key={r.id} value={r.id}>
+                      {r.room_type} – ${r.price_per_night}/night
+                    </option>
                   ))}
                 </select>
               </div>

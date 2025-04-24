@@ -3,16 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllBookings, deleteBooking } from '../../store/slices/booking';
 import { useNavigate } from 'react-router-dom';
 import { getAllHotels } from '../../services/api';
-import { FaBed, FaCalendarCheck, FaCalendarTimes, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
+import { FaBed, FaCalendarCheck, FaCalendarTimes, FaEdit, FaTimesCircle, FaEye } from 'react-icons/fa';
 import { format } from 'date-fns';
 
 const BookingsList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bookings, loading, error } = useSelector((state) => state.bookings);
+  const { bookings } = useSelector((state) => state.bookings);
   const token = localStorage.getItem('access');
   const user = localStorage.getItem('user'); // Or wherever your user data is stored
   const [hotels, setHotels] = useState([]);
+  const [deleteBookingId, setDeleteBookingId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (!token || !user) {
@@ -41,11 +43,17 @@ const BookingsList = () => {
     return `${hotel.name} – ${room.room_type}`;
   };
   
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this booking?')) {
-      dispatch(deleteBooking(id));
+  const handleDelete = () => {
+    if (deleteBookingId) {
+      dispatch(deleteBooking(deleteBookingId)).then(() => {
+        navigate('/my-bookings');
+      }).catch((err) => {
+        console.error('Delete Booking Error:', err);
+      });
     }
+    setShowModal(false);  // Close the modal after deletion
   };
+  
 
   // Ensure bookings is an array before mapping over it
   if (!Array.isArray(bookings) || bookings.length === 0) {
@@ -57,14 +65,13 @@ const BookingsList = () => {
     switch (status) {
       case 'confirmed':
         return '#CD9A5E'; // Confirmed
-      case 'cancelled':
-        return '#B45F3A'; // Cancelled
       case 'pending':
         return '#8A8A8A'; // Pending
       default:
         return '#8A8A8A'; // Default to pending
     }
   };
+  
 
   return (
     <div className="container py-5" style={{ backgroundColor: '#F9F5F1', minHeight: '100vh' }}>
@@ -135,11 +142,11 @@ const BookingsList = () => {
                       style={{ backgroundColor: '#CD9A5E', color: 'white', flex: 1 }}
                       onClick={() => navigate(`/my-bookings/${booking.id}`)}
                     >
-                      <FaEye className="me-2" /> View
+                      <FaEye className="me-2" /> Details
                     </button>
 
                     {/* Conditionally render Edit button */}
-                    {['confirmed', 'cancelled'].includes(booking.status) ? null : (
+                    {booking.status === 'confirmed' ? null : (
                       <button
                         className="btn btn-sm d-flex align-items-center justify-content-center fw-bold"
                         style={{
@@ -154,15 +161,19 @@ const BookingsList = () => {
                     )}
 
                     {/* Conditionally render Delete button */}
-                    {['confirmed', 'cancelled'].includes(booking.status) ? null : (
+                    {booking.status === 'confirmed' ? null : (
                       <button
                         className="btn btn-sm d-flex align-items-center justify-content-center fw-bold"
                         style={{ backgroundColor: '#8A8A8A', color: 'white', flex: 1 }}
-                        onClick={() => handleDelete(booking.id)}
+                        onClick={() => {
+                          setDeleteBookingId(booking.id); // Set the id of the booking to delete
+                          setShowModal(true);
+                        }}
                       >
-                        <FaTrash className="me-2" /> Delete
+                        <FaTimesCircle className="me-2" /> Cancel
                       </button>
                     )}
+
                   </div>
                 </div>
               </div>
@@ -170,6 +181,36 @@ const BookingsList = () => {
           );
         })}
       </div>
+      {/* Message if there are any pending bookings */}
+{bookings.some(b => b.status === 'pending') && (
+  <div className="alert alert-warning mt-5 text-center fw-bold" style={{ backgroundColor: '#FFF7E6', color: '#B45F3A' }}>
+    📢 Some of your bookings are currently marked as <strong>Pending</strong>. These reservations are <u>not confirmed</u> and may still be booked by others.<br />
+    To secure your stay, please complete the <strong>payment</strong>. <br />
+    💳 Payment methods are available in the <em>booking details</em> of each pending reservation.
+  </div>
+)}
+
+{showModal && (
+  <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div className="modal-dialog" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title" id="deleteModalLabel">Confirm Cancellation</h5>
+          <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowModal(false)}></button>
+        </div>
+        <div className="modal-body">
+          Are you sure you want to cancel this booking?
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)} style={{ backgroundColor: '#B45F3A' }}>Close</button>
+          <button type="button" className="btn btn-secondary" onClick={handleDelete} style={{ backgroundColor: '#8A8A8A' }}>Yes, Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };

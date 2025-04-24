@@ -18,6 +18,8 @@ import BookingsList from './pages/booking/BookingList';
 import BookingDetails from './pages/booking/BookingDetails.jsx';
 import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -42,6 +44,7 @@ function App() {
      <Route path="/my-bookings/:id" element={<BookingDetails />} />
      <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
    </Routes>
+   <ToastContainer position="top-center" autoClose={3000} />
    </BrowserRouter>
     }
   </main>
