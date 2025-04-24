@@ -14,7 +14,7 @@ export const fetchHotels = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllHotels();
-      console.log('Fetch Hotels Response:', response);
+      console.log('Fetch Hotels Response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Fetch Hotels Error:', error);

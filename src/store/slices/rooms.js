@@ -4,9 +4,10 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 import { 
-  getAllRooms, 
+  // getAllRooms, 
   createRoom, 
   updateRoom, 
+  createRoomType,
   deleteRoom, 
   getRoomDetail, 
   filterRoomsByType,
@@ -14,20 +15,34 @@ import {
 } from "../../services/api";
 
 // Fetch all rooms
-export const fetchRooms = createAsyncThunk(
-  "rooms/fetchRooms",
-  async (_, { rejectWithValue }) => {
+// export const fetchRooms = createAsyncThunk(
+//   "rooms/fetchRooms",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await getAllRooms();
+//       console.log('Fetch Rooms Response:', response);
+//       return response.data;
+//     } catch (error) {
+//       console.error('Fetch Rooms Error:', error);
+//       return rejectWithValue(error.response?.data?.message || "Failed to fetch rooms");
+//     }
+//   }
+// );
+
+// create room type 
+export const createtype = createAsyncThunk(
+  "rooms/createtype" ,
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await getAllRooms();
-      console.log('Fetch Rooms Response:', response);
+      const response = await createRoomType(data);
+      console.log('Create Room Type Response:', response);
       return response.data;
     } catch (error) {
-      console.error('Fetch Rooms Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch rooms");
+      console.error('Create Room Type Error:', error);
+      return rejectWithValue(error.response?.data?.message || "Failed to create room type");
     }
   }
-);
-
+)
 // Create a room
 export const addRoom = createAsyncThunk(
   "rooms/addRoom",
@@ -114,6 +129,8 @@ export const fetchRoomsByHotel = createAsyncThunk(
 );
 const initialState = {
   rooms: [],
+  roomDetail: null,
+  roomTypes: [],
   loading: false,
   error: null,
 };
@@ -124,19 +141,19 @@ const roomsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch rooms
-      .addCase(fetchRooms.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchRooms.fulfilled, (state, action) => {
-        state.loading = false;
-        state.rooms = action.payload;
-      })
-      .addCase(fetchRooms.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+      // // Fetch rooms
+      // .addCase(fetchRooms.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(fetchRooms.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.rooms = action.payload;
+      // })
+      // .addCase(fetchRooms.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.payload;
+      // })
 
       // Add room
       .addCase(addRoom.pending, (state) => {
@@ -151,7 +168,19 @@ const roomsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
+      // Create room type
+      .addCase(createtype.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createtype.fulfilled, (state, action) => {
+        state.loading = false;
+        state.roomTypes.push(action.payload);
+      })
+      .addCase(createtype.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })      
       // Edit room
       .addCase(editRoom.pending, (state) => {
         state.loading = true;
