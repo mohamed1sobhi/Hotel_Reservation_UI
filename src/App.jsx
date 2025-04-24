@@ -24,6 +24,7 @@ import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
 import RoomsPage from './pages/Hotel/Rooms';
 import ImageForm from './components/ImageForm.jsx';
+import AddRoom from './components/addroom';
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
      <Route path='/hotels' element={< All_hotels />} ></Route>
     <Route path="/hotels/:id" element={<RoomsPage/>} />
     <Route path = "/createImage/:Id" element = {<  ImageForm />} /> 
+    <Route path="/addroom/:HotelId" element={<AddRoom />} />
    </Routes>
    </BrowserRouter>
     }
