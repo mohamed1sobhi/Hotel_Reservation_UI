@@ -178,13 +178,14 @@ console.log("hotels", hotels);
           {filteredHotels.map(hotel => {
             const hotelImages = images.filter(img => img.hotel === hotel.id);
             const mainImage = hotelImages.length > 0 ? hotelImages[0].image : null;
+            console.log("mainimage", mainImage);
 
             return (
               <div key={hotel.id} className="col-md-6 col-lg-4">
                 <div className="card h-100 shadow-sm">
                   {mainImage && (
                     <img
-                      src={`http://127.0.0.1:8000${mainImage}/`}
+                      src={hotel[0].image[0].image}
                       alt={hotel.name}
                       className="card-img-top"
                       style={{ objectFit: 'cover', height: '200px' }}
