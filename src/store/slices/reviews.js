@@ -7,6 +7,7 @@ export const fetchReviews = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllReviews();
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error('Fetch Reviews Error:', error);
@@ -24,39 +25,57 @@ export const addReview = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error('Create Review Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to create review");
+      console.error('Error response:', error.response);
+      console.error('Error data:', error.response?.data);
+      
+      return rejectWithValue(
+        error.response?.data?.message || 
+        error.response?.data?.detail || 
+        "Failed to create review"
+      );
     }
   }
 );
 
-// Get details of a specific review
 export const fetchReviewDetail = createAsyncThunk(
   "reviews/fetchReviewDetail",
   async (id, { rejectWithValue }) => {
     try {
+      console.log('Fetching review with ID:', id);
       const response = await getReviewDetail(id);
       return response.data;
     } catch (error) {
       console.error('Fetch Review Detail Error:', error);
+      console.error('Error details:', {
+        status: error.response?.status,
+        url: error.config?.url,
+        method: error.config?.method
+      });
       return rejectWithValue(error.response?.data?.message || "Failed to fetch review details");
     }
   }
 );
 
-// Get all reviews for a specific hotel
 export const fetchHotelReviews = createAsyncThunk(
   "reviews/fetchHotelReviews",
   async (hotelId, { rejectWithValue }) => {
     try {
+      console.log('Fetching reviews for hotel ID:', hotelId);
       const response = await getHotelReviews(hotelId);
+      console.log('Received reviews:', response.data);
       return response.data;
     } catch (error) {
       console.error('Fetch Hotel Reviews Error:', error);
+      console.error('Error details:', {
+        status: error.response?.status,
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.response?.data
+      });
       return rejectWithValue(error.response?.data?.message || "Failed to fetch hotel reviews");
     }
   }
 );
-
 // Initial state
 const initialState = {
   reviews: [],
@@ -129,5 +148,4 @@ const reviewsSlice = createSlice({
       });
   },
 });
-
 export default reviewsSlice.reducer;

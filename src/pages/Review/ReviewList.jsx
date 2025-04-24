@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews } from "../../store/slices/reviews";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
-// import Footer from '../../components/Common/Footer';
-// import Loader from '../../components/Common/Loader';
 
 const ReviewList = () => {
   const dispatch = useDispatch();
@@ -133,7 +131,7 @@ const ReviewList = () => {
                 >
                   <div>
                     <h3 style={{ color: "#1A1A1A", marginBottom: "0.5rem" }}>
-                      {review.hotel_name || "Hotel Name"}
+                      {review.hotel_details.name || "Hotel Name"}
                     </h3>
                     <div
                       style={{ fontSize: "1.25rem", marginBottom: "0.5rem" }}
@@ -146,7 +144,7 @@ const ReviewList = () => {
                       {formatDate(review.created_at || new Date())}
                     </p>
                     <p style={{ color: "#1A1A1A", fontWeight: "bold" }}>
-                      {review.user_name || "Guest"}
+                      {review.user_details.username || "Guest"}
                     </p>
                   </div>
                 </div>
@@ -161,18 +159,35 @@ const ReviewList = () => {
                   {review.comment || "No comment provided."}
                 </p>
 
-                <Link
-                  to={`/hotels/detail/${review.hotel_id}`}
+                <div
                   style={{
-                    color: "#B45F3A",
-                    textDecoration: "none",
-                    fontWeight: "500",
-                    display: "inline-block",
+                    display: "flex",
+                    justifyContent: "space-between",
                     marginTop: "0.5rem",
                   }}
                 >
-                  View Hotel →
-                </Link>
+                  <Link
+                    to={`/hotels/detail/${review.hotel_id}`}
+                    style={{
+                      color: "#B45F3A",
+                      textDecoration: "none",
+                      fontWeight: "500",
+                    }}
+                  >
+                    View Hotel →
+                  </Link>
+
+                  <Link
+                    to={`/reviews/${review.id}`}
+                    style={{
+                      color: "#CD9A5E",
+                      textDecoration: "none",
+                      fontWeight: "500",
+                    }}
+                  >
+                    View Review Details →
+                  </Link>
+                </div>
               </div>
             ))
           ) : (

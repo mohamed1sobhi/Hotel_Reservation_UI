@@ -4,9 +4,6 @@ import { useParams, Link } from "react-router-dom";
 import { fetchHotelReviews } from "../../store/slices/reviews";
 import { getHotelDetail } from "../../services/api";
 import Header from "../../components/Header";
-// import Footer from '../../components/Common/Footer';
-// import Loader from '../../components/Common/Loader';
-
 const HotelReviews = () => {
   const { hotelId } = useParams();
   const dispatch = useDispatch();
@@ -18,12 +15,14 @@ const HotelReviews = () => {
   const [sortBy, setSortBy] = useState("newest");
 
   useEffect(() => {
+    console.log("Current hotel ID from params:", hotelId);
     if (hotelId) {
       dispatch(fetchHotelReviews(hotelId));
 
       const fetchHotelData = async () => {
         try {
           const hotelData = await getHotelDetail(hotelId);
+          console.log("Hotel data received:", hotelData);
           setHotel(hotelData);
         } catch (err) {
           console.error("Error fetching hotel:", err);
@@ -107,7 +106,7 @@ const HotelReviews = () => {
                   marginRight: "0.5rem",
                 }}
               >
-                {hotel.name || "Hotel"}
+                {hotel.data.name || "Hotel"}
               </Link>
               <span style={{ color: "#8A8A8A" }}> / Reviews</span>
             </div>
@@ -313,8 +312,24 @@ const HotelReviews = () => {
                     >
                       {renderStars(review.rating)}
                     </div>
-                    <h3 style={{ color: "#1A1A1A", marginBottom: "0.25rem" }}>
-                      {review.title || "Review"}
+                    <h3
+                      style={{
+                        color: "#1A1A1A",
+                        marginBottom: "0.25rem",
+                        fontSize: "1.5rem",
+                        fontWeight: "600",
+                        borderLeft: "3px solid #CD9A5E",
+                        paddingLeft: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ marginRight: "8px" }}>
+                        {review.rating}-Star
+                      </span>
+                      <span style={{ color: "#555" }}>
+                        Review by {review.user_details.username}
+                      </span>
                     </h3>
                   </div>
                   <div style={{ textAlign: "right" }}>
@@ -322,7 +337,7 @@ const HotelReviews = () => {
                       {formatDate(review.created_at || new Date())}
                     </p>
                     <p style={{ color: "#1A1A1A", fontWeight: "bold" }}>
-                      {review.user_name || "Guest"}
+                      {review.user_details.username || "Guest"}
                     </p>
                   </div>
                 </div>

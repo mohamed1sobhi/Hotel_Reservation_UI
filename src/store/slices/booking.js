@@ -1,77 +1,71 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createBooking, getBookingDetail } from "../../services/api";
+// src/store/bookingSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createBooking, getAllBookings } from '../../services/api'; // Adjust the import path as necessary
+import axios from 'axios';
 
-// Create a new booking
-export const addBooking = createAsyncThunk(
-  "bookings/addBooking",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await createBooking(data);
-      return response.data;
-    } catch (error) {
-      console.error('Create Booking Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to create booking");
-    }
-  }
-);
-
-// Fetch booking details
-export const fetchBookingDetail = createAsyncThunk(
-  "bookings/fetchBookingDetail",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await getBookingDetail(id);
-      return response.data;
-    } catch (error) {
-      console.error('Fetch Booking Detail Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch booking detail");
-    }
-  }
-);
-
-// Initial State
+// Initial state for the booking slice
 const initialState = {
   bookings: [],
-  bookingDetail: null,
   loading: false,
   error: null,
 };
 
-// Slice
-const bookingsSlice = createSlice({
-  name: "bookings",
+// Thunks for async actions
+export const fetchAllBookings = createAsyncThunk('bookings/fetchAll', async () => {
+  const response = await getAllBookings();
+  return response.data;
+});
+
+export const addBooking = createAsyncThunk('bookings/add', async (data) => {
+  const response = await createBooking(data);
+  return response.data;
+});
+
+export const deleteBooking = createAsyncThunk('bookings/delete', async (id) => {
+  await axios.delete(`/api/bookings/${id}/`);
+  return id;
+});
+
+
+
+// Create the slice
+const bookingSlice = createSlice({
+  name: 'bookings',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      // Add Booking
-      .addCase(addBooking.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(addBooking.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bookings.push(action.payload);
-      })
-      .addCase(addBooking.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+    // Fetching all bookings
+    builder.addCase(fetchAllBookings.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchAllBookings.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bookings = action.payload;
+    });
+    builder.addCase(fetchAllBookings.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
 
-      // Fetch Booking Detail
-      .addCase(fetchBookingDetail.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchBookingDetail.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bookingDetail = action.payload;
-      })
-      .addCase(fetchBookingDetail.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+    // Adding a new booking
+    builder.addCase(addBooking.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addBooking.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bookings.push(action.payload);
+    });
+    builder.addCase(addBooking.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    
+    builder.addCase(deleteBooking.fulfilled, (state, action) => {
+      state.bookings = state.bookings.filter((b) => b.id !== action.payload);
+    });
+
   },
 });
 
-export default bookingsSlice.reducer;
+// Export actions
+export default bookingSlice.reducer;

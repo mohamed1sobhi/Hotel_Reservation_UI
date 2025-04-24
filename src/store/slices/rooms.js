@@ -1,11 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+
 import { 
   getAllRooms, 
   createRoom, 
   updateRoom, 
   deleteRoom, 
   getRoomDetail, 
-  filterRoomsByType 
+  filterRoomsByType,
+  getRoomsByHotel
 } from "../../services/api";
 
 // Fetch all rooms
@@ -14,6 +19,7 @@ export const fetchRooms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllRooms();
+      console.log('Fetch Rooms Response:', response);
       return response.data;
     } catch (error) {
       console.error('Fetch Rooms Error:', error);
@@ -92,14 +98,25 @@ export const filterRooms = createAsyncThunk(
   }
 );
 
-// Initial state
+// Fetch rooms by hotel ID
+export const fetchRoomsByHotel = createAsyncThunk(
+  "rooms/fetchRoomsByHotel",
+  async (hotelId, { rejectWithValue }) => {
+    try {
+      const response = await getRoomsByHotel(hotelId);
+      console.log('Fetch Rooms By Hotel Response:', response);
+      return response.data;
+    } catch (error) {
+      console.error("Fetch Rooms By Hotel Error:", error);
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch rooms for the hotel");
+    }
+  }
+);
 const initialState = {
   rooms: [],
   loading: false,
   error: null,
-  roomDetail: null,
 };
-
 // Slice
 const roomsSlice = createSlice({
   name: "rooms",
@@ -192,8 +209,23 @@ const roomsSlice = createSlice({
       .addCase(filterRooms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Fetch rooms by hotel
+      .addCase(fetchRoomsByHotel.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRoomsByHotel.fulfilled, (state, action) => {
+        state.loading = false;
+        state.rooms = action.payload; // تحديث قائمة الغرف
+      })
+      .addCase(fetchRoomsByHotel.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // تخزين الخطأ
       });
   },
 });
 
+ 
 export default roomsSlice.reducer;

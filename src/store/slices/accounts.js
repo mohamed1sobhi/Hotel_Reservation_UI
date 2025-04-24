@@ -9,7 +9,7 @@ import {
   updateCurrentUser,
 } from "../../services/api";
 
-// Async thunks
+// // Async thunks
 
 export const fetchUsers = createAsyncThunk(
   "accounts/fetchUsers",
@@ -116,13 +116,13 @@ export const editCurrentUser = createAsyncThunk(
   }
 );
 
-// Initial state
-const initialState = {
-  users: [],
-  loading: false,
-  error: null,
-  userDetail: null,
-};
+// // Initial state
+// const initialState = {
+//   users: [],
+//   loading: false,
+//   error: null,
+//   userDetail: null,
+// };
 
 // Slice
 const accountsSlice = createSlice({
@@ -210,35 +210,35 @@ const accountsSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Create new user
-      .addCase(createUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.users.push(action.payload);
-      })
-      .addCase(createUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+//       // Create new user
+//       .addCase(createUser.pending, (state) => {
+//         state.loading = true;
+//         state.error = null;
+//       })
+//       .addCase(createUser.fulfilled, (state, action) => {
+//         state.loading = false;
+//         state.users.push(action.payload);
+//       })
+//       .addCase(createUser.rejected, (state, action) => {
+//         state.loading = false;
+//         state.error = action.payload;
+//       })
 
-      // Edit current user
-      .addCase(editCurrentUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(editCurrentUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.userDetail = action.payload;
-      })
-      .addCase(editCurrentUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-  },
-});
+//       // Edit current user
+//       .addCase(editCurrentUser.pending, (state) => {
+//         state.loading = true;
+//         state.error = null;
+//       })
+//       .addCase(editCurrentUser.fulfilled, (state, action) => {
+//         state.loading = false;
+//         state.userDetail = action.payload;
+//       })
+//       .addCase(editCurrentUser.rejected, (state, action) => {
+//         state.loading = false;
+//         state.error = action.payload;
+//       });
+//   },
+// });
 
 export default accountsSlice.reducer;
 export const { clearError } = accountsSlice.actions;

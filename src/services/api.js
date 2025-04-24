@@ -2,10 +2,14 @@ import axiosInstance from "../config/axios_conf";
 
 // Hotel APIs
 export const getAllHotels = () => axiosInstance.get("/hotels/");
-export const createHotel = (data) =>
-  axiosInstance.post("/hotels/create/", data);
-export const updateHotel = (id, data) =>
-  axiosInstance.put(`/hotels/update/${id}/`, data);
+export const createHotel = (data) => {
+  console.log("Creating Hotel with Data:", data);
+  return axiosInstance.post("/hotels/create/", data);
+};
+export const updateHotel = (id, data) => {
+  console.log(`Updating Hotel with ID ${id} and Data:`, data);
+  return axiosInstance.put(`/hotels/update/${id}/`, data);
+};
 export const getHotelDetail = (id) =>
   axiosInstance.get(`/hotels/detail/${id}/`);
 export const deleteHotel = (id) =>
@@ -25,6 +29,22 @@ export const getRoomDetail = (id) =>
   axiosInstance.get(`/hotels/roomdetail/${id}/`);
 export const filterRoomsByType = (roomType) =>
   axiosInstance.get(`/hotels/roomfilter/${roomType}/`);
+export const getRoomsByHotel = (hotelId) =>
+  axiosInstance.get(`/hotels/rooms/${hotelId}/`);
+//ROom Images APIS
+
+export const createRoomImage = (data) =>
+  axiosInstance.post("/hotels/roomcreateimage/", data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+export const updateRoomImage = (id, formData) =>
+  axiosInstance.put(`/hotels/roomupdateimage/${id}/`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+export const deleteRoomImage = (id) =>
+  axiosInstance.delete(`/hotels/roomdeleteimage/${id}/`);
+export const listRoomImages = () =>
+  axiosInstance.get(`/hotels/roomlistimages/`);
 
 // Image APIs
 export const createHotelImage = (formData) =>
@@ -37,7 +57,7 @@ export const updateHotelImage = (id, formData) =>
   });
 export const deleteHotelImage = (id) =>
   axiosInstance.delete(`/hotels/deleteimage/${id}/`);
-export const listHotelImages = () => axiosInstance.get("/hotels/listimages/");
+export const listHotelImages = () => axiosInstance.get(`/hotels/listimages/`);
 
 // Notification APIs
 export const getNotifications = () =>
@@ -58,19 +78,31 @@ export const createReview = (data) =>
 export const getReviewDetail = (id) =>
   axiosInstance.get(`/reviews/details/${id}/`);
 export const getHotelReviews = (hotelId) =>
-  axiosInstance.get(`/reviews/hotelsreviews/${hotelId}/`);
+  axiosInstance.get(`/reviews/hotels/${hotelId}/reviews/`);
 
 // Bookings APIs
-export const createBooking = (data) =>
-  axiosInstance.post("/bookings/create/", data);
-export const getBookingDetail = (id) =>
-  axiosInstance.get(`/bookings/details/${id}/`);
+// Create a new booking
+export const createBooking = (data) => axiosInstance.post("/bookings/", data);
+
+// Get all bookings
+export const getAllBookings = () => axiosInstance.get("/bookings/");
+
+// Get booking detail
+export const getBookingDetail = (id) => axiosInstance.get(`/bookings/${id}/`);
+
+// Update a booking
+export const updateBooking = (id, data) =>
+  axiosInstance.put(`/bookings/${id}/`, data);
+
+// Delete a booking
+export const deleteBooking = (id) => axiosInstance.delete(`/bookings/${id}/`);
 
 // Get all payments
-export const getAllPayments = () => axiosInstance.get("/payments/");
+export const getAllPayments = () => axiosInstance.get("/payments/create");
 
 // Create a new payment
-export const createPayment = (data) => axiosInstance.post("/payments/", data);
+export const createPayment = (data) =>
+  axiosInstance.post("/payments/create", data);
 
 // Get single payment by id
 export const getPayment = (id) => axiosInstance.get(`/payments/${id}/`);
@@ -84,15 +116,15 @@ export const deletePayment = (id) => axiosInstance.delete(`/payments/${id}/`);
 
 // Process a specific payment
 export const processPayment = (id) =>
-  axiosInstance.post(`/payments/${id}/process_payment/`);
+  axiosInstance.post(`/payments/${id}/`, { process_payment: true });
 
 // Refund a specific payment
 export const refundPayment = (id) =>
-  axiosInstance.post(`/payments/${id}/refund_payment/`);
+  axiosInstance.post(`/payments/${id}/`, { refund_payment: true });
 
 // Create a payment for a reservation (reservation_id + payment_method + is_deposit)
 export const createPaymentForReservation = (data) =>
-  axiosInstance.post(`/payments/create_payment_for_reservation/`, data);
+  axiosInstance.post("/payments/create_payment_for_reservation/", data);
 
 // ------ Payment Settings APIs ------
 
@@ -100,17 +132,9 @@ export const createPaymentForReservation = (data) =>
 export const getAllPaymentSettings = () =>
   axiosInstance.get("/payment-settings/");
 
-// Create a new payment setting
-export const createPaymentSetting = (data) =>
-  axiosInstance.post("/payment-settings/", data);
-
-// Get single payment setting by id
-export const getPaymentSetting = (id) =>
-  axiosInstance.get(`/payment-settings/${id}/`);
-
-// Update payment setting by id
-export const updatePaymentSetting = (id, data) =>
-  axiosInstance.put(`/payment-settings/${id}/`, data);
+// Update payment settings (Create if not exists)
+export const updatePaymentSetting = (data) =>
+  axiosInstance.put("/payment-settings/", data);
 
 // Delete payment setting by id
 export const deletePaymentSetting = (id) =>
