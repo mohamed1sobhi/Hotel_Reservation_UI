@@ -10,10 +10,11 @@ import {
 // Fetch all images
 export const fetchRoomImages = createAsyncThunk(
     "images/fetchImages",
-    async (_, { rejectWithValue }) => {
+    async (id, { rejectWithValue }) => {
         try {
-            const response = await listRoomImages();
-            return response;
+            const response = await listRoomImages(id);
+            console.log('Fetch Images Response:', response.data);
+            return response.data;
         } catch (error) {
             console.error('Fetch Images Error:', error);
             return rejectWithValue(error.response?.data?.message || "Failed to fetch images");
@@ -26,7 +27,8 @@ export const addRoomImage = createAsyncThunk(
     async (formData, { rejectWithValue }) => {
         try {
             const response = await createRoomImage(formData);
-            return response;
+            console.log('Create Image Response:', response.data);
+            return response.data;
         } catch (error) {
             console.error('Create Image Error:', error);
             return rejectWithValue(error.response?.data?.message || "Failed to create image");

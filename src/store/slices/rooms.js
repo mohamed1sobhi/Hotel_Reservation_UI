@@ -105,6 +105,7 @@ export const fetchRoomDetail = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await getRoomDetail(id);
+      console.log('Fetch Room Detail Response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Fetch Room Detail Error:', error);
@@ -144,7 +145,7 @@ export const fetchRoomsByHotel = createAsyncThunk(
 const initialState = {
   rooms: [],
   hotelRoomTypes: [],
-  roomDetail: null,
+  roomDetail: [],
   roomTypes: [],
   loading: false,
   error: null,

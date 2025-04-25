@@ -25,6 +25,9 @@ import Footer from './components/Footer';
 import RoomsPage from './pages/Hotel/Rooms';
 import ImageForm from './components/ImageForm.jsx';
 import AddRoom from './components/addroom';
+import AddType from './components/addtype';
+import AddRoomImage from './components/addroomimage';
+import RoomDetails from './components/roomdetails';
 
 
 function App() {
@@ -54,6 +57,9 @@ function App() {
     <Route path="/hotels/:id" element={<RoomsPage/>} />
     <Route path = "/createImage/:Id" element = {<  ImageForm />} /> 
     <Route path="/addroom/:HotelId" element={<AddRoom />} />
+    <Route path="/addtype/:hotel_id" element={< AddType />} />
+    <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
+    <Route path="/roomdetails/:_id" element={<RoomDetails />} />
    </Routes>
    </BrowserRouter>
     }

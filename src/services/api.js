@@ -16,9 +16,9 @@ export const filterHotelsByStars = (stars) => axiosInstance.get(`/hotels/hotelfi
 
 // Room APIs
 // export const getAllRooms = () => axiosInstance.get("/hotels/roomlist/"); 
-export const createRoom = (data) => axiosInstance.post("/hotels/roomcreate/", data);
-export const hotelRoomstype = (id) => axiosInstance.get(`/hotels/hotelroometype/${id}/`); 
-export const createRoomType = (data) => axiosInstance.post("/hotels/roomtypecreate/", data);
+export const createRoom = (data) => axiosInstance.post("/hotels/roomcreate/", data);//done
+export const hotelRoomstype = (id) => axiosInstance.get(`/hotels/hotelroometype/${id}/`); //done
+export const createRoomType = (data) => axiosInstance.post("/hotels/roomcreatetype/", data);//done
 export const updateRoom = (id, data) => axiosInstance.put(`/hotels/roomupdate/${id}/`, data);
 export const deleteRoom = (id) => axiosInstance.delete(`/hotels/roomdelete/${id}/`);
 export const getRoomDetail = (id) => axiosInstance.get(`/hotels/roomdetail/${id}/`);
@@ -34,7 +34,7 @@ export const updateRoomImage = (id, formData) => axiosInstance.put(`/hotels/room
   headers: { "Content-Type": "multipart/form-data" }
 });
 export const deleteRoomImage = (id) => axiosInstance.delete(`/hotels/roomdeleteimage/${id}/`);
-export const listRoomImages = () => axiosInstance.get(`/hotels/roomlistimages/`);
+export const listRoomImages = (id) => axiosInstance.get(`/hotels/roomlistimages/${id}/`);
 
   
 // Image APIs
