@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomDetail } from "../store/slices/rooms";
 import { fetchRoomImages } from "../store/slices/room_images";
+import { removeRoomImage } from "../store/slices/room_images";
 
 const RoomDetails = () => {
     const { _id } = useParams();
@@ -67,6 +68,12 @@ const RoomDetails = () => {
                             alt={`Room Image ${image.id}`}
                             className="img-fluid rounded"
                         />
+                        <button
+                            className="btn btn-danger mt-2"
+                            onClick={() => dispatch(removeRoomImage(image.id))}
+                        >
+                            Delete
+                        </button>
                     </div>
                 ))}
             </div>

@@ -60,6 +60,7 @@ function App() {
     <Route path="/addtype/:hotel_id" element={< AddType />} />
     <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
     <Route path="/roomdetails/:_id" element={<RoomDetails />} />
+    <Route path="/editroom/:roomId/" element={<AddRoom />} />
    </Routes>
    </BrowserRouter>
     }

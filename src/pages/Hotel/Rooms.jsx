@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { fetchRoomDetail } from "../../store/slices/rooms";
 import { fetchRoomImages } from "../../store/slices/room_images";
+import { removeRoom } from "../../store/slices/rooms";
 
 
 export default function RoomsPage() {
@@ -68,6 +69,14 @@ export default function RoomsPage() {
                             <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/roomdetails/${room.id}/`)}>
                                 details
                             </button>
+                            <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/editroom/${room.id}/`)}>
+                                Editroom
+                            </button>
+                            <button className='btn btn-sm btn-danger mt-2' onClick={() => navigate(dispatch(removeRoom(room.id)))}>
+                                deleteroom
+                            </button>
+                            
+                           
                         </div>
                     ))}
                 </div>

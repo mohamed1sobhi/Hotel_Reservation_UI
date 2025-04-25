@@ -240,6 +240,7 @@ export default function HotelListingPage() {
                     <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addtype/${hotel.id}/`)}>
                       AddType
                     </button>
+                    
                   </div>
 
                   <div className="card-footer d-flex justify-content-between align-items-center">
