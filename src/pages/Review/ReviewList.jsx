@@ -4,7 +4,6 @@ import { fetchReviews } from '../../store/slices/reviews';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 
-
 const ReviewList = () => {
   const dispatch = useDispatch();
   const { reviews, loading, error } = useSelector((state) => state.reviews);
@@ -46,7 +45,7 @@ const ReviewList = () => {
 
   return (
     <div style={{ backgroundColor: '#F9F5F1', minHeight: '100vh' }}>
-      <Header />
+   
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
         <h1 style={{ 
           color: '#1A1A1A', 
@@ -118,7 +117,7 @@ const ReviewList = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                   <div>
                     <h3 style={{ color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                      {review.hotel_name || 'Hotel Name'}
+                      {review.hotel_details.name || 'Hotel Name'}
                     </h3>
                     <div style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
                       {renderStars(review.rating)}
@@ -129,7 +128,7 @@ const ReviewList = () => {
                       {formatDate(review.created_at || new Date())}
                     </p>
                     <p style={{ color: '#1A1A1A', fontWeight: 'bold' }}>
-                      {review.user_name || 'Guest'}
+                      {review.user_details.username || 'Guest'}
                     </p>
                   </div>
                 </div>
@@ -142,18 +141,33 @@ const ReviewList = () => {
                   {review.comment || 'No comment provided.'}
                 </p>
                 
-                <Link 
-                  to={`/hotels/detail/${review.hotel_id}`}
-                  style={{
-                    color: '#B45F3A',
-                    textDecoration: 'none',
-                    fontWeight: '500',
-                    display: 'inline-block',
-                    marginTop: '0.5rem'
-                  }}
-                >
-                  View Hotel →
-                </Link>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between',
+                  marginTop: '0.5rem'
+                }}>
+                  <Link 
+                    to={`/hotels/detail/${review.hotel_id}`}
+                    style={{
+                      color: '#B45F3A',
+                      textDecoration: 'none',
+                      fontWeight: '500',
+                    }}
+                  >
+                    View Hotel →
+                  </Link>
+                  
+                  <Link 
+                    to={`/reviews/${review.id}`}
+                    style={{
+                      color: '#CD9A5E',
+                      textDecoration: 'none',
+                      fontWeight: '500',
+                    }}
+                  >
+                    View Review Details →
+                  </Link>
+                </div>
               </div>
             ))
           ) : (
