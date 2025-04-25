@@ -5,7 +5,7 @@ import { fetchHotels } from "../store/slices/hotels";
 import FilterWithStar from "../components/filterwithstar";
 import Search from "../components/SearchBar";
 import HotelList from "../components/hotellist";
-import Header from "../components/Header";
+ 
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -20,8 +20,7 @@ const Home = () => {
 
   return (
     <>
-    <Header />
-    <div className="container">
+     <div className="container">
       <FilterWithStar selectedStars={selectedStars} setSelectedStars={setSelectedStars} />
       <Search hotels={hotels} setFilteredHotels={setFilteredHotels} />
 

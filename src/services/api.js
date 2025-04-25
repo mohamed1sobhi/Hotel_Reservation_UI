@@ -17,7 +17,7 @@ export const filterHotelsByStars = (stars) => axiosInstance.get(`/hotels/hotelfi
 // Room APIs
 // export const getAllRooms = () => axiosInstance.get("/hotels/roomlist/"); 
 export const createRoom = (data) => axiosInstance.post("/hotels/roomcreate/", data);
-export const createRoomType = (data) => axiosInstance.post("/hotels/roomtypecreate/", data);
+export const createRoomType = (data) => axiosInstance.post("/hotels/roomtypecreate/", data); //each hotel --> type 
 export const updateRoom = (id, data) => axiosInstance.put(`/hotels/roomupdate/${id}/`, data);
 export const deleteRoom = (id) => axiosInstance.delete(`/hotels/roomdelete/${id}/`);
 export const getRoomDetail = (id) => axiosInstance.get(`/hotels/roomdetail/${id}/`);

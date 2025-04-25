@@ -45,7 +45,7 @@ const ReviewList = () => {
 
   return (
     <div style={{ backgroundColor: '#F9F5F1', minHeight: '100vh' }}>
-      <Header />
+   
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
         <h1 style={{ 
           color: '#1A1A1A', 
