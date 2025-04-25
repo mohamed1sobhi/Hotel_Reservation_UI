@@ -17,6 +17,7 @@ const BookingDetails = () => {
   const user = localStorage.getItem('user');
   const [showDatePassedMessage, setShowDatePassedMessage] = useState(false);
   const today = new Date();
+  const [filter, setFilter] = useState('all'); // 'all', 'pending', 'confirmed'
 
   useEffect(() => {
     if (!token || !user) {
