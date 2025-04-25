@@ -7,6 +7,7 @@ import {
   // getAllRooms, 
   createRoom, 
   updateRoom, 
+  hotelRoomstype,
   createRoomType,
   deleteRoom, 
   getRoomDetail, 
@@ -28,7 +29,20 @@ import {
 //     }
 //   }
 // );
-
+//hotell rooms
+export const fetchHotelRoomsType = createAsyncThunk(
+  "rooms/fetchHotelRoomsType",
+  async (hotelId, { rejectWithValue }) => {
+    try {
+      const response = await hotelRoomstype(hotelId);
+      console.log('Fetch Hotel Rooms Type Response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch Hotel Rooms Type Error:', error);
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch hotel rooms");
+    }
+  }
+);
 // create room type 
 export const createtype = createAsyncThunk(
   "rooms/createtype" ,
@@ -91,6 +105,7 @@ export const fetchRoomDetail = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await getRoomDetail(id);
+      console.log('Fetch Room Detail Response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Fetch Room Detail Error:', error);
@@ -129,7 +144,8 @@ export const fetchRoomsByHotel = createAsyncThunk(
 );
 const initialState = {
   rooms: [],
-  roomDetail: null,
+  hotelRoomTypes: [],
+  roomDetail: [],
   roomTypes: [],
   loading: false,
   error: null,
@@ -168,6 +184,22 @@ const roomsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      //hotel rooms type 
+      .addCase(fetchHotelRoomsType.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchHotelRoomsType.fulfilled, (state, action) => {
+        state.loading = false;
+        state.hotelRoomTypes = action.payload;
+      }
+      )
+      .addCase(fetchHotelRoomsType.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      }
+      )
+      
       // Create room type
       .addCase(createtype.pending, (state) => {
         state.loading = true;

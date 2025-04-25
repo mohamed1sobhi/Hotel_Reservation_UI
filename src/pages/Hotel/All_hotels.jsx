@@ -6,7 +6,7 @@ import { Star, Map, Phone, Calendar, Search } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 import HotelFormModal from "../../components/HotelFormModal";
 import { useNavigate } from "react-router-dom";
-// import {fetchRooms } from '../../store/slices/rooms';
+import {fetchHotelRoomsType } from '../../store/slices/rooms';
 import { fetchRoomsByHotel } from '../../store/slices/rooms';
   
 export default function HotelListingPage() {
@@ -29,6 +29,7 @@ export default function HotelListingPage() {
     // dispatch(fetchRooms());
     // dispatch(fetchRoomsByHotel(4));
     // dispatch(fetchImages());
+    dispatch(fetchRoomsByHotel(1));
   }, [dispatch]);
   // console.log("images", images);
 // console.log("hotels images", hotels[0].image);
@@ -232,6 +233,12 @@ export default function HotelListingPage() {
                     </button>
                     <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/hotels/${hotel.id}/reviews`)}>
                       view reviews
+                    </button>
+                    <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addroom/${hotel.id}/`)}>
+                      AddRoom
+                    </button>
+                    <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addtype/${hotel.id}/`)}>
+                      AddType
                     </button>
                   </div>
 

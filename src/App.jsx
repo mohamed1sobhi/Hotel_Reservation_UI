@@ -26,6 +26,11 @@ import ImageForm from './components/ImageForm.jsx';
 import Header from './components/Header';
 import Star from './pages/Hotel/star';
 import HotelDetails from './pages/Hotel/hoteldetails';
+import AddRoom from './components/addroom';
+import AddType from './components/addtype';
+import AddRoomImage from './components/addroomimage';
+import RoomDetails from './components/roomdetails';
+
 function App() {
 
       
@@ -54,6 +59,10 @@ function App() {
           <Route path="/createImage/:Id" element={<ImageForm />} />
           <Route path="/star" element= { <Star />} />
           <Route path="/star/detail/:id" element={<HotelDetails />} />
+          <Route path="/addroom/:HotelId" element={<AddRoom />} />
+          <Route path="/addtype/:hotel_id" element={< AddType />} />
+          <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
+          <Route path="/roomdetails/:_id" element={<RoomDetails />} />
 
  
         </Routes>

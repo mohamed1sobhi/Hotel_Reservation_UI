@@ -2,15 +2,21 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoomsByHotel } from "../../store/slices/rooms";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { fetchRoomDetail } from "../../store/slices/rooms";
+import { fetchRoomImages } from "../../store/slices/room_images";
+
 
 export default function RoomsPage() {
-
+    const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useDispatch();
     const { rooms, loading, error } = useSelector((state) => state.rooms);
   
     useEffect(() => {
         dispatch(fetchRoomsByHotel(id));
+        dispatch(fetchRoomDetail(1));
+        dispatch(fetchRoomImages(1));
     }, [dispatch, id]);
 
     if (loading) {
@@ -56,6 +62,12 @@ export default function RoomsPage() {
                                     </p>
                                 </div>
                             </div>
+                            <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addroomimage/${room.id}/`)}>
+                                AddImage
+                            </button>
+                            <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/roomdetails/${room.id}/`)}>
+                                details
+                            </button>
                         </div>
                     ))}
                 </div>
