@@ -145,7 +145,7 @@ const EditBooking = () => {
           }
         });        
         setTimeout(() => {
-          navigate('/my-bookings');
+          navigate(`/my-bookings/${id}`);
         }, 1000); 
       })
       .catch((err) => {

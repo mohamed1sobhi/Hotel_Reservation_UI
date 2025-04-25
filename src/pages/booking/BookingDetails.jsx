@@ -69,9 +69,27 @@ const BookingDetails = () => {
 
 
   if (!booking) {
-    return <div className="text-center mt-4">Booking not found</div>;
+    return (
+      <div className="container d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '60vh' }}>
+        <div className="text-center p-5 border rounded shadow" style={{ backgroundColor: '#fff3cd', color: '#856404' }}>
+          <i className="fas fa-exclamation-triangle fa-4x mb-3"></i>
+          <h2 style={{ fontWeight: 'bold', fontSize: '2rem' }}>Booking Not Found</h2>
+          <p className="mt-3" style={{ fontSize: '1.2rem' }}>
+            😕 We couldn't find the booking you're looking for.<br />
+            It's possible it was deleted or never existed.
+          </p>
+          <button
+            className="btn btn-warning mt-4"
+            onClick={() => navigate('/my-bookings')}
+            style={{ fontSize: '1rem', fontWeight: 'bold' }}
+          >
+            <i className="fas fa-arrow-left me-2"></i>Go Back To Your Bookings List
+          </button>
+        </div>
+      </div>
+    );
   }
-
+  
 
   const formattedCheckInDate = booking.check_in
     ? format(new Date(booking.check_in), 'MMM dd, yyyy')
