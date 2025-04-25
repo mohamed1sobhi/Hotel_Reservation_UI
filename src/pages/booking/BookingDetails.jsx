@@ -10,13 +10,13 @@ const BookingDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
   const booking = useSelector((state) => state.bookings.selectedBooking);
   const [hotels, setHotels] = useState([]);
-  const [showModal, setShowModal] = useState(false);  // State to toggle modal visibility
-
+  const [showModal, setShowModal] = useState(false); // State to toggle modal visibility
   const token = localStorage.getItem('access');
   const user = localStorage.getItem('user');
+  const [showDatePassedMessage, setShowDatePassedMessage] = useState(false);
+  const today = new Date();
 
   useEffect(() => {
     if (!token || !user) {
@@ -24,9 +24,7 @@ const BookingDetails = () => {
     } else {
       dispatch(fetchBookingDetail(id));
       getAllHotels()
-        .then((res) => {
-          setHotels(res.data);
-        })
+        .then((res) => setHotels(res.data))
         .catch(() => console.error('Failed to load hotels.'));
     }
   }, [id, navigate, dispatch, token, user]);
@@ -50,6 +48,18 @@ const BookingDetails = () => {
     setShowModal(false);  // Close the modal after deletion
   };
 
+  useEffect(() => {
+    if (booking && booking.check_in) {  // Ensure booking and check_in exist
+        const checkInDate = new Date(booking.check_in);
+        if (checkInDate < today && booking.status === 'pending') {
+            setShowDatePassedMessage(true);
+        } else {
+            setShowDatePassedMessage(false);  // Optionally reset the state if no conflict
+        }
+    }
+}, [booking, today]);  // Add `today` to dependencies if necessary
+
+
   const calculateNights = () => {
     if (!booking) return 0;
     const start = new Date(booking.check_in);
@@ -57,9 +67,11 @@ const BookingDetails = () => {
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
+
   if (!booking) {
     return <div className="text-center mt-4">Booking not found</div>;
   }
+
 
   const formattedCheckInDate = booking.check_in
     ? format(new Date(booking.check_in), 'MMM dd, yyyy')
@@ -72,6 +84,7 @@ const BookingDetails = () => {
   const isDisabled = booking.status === 'confirmed';
 
   return (
+    
     <div className="container py-5" style={{ fontFamily: 'Segoe UI, sans-serif' }}>
       <div className="card shadow-lg" style={{ backgroundColor: '#F9F5F1', borderRadius: '12px' }}>
         <div className="card-body">
@@ -108,7 +121,7 @@ const BookingDetails = () => {
 
             <div className="col-md-4 d-flex flex-column justify-content-center align-items-center">
               <FaArrowRight size={24} color="#CD9A5E" />
-              <span className="mt-2">{calculateNights()} night{calculateNights() !== 1 ? 's' : ''}</span>
+              <span className="mt-2">{calculateNights()} Day{calculateNights() !== 1 ? 's' : ''}</span>
             </div>
 
             <div className="col-md-4">
@@ -135,10 +148,25 @@ const BookingDetails = () => {
             </li>
           </ul>
 
-          {/* Status-based messages */}
-          {booking.status === 'pending' && (
+
+            {/* Status-based messages */}
+            {booking.status === 'pending' && booking.has_conflict && (
+            <div className="alert alert-danger mt-4" role="alert" style={{ fontSize: '1rem', backgroundColor: '#F8D7DA', borderColor: '#F5C6CB', color: '#721C24' }}>
+              ⚠️ This booking is pending, but another guest has already confirmed the room for overlapping dates from <strong>{format(new Date(booking.check_in), 'MMM dd, yyyy')}</strong> to <strong>{format(new Date(booking.check_out), 'MMM dd, yyyy')}</strong>.
+              Please cancel this booking and let's make a new or edit your booking in available dates.
+            </div>
+          )}
+
+            {booking.status === 'pending' && showDatePassedMessage && (
+                <div className="alert alert-warning mt-4" role="alert" style={{ fontSize: '1rem', backgroundColor: '#FFF3CD', borderColor: '#FFEEBA', color: '#856404' }}>
+                    ⚠️ Your check-in date has already passed, but your booking is still <strong>pending</strong> and till now you didn't <u>confirm</u> your booking.<br />
+                    Please either cancel your booking and make a new one or edit your booking with available dates.
+                </div>
+            )}
+
+          {!booking.has_conflict && booking.status === 'pending' && !showDatePassedMessage && (
             <div className="alert alert-warning mt-4" role="alert" style={{ fontSize: '1rem', backgroundColor: '#FFF3CD', borderColor: '#FFEEBA', color: '#856404' }}>
-              📢 This booking is currently marked as <strong>Pending</strong>. It is <u>not confirmed</u> and may still be booked by others.<br />
+              📢 This booking is currently marked as <strong>Pending</strong>. It is <u>not confirmed</u> and may still be booked by others. If the check-in date passes without confirming your booking, the process will be stopped.<br />
               To secure your stay, please complete the <strong>payment</strong> below.
             </div>
           )}
@@ -146,8 +174,8 @@ const BookingDetails = () => {
           {booking.status === 'confirmed' && (
             <div className="alert alert-success mt-4" role="alert" style={{ fontSize: '1rem', backgroundColor: '#D4EDDA', borderColor: '#C3E6CB', color: '#155724' }}>
               🎉 Your booking is <strong>Confirmed</strong>!<br />
-              Thank you for choosing us — we look forward to hosting you.<br />
-              🛏️ Wishing you a pleasant and relaxing stay!
+              Thank you for choosing us — we look forward to hosting you on <strong>{format(new Date(booking.check_in), 'MMM dd, yyyy')}</strong>.<br />
+              🛏️ Wishing you a pleasant and relaxing stay, and we can’t wait to meet you at check-in!
             </div>
           )}
 
@@ -162,7 +190,7 @@ const BookingDetails = () => {
               </button>
             )}
 
-            {!isDisabled && (
+            {!isDisabled && !booking.has_conflict && !showDatePassedMessage && (
               <button
                 className="btn text-white flex-fill"
                 style={{ backgroundColor: '#B45F3A' }}
@@ -170,6 +198,7 @@ const BookingDetails = () => {
                 💳 Pay Now
               </button>
             )}
+
 
             {!isDisabled && (
               <button
