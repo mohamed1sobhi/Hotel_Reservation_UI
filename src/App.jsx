@@ -1,8 +1,6 @@
- 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
- 
-import React, {useEffect} from 'react'
+ import React, {useEffect} from 'react'
 import Home from './pages/Home'
 import All_hotels from  './pages/Hotel/All_hotels'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -15,8 +13,8 @@ import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
 // import RegisterUserForm from './pages/register';
 // import BookingForm from './pages/booking/create';
-// import PaymentsList from './pages/payment/paymentList';
-// import PaymentSettings from './pages/payment/paymentSettings';
+import ClientInfoPayment from './pages/payment/ClientInfoPayment';
+import PaymentMethod from './pages/payment/PaymentMethod';
 import AddBooking from './pages/booking/AddBooking';
 import BookingsList from './pages/booking/BookingList';
 import BookingDetails from './pages/booking/BookingDetails.jsx';
@@ -60,6 +58,8 @@ function App() {
     <Route path="/addtype/:hotel_id" element={< AddType />} />
     <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
     <Route path="/roomdetails/:_id" element={<RoomDetails />} />
+    <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
+    <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
    </Routes>
    </BrowserRouter>
     }
