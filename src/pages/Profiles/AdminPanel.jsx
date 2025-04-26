@@ -9,23 +9,28 @@ import {
 } from "../../store/slices/accounts";
 import { fetchhotelBookings } from "../../store/slices/booking";
 import { fetchOwnerHotelDetails } from "../../store/slices/hotels";
-import "./HotelOwner.css";
+import "./AdminPanel.css";
 import { useEffect, useState } from "react";
 
-// get owner personl data (done)
-// add form to update owner personal data (done)
-// get hotel data (done)
+// get admin personl data ()
+// add form to update admin personal data ()
+// get all users data ()
+// limit users data to 5 and add a button to view all users ()
+// add user details page that can confirm or block user ()
+// get all hotels data ()
+// limit hotels data to 5 and add a button to view all hotels ()
+// get all bookings data ()
+// limit bookings data to 5 and add a button to view all bookings ()
 // get hotel reviews or view in hotel details (done)
 // get hotel bookings (done)
 
-export default function HotelOwner() {
+export default function AdminPanel() {
   const dispatch = useDispatch();
   const { userDetail, loading, error } = useSelector((state) => state.accounts);
   const { bookings } = useSelector((state) => state.bookings);
   const { hotelDetail } = useSelector((state) => state.hotels);
   console.log(userDetail, "userDetail");
   console.log(hotelDetail, "hotelDetail");
-  console.log(bookings, "bookings");
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -199,7 +204,7 @@ export default function HotelOwner() {
         )}
       </div>
       <div className="mt-5 hotel-bookings">
-        <h2>Your Hotel Reservations</h2>
+        <h2>Your Hotel Bookings</h2>
         {bookings && bookings.length > 0 ? (
           bookings.map((booking) => (
             <Link
@@ -211,8 +216,8 @@ export default function HotelOwner() {
                 key={booking.id}
                 hotelimage={booking.hotel_image}
                 bookingDate={booking.created_at}
-                clientName={booking.client_name}
-                clientEmail={booking.client_email}
+                hotelname={booking.hotel_name}
+                hoteladdress={booking.hotel_address}
                 roomtype={booking.room_type}
                 checkinDate={booking.check_in}
                 checkOutDate={booking.check_out}

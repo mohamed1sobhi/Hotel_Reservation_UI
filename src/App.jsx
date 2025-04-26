@@ -15,6 +15,7 @@ import AddReview from "./pages/Review/AddReview";
 import Login from "./components/login";
 import RegisterUserForm from "./pages/register";
 import CustomerProfile from "./pages/Profiles/Customer";
+import AdminPanel from "./pages/Profiles/AdminPanel.jsx";
 import HotelOwner from "./pages/Profiles/HotelOwner";
 // import BookingForm from './pages/booking/create';
 // import PaymentsList from './pages/payment/paymentList';
@@ -41,6 +42,7 @@ function App() {
               <Route path="/register" element={<RegisterUserForm />} />
               <Route path="/customerprofile" element={<CustomerProfile />} />
               <Route path="/hotelownerprofile" element={<HotelOwner />} />
+              <Route path="/adminpanel" element={<AdminPanel />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/reviews" element={<ReviewList />} />

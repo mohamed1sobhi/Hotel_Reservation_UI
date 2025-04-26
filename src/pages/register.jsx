@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createUser, editUser } from "../store/slices/accounts";
 import "./RegisterUserForm.css";
 
-const RegisterUserForm = ({ existingUser = null, onSuccess }) => {
+const RegisterUserForm = ({ onSuccess }) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.accounts);
 
@@ -15,19 +15,6 @@ const RegisterUserForm = ({ existingUser = null, onSuccess }) => {
     password2: "",
     role: "customer",
   });
-
-  useEffect(() => {
-    if (existingUser) {
-      setFormData({
-        username: existingUser.username || "",
-        email: existingUser.email || "",
-        phone: existingUser.phone || "",
-        password: "",
-        password2: "",
-        role: existingUser.role || "customer",
-      });
-    }
-  }, [existingUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,9 +43,7 @@ const RegisterUserForm = ({ existingUser = null, onSuccess }) => {
 
   return (
     <div className="register-form-container bg-cream p-4 rounded shadow">
-      <h2 className="form-title text-dark mb-3">
-        {existingUser ? "Edit User" : "Register New User"}
-      </h2>
+      <h2 className="form-title text-dark mb-3">Register New User</h2>
       <form onSubmit={handleSubmit} className="register-form">
         <input
           type="text"
@@ -109,30 +94,12 @@ const RegisterUserForm = ({ existingUser = null, onSuccess }) => {
           required
         />
 
-        <select
-          name="role"
-          className="form-select mb-3"
-          value={formData.role}
-          onChange={handleChange}
-        >
-          <option value="customer">Customer</option>
-          <option value="hotel_staff">Hotel Staff</option>
-          <option value="hotel_owner">Hotel Owner</option>
-          <option value="admin">Admin</option>
-        </select>
-
         <button
           type="submit"
           className="btn btn-primary-custom w-100"
           disabled={loading}
         >
-          {loading
-            ? existingUser
-              ? "Updating..."
-              : "Registering..."
-            : existingUser
-            ? "Update User"
-            : "Register"}
+          {loading ? "Registering..." : "Register User"}
         </button>
 
         {error && <p className="text-danger mt-2">{error}</p>}
