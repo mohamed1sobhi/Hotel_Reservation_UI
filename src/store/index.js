@@ -4,7 +4,7 @@ import RoomsReducer from "./slices/rooms";
 import ReviewsReducer from './slices/reviews';
 import AuthReducer from './slices/login';
 import BookingsReducer from './slices/booking';
-// import PaymentReducer from './slices/payments';
+import PaymentReducer from './slices/payments';
 import ImageReducer from './slices/images';
 // import AccountReducer from './slices/accounts';
 import roomImagesReducer from "./slices/room_images";
@@ -17,7 +17,7 @@ const store = configureStore({
     reviews: ReviewsReducer,
     auth: AuthReducer,
     bookings: BookingsReducer,
-    // payments: PaymentReducer,
+    payments: PaymentReducer,
     images: ImageReducer,
     // accounts: AccountReducer,
     roomImages: roomImagesReducer,

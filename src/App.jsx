@@ -30,6 +30,10 @@ import AddRoom from './components/addroom';
 import AddType from './components/addtype';
 import AddRoomImage from './components/addroomimage';
 import RoomDetails from './components/roomdetails';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import BookingForm  from './components/addbooking';
+import BookingDetail from './components/bookingdetails';
 
 function App() {
 
@@ -55,7 +59,7 @@ function App() {
           <Route path="/my-bookings/:id" element={<BookingDetails />} />
           <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
           <Route path="/hotels" element={<All_hotels />} />
-          <Route path="/hotels/:id" element={<RoomsPage />} />
+          <Route path="/hotels/:ID" element={<RoomsPage />} />
           <Route path="/createImage/:Id" element={<ImageForm />} />
           <Route path="/star" element= { <Star />} />
           <Route path="/star/detail/:id" element={<HotelDetails />} />
@@ -64,6 +68,9 @@ function App() {
           <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
           <Route path="/roomdetails/:_id" element={<RoomDetails />} />
           <Route path="/editroom/:roomId/" element={<AddRoom />} />
+          <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
+          <Route path="/bookingdetails/:UserId" element={< BookingDetail />}/>
+          {/* <ToastContainer position="top-center" autoClose={3000} /> */}
         </Routes>
       </main>
       <Footer />

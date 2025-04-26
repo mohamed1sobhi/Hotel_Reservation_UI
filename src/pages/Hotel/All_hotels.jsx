@@ -241,6 +241,7 @@ export default function HotelListingPage() {
                       AddType
                     </button>
                     
+                    
                   </div>
 
                   <div className="card-footer d-flex justify-content-between align-items-center">

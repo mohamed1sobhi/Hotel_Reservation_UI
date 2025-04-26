@@ -1,91 +1,166 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { FaCalendarAlt, FaDoorOpen } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBookingDetail, updateBooking } from '../../store/slices/booking';
+import { getAllHotels } from '../../services/api'; // Assuming you have an API file with this function.
+import { FaCalendarAlt, FaBed, FaMoneyBillWave, FaHotel } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const EditBooking = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem('access');
-  const user = localStorage.getItem('user'); // Or wherever your user data is stored
+  const dispatch = useDispatch();
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+
+  const selectedBooking = useSelector((state) => state.bookings.selectedBooking);
 
   const [formData, setFormData] = useState({
     check_in: '',
     check_out: '',
+    hotel: '',
     room: '',
+    roomPrice: 0,
+    totalPrice: 0,
   });
+
+  const [hotels, setHotels] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [errors, setErrors] = useState([]);
   const [statusError, setStatusError] = useState('');
-  const [bookingNotFound, setBookingNotFound] = useState(false);
 
   useEffect(() => {
-    if (!token || !user) {
-        console.log('User not logged in, redirecting to login...');
-        navigate('/login');
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('access');
+    if (!storedUser || !storedToken) {
+      navigate('/login');
+    } else {
+      setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
+  }, [navigate]);
 
-    axios.get(`/api/bookings/${id}/`)
-      .then(res => {
-        const data = res.data;
-        if (data.user !== user) {
-          // Check if the logged-in user matches the booking user
-          setStatusError("⚠️ You cannot edit this booking. It's not your booking.");
-        } else if (['confirmed', 'cancelled'].includes(data.status)) {
-          setStatusError("⛔ Cannot edit a confirmed or cancelled booking.");
-        } else {
-          setFormData({
-            check_in: data.check_in,
-            check_out: data.check_out,
-            room: data.room,
-          });
-        }
-      })
-      .catch(() => setStatusError("⚠️ Failed to load booking."));
+  useEffect(() => {
+    if (user && token) {
+      // Fetch booking details and hotels
+      dispatch(fetchBookingDetail(id));
 
-    axios.get('/api/rooms/')
-      .then(res => setRooms(res.data));
-  }, [id, user, navigate]);
+      getAllHotels()  // Use your own API call function here
+        .then((res) => setHotels(res.data))
+        .catch((err) => console.log("Failed to load hotels", err));
+    }
+  }, [id, user, token, dispatch]);
 
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (selectedBooking) {
+      // Pre-fill the form data with the selected booking details
+      setFormData({
+        check_in: selectedBooking.check_in,
+        check_out: selectedBooking.check_out,
+        hotel: selectedBooking.hotel, 
+        room: selectedBooking.room,   
+        roomPrice: selectedBooking.room.price_per_night || 0,
+        totalPrice: calculateTotalPrice(selectedBooking.check_in, selectedBooking.check_out, selectedBooking.room.price_per_night),
+      });
+    }
+  }, [selectedBooking]);
+
+  useEffect(() => {
+    const selectedHotel = hotels.find((h) => h.id === Number(formData.hotel));
+    setRooms(selectedHotel?.rooms || []);
+  }, [formData.hotel, hotels]);
+
+  useEffect(() => {
+    const selectedRoom = rooms.find((r) => r.id === Number(formData.room));
+    setFormData((prevState) => ({
+      ...prevState,
+      roomPrice: selectedRoom?.price_per_night || 0,
+    }));
+  }, [formData.room, rooms]);
+
+  useEffect(() => {
+    if (formData.check_in && formData.check_out && formData.roomPrice) {
+      setFormData((prevState) => ({
+        ...prevState,
+        totalPrice: calculateTotalPrice(formData.check_in, formData.check_out, formData.roomPrice),
+      }));
+    }
+  }, [formData.check_in, formData.check_out, formData.roomPrice]);
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [errors]);
+
+  const calculateTotalPrice = (checkIn, checkOut, roomPrice) => {
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const nights = (end - start) / (1000 * 60 * 60 * 24);
+    return nights > 0 ? nights * roomPrice : 0;
   };
 
-  const handleSubmit = e => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Reset errors
     setErrors([]);
-    axios.put(`/api/bookings/${id}/`, formData)
-      .then(() => navigate('/bookings'))
-      .catch(err => {
-        const data = err.response?.data;
-        if (typeof data === 'string') {
-          setErrors([data]);
-        } else if (typeof data === 'object') {
-          const messages = Object.values(data).flat();
+    setStatusError('');
+
+    // Validate dates before submitting
+    const { check_in, check_out, room } = formData;
+    if (!check_in || !check_out || !room) {
+      setErrors(['All fields are required']);
+      return;
+    }
+
+    if (new Date(check_in) >= new Date(check_out)) {
+      setErrors(['Check-out date must be after check-in date']);
+      return;
+    }
+
+    const updatedData = {
+      check_in,
+      check_out,
+      room,
+    };
+
+    dispatch(updateBooking({ id, data: updatedData }))
+      .unwrap()
+      .then(() => {
+        toast.success('Booking updated successfully!', {
+          style: {
+            background: '#CD9A5E', // Warm gold
+            color: '#fff',         // White text
+            fontWeight: 'bold',
+          }
+        });        
+        setTimeout(() => {
+          navigate('/my-bookings');
+        }, 1000); 
+      })
+      .catch((err) => {
+        console.error("Update Booking Error:", err);
+
+        if (typeof err === 'string') {
+          setErrors([err]);
+        } else if (typeof err === 'object') {
+          const messages = Object.values(err).flat();
           setErrors(messages);
         } else {
           setErrors(['Update failed. Please check your inputs.']);
         }
       });
   };
-
-  if (statusError) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="alert alert-danger">{statusError}</div>
-      </div>
-    );
-  }
-
-  if (bookingNotFound) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="alert alert-warning">
-          <p>No booking available to edit. Please check your booking details.</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="container py-5" style={{ backgroundColor: '#F4EFE6', minHeight: '100vh' }}>
@@ -105,61 +180,125 @@ const EditBooking = () => {
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label fw-semibold text-dark">
-                  <FaCalendarAlt className="me-2 text-warning" /> Check-in
-                </label>
-                <input
-                  type="date"
-                  name="check_in"
-                  value={formData.check_in}
-                  onChange={handleChange}
-                  className="form-control"
-                  required
-                />
+
+              {/* Buttons for navigation */}
+              <div className="text-center my-4 ">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary me-3"
+                  onClick={() => navigate(`/my-bookings/${id}`)}
+                >
+                  🔍 Booking Details
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-dark"
+                  onClick={() => navigate('/my-bookings')}
+                >
+                  📋 Your Bookings List
+                </button>
               </div>
 
+              {/* Hotel */}
               <div className="mb-3">
                 <label className="form-label fw-semibold text-dark">
-                  <FaCalendarAlt className="me-2 text-warning" /> Check-out
-                </label>
-                <input
-                  type="date"
-                  name="check_out"
-                  value={formData.check_out}
-                  onChange={handleChange}
-                  className="form-control"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="form-label fw-semibold text-dark">
-                  <FaDoorOpen className="me-2 text-warning" /> Room
+                  <FaHotel className="me-2 text-warning" /> Hotel
                 </label>
                 <select
-                  name="room"
-                  value={formData.room}
-                  onChange={handleChange}
                   className="form-select"
+                  name="hotel"
+                  value={formData.hotel}
+                  onChange={handleInputChange}
                   required
                 >
-                  <option value="">-- Select Room --</option>
-                  {rooms.map(room => (
-                    <option key={room.id} value={room.id}>
-                      {room.name} – ${room.price_per_night}/night
+                  <option value="">Select Hotel</option>
+                  {hotels.map((h) => (
+                    <option key={h.id} value={h.id}>{h.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Room */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold text-dark">
+                  <FaBed className="me-2 text-warning" /> Room
+                </label>
+                <select
+                  className="form-select"
+                  name="room"
+                  value={formData.room}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select Room</option>
+                  {rooms.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.room_type} – ${r.price_per_night}/night
                     </option>
                   ))}
                 </select>
               </div>
 
-              <button
-                type="submit"
-                className="btn w-100 text-white fw-bold"
-                style={{ backgroundColor: '#B87333' }}
-              >
-                Update Booking
-              </button>
+              {/* Dates */}
+              <div className="row mb-3">
+                <div className="col-md-6 mb-3 mb-md-0">
+                  <label className="form-label fw-semibold text-dark">
+                    <FaCalendarAlt className="me-2 text-warning" /> Check-in
+                  </label>
+                  <input
+                    type="date"
+                    name="check_in"
+                    value={formData.check_in}
+                    onChange={handleInputChange}
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label fw-semibold text-dark">
+                    <FaCalendarAlt className="me-2 text-warning" /> Check-out
+                  </label>
+                  <input
+                    type="date"
+                    name="check_out"
+                    value={formData.check_out}
+                    onChange={handleInputChange}
+                    className="form-control"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Price */}
+              <div className="mb-4">
+                <label className="form-label fw-semibold text-dark">
+                  <FaMoneyBillWave className="me-2 text-warning" /> Total Price
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={`$${formData.totalPrice || 0}`}
+                  readOnly
+                />
+              </div>
+
+              {/* Button */}
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="btn"
+                  style={{
+                    backgroundColor: '#B45F3A',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    padding: '0.6rem 2rem',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                  }}
+                >
+                  Update Booking
+                </button>
+              </div>
             </form>
           </div>
         </div>

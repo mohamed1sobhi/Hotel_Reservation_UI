@@ -127,6 +127,9 @@ export default function HotelDetails() {
           >
             Delete
           </button>
+          <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addbooking/${hotel.id}/`)}>
+              AddBooking
+          </button>
 
         </div>
 
