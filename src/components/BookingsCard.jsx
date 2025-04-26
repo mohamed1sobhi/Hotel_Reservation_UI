@@ -1,13 +1,19 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 import "./BookingsCard.css"; // External CSS for styling
 
 export default function BookingsCard({
   hotelimage,
   hotelname,
+  hotelId,
+  roomtype,
+  roomnumber,
   hoteladdress,
   hotelrating,
   bookingPrice,
   bookingDate,
+  checkinDate,
+  checkOutDate,
   bookingStatus,
 }) {
   return (
@@ -16,10 +22,13 @@ export default function BookingsCard({
       <div className="booking-details p-3">
         <h4 className="hotel-name">{hotelname}</h4>
         <p className="hotel-address">{hoteladdress}</p>
-        <p>⭐ Rating: {hotelrating}</p>
-        <p>💵 Price: {bookingPrice}</p>
-        <p>📅 Date: {bookingDate}</p>
-        <p className={`status ${bookingStatus.toLowerCase()}`}>
+        <p> Room:{roomtype} </p>
+        <p> Room Number: {roomnumber} </p>
+        <p> Date: {bookingDate}</p>
+        <p> Check In: {checkinDate}</p>
+        <p> Check Out: {checkOutDate}</p>
+        <p> Price: {bookingPrice} $</p>
+        <p className={`status ${bookingStatus}` || ""}>
           Status: {bookingStatus}
         </p>
       </div>

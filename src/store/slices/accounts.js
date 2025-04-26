@@ -116,13 +116,13 @@ export const editCurrentUser = createAsyncThunk(
   }
 );
 
-// // Initial state
-// const initialState = {
-//   users: [],
-//   loading: false,
-//   error: null,
-//   userDetail: null,
-// };
+// Initial state
+const initialState = {
+  users: [],
+  loading: false,
+  error: null,
+  userDetail: null,
+};
 
 // Slice
 const accountsSlice = createSlice({

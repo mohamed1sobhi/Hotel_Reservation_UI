@@ -16,6 +16,8 @@ export const deleteHotel = (id) =>
   axiosInstance.delete(`/hotels/delete/${id}/`);
 export const filterHotelsByStars = (stars) =>
   axiosInstance.get(`/hotels/hotelfilter/${stars}/`);
+export const getOwnerHotelDetails = () =>
+  axiosInstance.get("/hotels/details/ownerhoteldetails/");
 
 // Room APIs
 export const getAllRooms = () => axiosInstance.get("/hotels/roomlist/");
@@ -89,6 +91,14 @@ export const getAllBookings = () => axiosInstance.get("/bookings/");
 
 // Get booking detail
 export const getBookingDetail = (id) => axiosInstance.get(`/bookings/${id}/`);
+
+// Get current user's bookings
+export const getCurrentUserBookings = () =>
+  axiosInstance.get("/bookings/userbookings/");
+
+// Get hotel's bookings
+export const getHotelBookings = () =>
+  axiosInstance.get("/bookings/hotelbookings/");
 
 // Update a booking
 export const updateBooking = (id, data) =>

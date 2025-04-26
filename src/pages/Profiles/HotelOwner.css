@@ -1,0 +1,134 @@
+/* HotelOwner.css (Enhanced) */
+
+/* General body styling */
+body {
+  background-color: #f9f5f1;
+  color: #1a1a1a;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Profile Container */
+.profile-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #e8dfd5;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-header h1 {
+  color: #5e412f;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 2.5rem;
+}
+
+/* Profile Info Section */
+.profile-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Responsive stacking on smaller screens */
+@media (max-width: 768px) {
+  .profile-info {
+    flex-direction: column;
+  }
+}
+
+/* Personal Details & Hotel Details */
+.profile-details,
+.hotel-details,
+.hotel-bookings {
+  background-color: #f5efe6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  flex: 1 1 45%;
+}
+
+/* Personal info and hotel details texts */
+.profile-details p,
+.hotel-details p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.profile-details label,
+.hotel-details label {
+  font-weight: bold;
+  color: #8a8a8a;
+}
+
+/* Form */
+.edit-form {
+  margin-top: 2rem;
+}
+
+.form-control {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+.form-control:focus {
+  border-color: #cd9a5e;
+  box-shadow: 0 0 0 0.2rem rgba(205, 154, 94, 0.25);
+}
+
+/* Buttons */
+.btn-custom {
+  background-color: #cd9a5e;
+  color: white !important;
+  border: none;
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-custom:hover {
+  background-color: #b45f3a;
+  transform: translateY(-2px);
+}
+
+/* Hotel Bookings Section */
+.hotel-bookings h2 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #5e412f;
+  margin-bottom: 1.5rem;
+}
+
+.hotel-bookings .card {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hotel-bookings .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Alert message */
+.alert {
+  border-radius: 0.75rem;
+}
+
+/* General Links */
+a.text-decoration-none.text-dark:hover {
+  text-decoration: none;
+  color: #b45f3a !important;
+}

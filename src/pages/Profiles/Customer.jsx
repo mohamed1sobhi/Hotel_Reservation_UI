@@ -7,28 +7,26 @@ import {
   clearError,
 } from "../../store/slices/accounts";
 import "./Customer.css";
-
-// import { fetchBookings } from "../../store/slices/bookings"; *when created*
+import { fetchUserBookings } from "../../store/slices/booking";
+import { Link } from "react-router-dom";
 
 export default function CustomerProfile() {
   const dispatch = useDispatch();
   const { userDetail, loading, error } = useSelector((state) => state.accounts);
-  const bookings = useSelector((state) =>
-    (state.bookings.items || []).filter(
-      (booking) => booking.userId === userDetail?.id
-    )
-  );
+  const { bookings } = useSelector((state) => state.bookings);
+
+  console.log(bookings, "bookings");
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
   // fetch user bookings
-  // useEffect(() => {
-  //   if (userDetail) {
-  //     dispatch(fetchBookings(userDetail.id));
-  //   }
-  // }, [dispatch, userDetail]);
+  useEffect(() => {
+    if (userDetail) {
+      dispatch(fetchUserBookings());
+    }
+  }, [dispatch, userDetail]);
 
   useEffect(() => {
     if (error) {
@@ -139,20 +137,44 @@ export default function CustomerProfile() {
               </div>
             )}
 
+            {/*   hotelimage,
+                  hotelname,
+                  roomtype,
+                  roomnumber,
+
+                  hoteladdress,
+                  hotelrating,
+
+                  bookingPrice,
+                  bookingDate,
+                  checkinDate,
+                  checkOutDate,
+                  bookingStatus,
+            */}
+
             <div className="mt-5">
               <h2>Your Bookings</h2>
-              {bookings.length > 0 ? (
+              {bookings && bookings.length > 0 ? (
                 bookings.map((booking) => (
-                  <BookingsCard
+                  <Link
+                    to={`/my-bookings/${booking.id}`}
+                    className="text-decoration-none text-dark"
                     key={booking.id}
-                    hotelimage={booking.hotelImage}
-                    hotelname={booking.hotelName}
-                    hoteladdress={booking.hotelAddress}
-                    hotelrating={booking.hotelRating}
-                    bookingPrice={booking.bookingPrice}
-                    bookingDate={booking.bookingDate}
-                    bookingStatus={booking.bookingStatus}
-                  />
+                  >
+                    <BookingsCard
+                      key={booking.id}
+                      hotelimage={booking.hotel_image}
+                      bookingDate={booking.created_at}
+                      hotelname={booking.hotel_name}
+                      hoteladdress={booking.hotel_address}
+                      roomtype={booking.room_type}
+                      checkinDate={booking.check_in}
+                      checkOutDate={booking.check_out}
+                      hotelrating={booking.hotelRating}
+                      bookingPrice={booking.total_price}
+                      bookingStatus={booking.status}
+                    />
+                  </Link>
                 ))
               ) : (
                 <p>No bookings Yet.</p>
