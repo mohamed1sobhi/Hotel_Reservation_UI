@@ -3,8 +3,7 @@ import './App.css'
  
 import React, {useEffect} from 'react'
 import Home from './pages/Home'
-import All_hotels from  './pages/Hotel/All_hotels'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import ReviewList from './pages/Review/ReviewList';
@@ -24,7 +23,7 @@ import Footer from './components/Footer';
 import RoomsPage from './pages/Hotel/Rooms';
 import ImageForm from './components/ImageForm.jsx';
 import Header from './components/Header';
-import Star from './pages/Hotel/star';
+import Hotels from './pages/Hotel/all_hotels.jsx';
 import HotelDetails from './pages/Hotel/hoteldetails';
 import AddRoom from './components/addroom';
 import AddType from './components/addtype';
@@ -54,11 +53,10 @@ function App() {
           <Route path="/my-bookings" element={<BookingsList />} />
           <Route path="/my-bookings/:id" element={<BookingDetails />} />
           <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
-          <Route path="/hotels" element={<All_hotels />} />
-          <Route path="/hotels/:id" element={<RoomsPage />} />
+          <Route path="/hotels/:ID" element={<RoomsPage />} />
           <Route path="/createImage/:Id" element={<ImageForm />} />
-          <Route path="/star" element= { <Star />} />
-          <Route path="/star/detail/:id" element={<HotelDetails />} />
+          <Route path="/hotels" element= { <Hotels />} />
+          <Route path="/hotels/detail/:id" element={<HotelDetails />} />
           <Route path="/addroom/:HotelId" element={<AddRoom />} />
           <Route path="/addtype/:hotel_id" element={< AddType />} />
           <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />

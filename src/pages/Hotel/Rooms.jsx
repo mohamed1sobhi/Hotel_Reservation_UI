@@ -8,16 +8,17 @@ import { removeRoom } from "../../store/slices/rooms";
 
 export default function RoomsPage() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { ID } = useParams();
   const dispatch = useDispatch();
   const { rooms, loading, error } = useSelector((state) => state.rooms);
   const [hoveredRoom, setHoveredRoom] = useState(null);
-
+    console.log("id" ,  ID)
   useEffect(() => {
-    dispatch(fetchRoomsByHotel(id));
-    dispatch(fetchRoomDetail(1));
-    dispatch(fetchRoomImages(1));
-  }, [dispatch, id]);
+    dispatch(fetchRoomsByHotel(ID));
+    // dispatch(fetchRoomDetail(ID));
+    dispatch(fetchRoomImages(ID));
+
+  }, [dispatch, ID]);
 
   const formatAmenities = (amenities) => {
     if (!amenities) return ["No amenities listed"];
