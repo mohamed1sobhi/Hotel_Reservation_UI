@@ -3,7 +3,6 @@ import axiosInstance from "../config/axios_conf";
 // Hotel APIs
 export const getAllHotels = () => axiosInstance.get("/hotels/");
 export const createHotel = (data) => {
-  console.log("Creating Hotel with Data:", data);
   return axiosInstance.post("/hotels/create/", data);
 };
 export const updateHotel = (id, data) => {

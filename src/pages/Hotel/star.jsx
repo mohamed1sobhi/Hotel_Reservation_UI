@@ -186,12 +186,12 @@ export default function SimpleHotelListingPage() {
             })}
           </div>
         )}
-        <HotelFormModal
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          onSubmit={handleSubmit}
-          initialData={editingHotel}
-        />
+        {  showModal &&(<HotelFormModal
+              show={showModal}
+              onClose={() => setShowModal(false)}
+              onSubmit={handleSubmit}
+              initialData={editingHotel}
+            />)}
       </div>
     </div>
   );

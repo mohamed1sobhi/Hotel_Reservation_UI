@@ -1,82 +1,113 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { addHotel, editHotel, fetchHotelDetail } from "../store/slices/hotels";
 
-const HotelFormModal = ({ show, onClose, onSubmit, initialData }) => {
+const HotelFormModal = ({ HOTEL_ID , onClose }) => {
+  const handleClose = () => {
+    console.log("Cancel button clicked");
+    onClose();
+  };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const { HOTEL_ID } = useParams();
+  const isEdit = !!HOTEL_ID;
+
+  const { hotelDetail } = useSelector((state) => state.hotels);
   const user = localStorage.getItem("user");
+
   const [formData, setFormData] = useState({
-    user_id: user ? JSON.parse(user).id : "1",
+    owner: user ? JSON.parse(user).id : "1",
     name: "",
     description: "",
     address: "",
-    stars: 0,
+    stars: "",
     price_range: "",
     phone: "",
     email: "",
   });
 
+  const [formErrors, setFormErrors] = useState({});
+
   useEffect(() => {
-    if (initialData) {
+    if (isEdit) {
+      dispatch(fetchHotelDetail(HOTEL_ID));
+    }
+  }, [dispatch, HOTEL_ID, isEdit]);
+
+  useEffect(() => {
+    if (isEdit && hotelDetail) {
       setFormData({
-        ...initialData,
-        stars: initialData.stars ? Number(initialData.stars) : 0,
+        owner: hotelDetail.owner,
+        name: hotelDetail.name || '',
+        description: hotelDetail.description || '',
+        address: hotelDetail.address || '',
+        stars: hotelDetail.stars ? Number(hotelDetail.stars) : '',
+        price_range: hotelDetail.price_range || '',
+        phone: hotelDetail.phone || '',
+        email: hotelDetail.email || '',
       });
     }
-  }, [initialData]);
+  }, [hotelDetail, isEdit]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "stars"
-        ? value === "" ? "" : Number(value)
-        : value,
+      [name]: name === "stars" ? (value === "" ? "" : Number(value)) : value,
     }));
+
+    if (formErrors[name]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        [name]: null,
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.name) errors.name = "Name is required.";
+    if (!formData.address) errors.address = "Address is required.";
+    if (!formData.stars) errors.stars = "Stars rating is required.";
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) {
+      errors.email = "Invalid email address.";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name  || !formData.address || !formData.stars) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+    if (!validateForm()) return;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address.");
-      return;
+    if (isEdit) {
+      dispatch(editHotel({ id: HOTEL_ID, data: formData }));
+    } else {
+      dispatch(addHotel(formData));
     }
-
-    const preparedData = { ...formData, stars: Number(formData.stars) };
-    console.log("Submitting Hotel Data:", preparedData);
-    onSubmit(preparedData);
-    setFormData({
-      name: "",
-      description: "",
-      address: "",
-      stars: 0,
-      price_range: "",
-      phone: "",
-      email: "",
-    });
+    onClose();
   };
 
-  if (!show) return null;
-
   return (
-    <div className="modal d-block" tabIndex="-1">
-      <div className="modal-dialog">
+    <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+      <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
-              {initialData ? "Edit Hotel" : "Add Hotel"}
-            </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <h5 className="modal-title">{isEdit ? "Edit Hotel" : "Add Hotel"}</h5>
+            <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
           </div>
-          <form onSubmit={handleSubmit}>
-            <div className="modal-body">
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
               {[
                 { label: "Name", name: "name", type: "text" },
-                { label: "Description", name: "description", type: "text" },
+                { label: "Description", name: "description", type: " biti text" },
                 { label: "Address", name: "address", type: "text" },
                 { label: "Email", name: "email", type: "email" },
                 { label: "Price Range", name: "price_range", type: "text" },
@@ -87,39 +118,39 @@ const HotelFormModal = ({ show, onClose, onSubmit, initialData }) => {
                   <input
                     type={type}
                     id={name}
-                    className="form-control"
                     name={name}
                     value={formData[name]}
                     onChange={handleChange}
-                    required={name !== "phone"}
+                    className={`form-control ${formErrors[name] ? "is-invalid" : ""}`}
                   />
+                  {formErrors[name] && <div className="invalid-feedback">{formErrors[name]}</div>}
                 </div>
               ))}
 
               <div className="mb-3">
-                <label className="form-label">Stars</label>
+                <label htmlFor="stars" className="form-label">Stars</label>
                 <input
                   type="number"
-                  className="form-control"
+                  id="stars"
                   name="stars"
-                  value={formData.stars}
-                  onChange={handleChange}
                   min="3"
                   max="7"
-                  required
+                  value={formData.stars}
+                  onChange={handleChange}
+                  className={`form-control ${formErrors.stars ? "is-invalid" : ""}`}
                 />
+                {formErrors.stars && <div className="invalid-feedback">{formErrors.stars}</div>}
               </div>
-            </div>
-
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Close
-              </button>
-              <button type="submit" className="btn btn-primary">
-                {initialData ? "Save Changes" : "Add Hotel"}
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={handleClose}>
+              Cancel
+            </button>
+            <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+              {isEdit ? "Save Changes" : "Add Hotel"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
