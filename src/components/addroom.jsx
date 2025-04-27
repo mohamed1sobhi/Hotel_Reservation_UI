@@ -12,7 +12,7 @@ import './AddRoom.css';
 const AddRoom = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { HotelId, roomId } = useParams(); // Get roomId from URL
+  const {HotelId, roomId } = useParams(); 
   const isEdit = !!roomId;
 
   const { roomDetail, hotelRoomTypes, loading } = useSelector((state) => state.rooms);

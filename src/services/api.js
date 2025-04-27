@@ -3,7 +3,6 @@ import axiosInstance from "../config/axios_conf";
 // Hotel APIs
 export const getAllHotels = () => axiosInstance.get("/hotels/");
 export const createHotel = (data) => {
-  console.log("Creating Hotel with Data:", data);
   return axiosInstance.post("/hotels/create/", data);
 };
 export const updateHotel = (id, data) => {
@@ -65,7 +64,8 @@ export const getHotelReviews = (hotelId) =>
 
 // Bookings APIs
 // Create a new booking
-export const createBooking = (data) => axiosInstance.post("/bookings/", data);
+export const createBooking = (data) => axiosInstance.post("/bookings/create/", data);
+
 
 // Get all bookings
 export const getAllBookings = () => axiosInstance.get("/bookings/");
@@ -80,33 +80,15 @@ export const updateBooking = (id, data) => axiosInstance.put(`/bookings/${id}/`,
 export const deleteBooking = (id) => axiosInstance.delete(`/bookings/${id}/`);
 
 
+// get all payments for a specific booking
+export const paymentData = (id) => axiosInstance.get(`/bookings/booking/payment/${id}/`);
 
 // Get all payments
 export const getAllPayments = () => axiosInstance.get("/payments/create");
 
-// Create a new payment
-export const createPayment = (data) => axiosInstance.post("/payments/create", data);
 
 // Get single payment by id
 export const getPayment = (id) => axiosInstance.get(`/payments/${id}/`);
 
 // Process a specific payment
 export const processPayment = (id) => axiosInstance.post(`/payments/${id}/`, { process_payment: true });
-
-// Refund a specific payment
-export const refundPayment = (id) => axiosInstance.post(`/payments/${id}/`, { refund_payment: true });
-
-// Create a payment for a reservation (reservation_id + payment_method + is_deposit)
-export const createPaymentForReservation = (data) => axiosInstance.post("/payments/create_payment_for_reservation/", data);
-
-// ------ Payment Settings APIs ------
-
-// Get all payment settings
-export const getAllPaymentSettings = () => axiosInstance.get("/payment-settings/");
-
-// Update payment settings (Create if not exists)
-export const updatePaymentSetting = (data) => axiosInstance.put("/payment-settings/", data);
-
-// // ------ User APIs ------
-// export const getAllUsers = () => axiosInstance.get("/users/");
-// export const registerUser = (data) => axiosInstance.post("/users/register/", data);

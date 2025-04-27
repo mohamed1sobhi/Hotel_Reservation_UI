@@ -5,12 +5,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchRoomDetail } from "../../store/slices/rooms";
 import { fetchRoomImages } from "../../store/slices/room_images";
 import { removeRoom } from "../../store/slices/rooms";
+import { fetchPaymentDetail } from "../../store/slices/payments";
 
 export default function RoomsPage() {
   const navigate = useNavigate();
   const { ID } = useParams();
   const dispatch = useDispatch();
   const { rooms, loading, error } = useSelector((state) => state.rooms);
+  const { paymentDetail } = useSelector((state) => state.payments || {});
   const [hoveredRoom, setHoveredRoom] = useState(null);
     console.log("id" ,  ID)
   useEffect(() => {

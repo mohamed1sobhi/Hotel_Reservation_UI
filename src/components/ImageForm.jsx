@@ -45,7 +45,7 @@ const ImageForm = () => {
     dispatch(addImage(formData))
       .unwrap()
       .then(() => {
-        navigate(`/star/detail/${Id}`); 
+        navigate(`/hotels/detail/${Id}`); 
       })
       .catch((err) => {
         console.error("Error uploading image:", err);

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addBooking } from '../../store/slices/booking';
 import { getAllHotels } from '../../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHotel, faBed, faCalendarAlt, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
+import { faHotel, faBed, faCalendarAlt, faMoneyBillWave, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 const AddBooking = () => {
@@ -17,9 +17,11 @@ const AddBooking = () => {
   const [roomPrice, setRoomPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
+  const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
   const token = localStorage.getItem('access');
-  const user = localStorage.getItem('user'); // Or wherever your user data is stored
+  const user = localStorage.getItem('user');
 
   useEffect(() => {
     if (!token || !user) {
@@ -73,7 +75,8 @@ const AddBooking = () => {
         })
       ).unwrap();
 
-      alert('🎉 Booking added successfully!');
+      setModalMessage('🎉 Booking added successfully!');
+      setIsModalOpen(true); // Open the modal on success
       setHotel('');
       setRoom('');
       setCheckIn('');
@@ -81,9 +84,15 @@ const AddBooking = () => {
       setTotalPrice(0);
       setRooms([]);
     } catch (err) {
-      const messages = typeof err === 'object' ? Object.values(err).flat().join(' | ') : 'Unexpected error.';
+      const messages = typeof err === 'object' ? Object.values(err).flat().join(' | ') : 'Invalid data.';
       setError(messages);
     }
+  };
+
+  // Close modal handler and redirect after modal is closed
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    navigate('/my-bookings'); // Redirect to "My Bookings" after the modal is closed
   };
 
   return (
@@ -95,12 +104,23 @@ const AddBooking = () => {
         fontFamily: 'Segoe UI, sans-serif',
         color: '#2C1E1E'
       }}>
+        <div className="mb-4">
+          <button
+            type="button"
+            className="btn btn-outline-secondary d-flex align-items-center"
+            onClick={() => navigate('/')}
+          >
+            <FontAwesomeIcon icon={faHome} className="me-2" />
+            Home
+          </button>
+        </div>
+
         <h2 className="text-center mb-4" style={{ color: '#CD9A5E', fontWeight: 'bold' }}>
           <FontAwesomeIcon icon={faHotel} className="me-2" />
           Book Your Stay
         </h2>
 
-        {error && <div className="alert alert-danger text-center">{error}</div>}
+        {error && <div className="alert alert-warning text-center">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           {/* Hotel */}
@@ -126,7 +146,7 @@ const AddBooking = () => {
             <select className="form-select" value={room} onChange={(e) => setRoom(e.target.value)} required>
               <option value="">Select Room</option>
               {rooms.map((r) => (
-                <option key={r.id} value={r.id}>{r.name} – ${r.price_per_night}/night</option>
+                <option key={r.id} value={r.id}>{r.room_type} – ${r.price_per_night}/night</option>
               ))}
             </select>
           </div>
@@ -178,6 +198,26 @@ const AddBooking = () => {
           </div>
         </form>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog" style={{ maxWidth: '500px', marginTop: '15%' }}>
+            <div className="modal-content" style={{ backgroundColor: '#FDF6EC', borderRadius: '10px' }}>
+              <div className="modal-header" style={{ borderBottom: 'none' }}>
+                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+              </div>
+              <div className="modal-body text-center" style={{ color: '#2C1E1E' }}>
+                <h4 style={{ color: '#CD9A5E' }}>Success!</h4>
+                <p>{modalMessage}</p>
+                <button className="btn btn-primary" style={{ backgroundColor: '#B45F3A', borderColor: '#B45F3A' }} onClick={handleCloseModal}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

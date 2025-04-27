@@ -150,8 +150,13 @@ export default function HotelDetails() {
             onClick={() => setShowDeleteModal(true)}
           >
             Delete
-
+            </button>
+         
+          <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addbooking/${hotel.id}/`)}>
+              AddBooking
           </button>
+
+      
           <button
             className="btn btn-primary" style={{ marginLeft: "auto", border: "none" }}
             onClick={() => navigate(`/addroom/${hotel.id}`)}

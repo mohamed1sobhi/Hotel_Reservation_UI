@@ -23,7 +23,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className='container'>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input

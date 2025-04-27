@@ -1,11 +1,12 @@
 // src/store/bookingSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createBooking, getAllBookings } from '../../services/api'; // Adjust the import path as necessary
-import axios from 'axios';
+import { createBooking, getAllBookings, deleteBooking as deleteBookingAPI, getBookingDetail as getBookingDetailAPI, updateBooking as updateBookingAPI } from '../../services/api';
+
 
 // Initial state for the booking slice
 const initialState = {
   bookings: [],
+  selectedBooking: null,
   loading: false,
   error: null,
 };
@@ -16,15 +17,42 @@ export const fetchAllBookings = createAsyncThunk('bookings/fetchAll', async () =
   return response.data;
 });
 
-export const addBooking = createAsyncThunk('bookings/add', async (data) => {
-  const response = await createBooking(data);
+export const addBooking = createAsyncThunk('bookings/add', async (data, { rejectWithValue }) => {
+  try {
+    const response = await createBooking(data);
+    console.log("the booking data for id is ",response.data)
+    return response.data;
+  } catch (err) {
+    // Ensure the error is properly passed to the frontend
+    if (err.response && err.response.data) {
+      return rejectWithValue(err.response.data); // Send the error data to the frontend
+    }
+    return rejectWithValue('An unexpected error occurred. Please try again later.');
+  }
+});
+
+
+export const deleteBooking = createAsyncThunk('bookings/delete', async (id) => {
+  await deleteBookingAPI(id);
+  return id;
+});
+
+export const fetchBookingDetail = createAsyncThunk('bookings/fetchDetail', async (id) => {
+  const response = await getBookingDetailAPI(id);
   return response.data;
 });
 
-export const deleteBooking = createAsyncThunk('bookings/delete', async (id) => {
-  await axios.delete(`/api/bookings/${id}/`);
-  return id;
-});
+export const updateBooking = createAsyncThunk(
+  'bookings/updateBooking',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await updateBookingAPI(id, data);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || 'Update failed');
+    }
+  }
+);
 
 
 
@@ -57,12 +85,51 @@ const bookingSlice = createSlice({
     });
     builder.addCase(addBooking.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      // If the action has a payload (from rejectWithValue), set it as the error
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error.message; // fallback to default error message
+      }
     });
+    
     
     builder.addCase(deleteBooking.fulfilled, (state, action) => {
       state.bookings = state.bookings.filter((b) => b.id !== action.payload);
     });
+
+    builder.addCase(fetchBookingDetail.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchBookingDetail.fulfilled, (state, action) => {
+      state.loading = false;
+      state.selectedBooking = action.payload;  // Storing the fetched booking in state
+    });
+    builder.addCase(fetchBookingDetail.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+
+
+    builder.addCase(updateBooking.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateBooking.fulfilled, (state, action) => {
+      state.loading = false;
+      // Update the booking in state by replacing it with the updated one
+      state.bookings = state.bookings.map((booking) =>
+        booking.id === action.payload.id ? action.payload : booking
+      );
+      if (state.selectedBooking && state.selectedBooking.id === action.payload.id) {
+        state.selectedBooking = action.payload;  // Update the selected booking if it's the one being edited
+      }
+    });
+    builder.addCase(updateBooking.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
 
   },
 });

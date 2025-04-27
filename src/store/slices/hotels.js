@@ -29,7 +29,7 @@ export const addHotel = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await createHotel(data);
-      console.log('Create Hotel Response:', response);
+      console.log('Create Hotel Response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Create Hotel Error:', error.response?.data || error.message);

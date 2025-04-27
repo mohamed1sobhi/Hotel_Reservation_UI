@@ -11,12 +11,12 @@ export default function SimpleHotelListingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { hotels, loading, error } = useSelector((state) => state.hotels);
-  const [editingHotel, setEditingHotel] = useState(null);
+  // const [editingHotel, setEditingHotel] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStars, setFilterStars] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; 
+  const itemsPerPage = 6;
   useEffect(() => {
     dispatch(fetchHotels());
   }, [dispatch]);
@@ -33,43 +33,46 @@ export default function SimpleHotelListingPage() {
   };
 
   const handleAddHotel = () => {
-    setEditingHotel(null);
+    // setEditingHotel(null);
     setShowModal(true);
+    console.log("Adding new hotel");
+    console.log("the show modal is ", showModal);
+  
   };
 
-  const handleSubmit = (formData) => {
-    if (editingHotel) {
-      dispatch(editHotel({ id: editingHotel.id, data: formData }))
-        .unwrap()
-        .then(() => {
-          dispatch(fetchHotels());
-        })
-        .catch((error) => {
-          console.error("Error updating hotel:", error);
-        });
-    } else {
-      dispatch(addHotel(formData))
-        .unwrap()
-        .then(() => {
-          dispatch(fetchHotels());
-        })
-        .catch((error) => {
-          console.error("Error adding hotel:", error);
-        });
-    }
-    setShowModal(false);
-  };
+  // const handleSubmit = (formData) => {
+  //   if (editingHotel) {
+  //     dispatch(editHotel({ id: editingHotel.id, data: formData }))
+  //       .unwrap()
+  //       .then(() => {
+  //         dispatch(fetchHotels());
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error updating hotel:", error);
+  //       });
+  //   } else {
+  //     dispatch(addHotel(formData))
+  //       .unwrap()
+  //       .then(() => {
+  //         dispatch(fetchHotels());
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error adding hotel:", error);
+  //       });
+  //   }
+  //   setShowModal(false);
+  // };
 
   const filteredHotels = searchTerm
     ? hotels.filter(
-        (hotel) =>
-          hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          hotel.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          hotel.price_range?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      (hotel) =>
+        hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        hotel.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        hotel.price_range?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : hotels;
 
-  
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
@@ -113,6 +116,7 @@ export default function SimpleHotelListingPage() {
               const imageUrl = hotel.image[0].image.startsWith("/media/")
                 ? `http://127.0.0.1:8000${hotel.image[0].image}`
                 : hotel.image[0].image;
+              
 
               return (
                 <div
@@ -178,6 +182,18 @@ export default function SimpleHotelListingPage() {
         onFilter={handleStarFilter}
         onReset={resetFilters}
       />
+
+      <button className="btn btn-primary mb-4" onClick={handleAddHotel}>
+        + Add Hotel
+      </button>
+
+      {showModal && (
+        <>
+          <HotelFormModal onClose={ () => setShowModal(false) } />
+          <div className="modal-backdrop fade show"></div>
+        </>
+      )}
+
       <h1 className="text-center p-3 m-2"> Discover Your Hotel </h1>
       <div style={{ width: '80px', height: '4px', backgroundColor: '#CD9A5E', margin: '0 auto' }}></div>
       {/* Hotels Section */}
@@ -248,12 +264,7 @@ export default function SimpleHotelListingPage() {
           onPageChange={handlePageChange}
         />
 
-        <HotelFormModal
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          onSubmit={handleSubmit}
-          initialData={editingHotel}
-        />
+
       </div>
     </div>
   );
