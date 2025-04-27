@@ -1,96 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import './PaymentStyles.css';
 import { Card, Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import axiosInstance from '../../config/axios_conf.js';
+import { fetchPaymentDetail, submitPaymentMethod } from '../../store/slices/payments';
 
 const PaymentMethod = () => {
   const { paymentId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const { paymentDetail, loading, error: reduxError, paymentSuccess } = useSelector(state => state.payments);
+  
+  // Get payment data from location state or Redux store
   const [paymentData, setPaymentData] = useState(location.state?.paymentData || null);
   const [selectedMethod, setSelectedMethod] = useState('credit_card');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [processing, setProcessing] = useState(false);
   const [availablePaymentMethods, setAvailablePaymentMethods] = useState({
     credit_card: true,
     paypal: true,
     bank_transfer: true
   });
 
-  const MOCK_PAYMENT_DATA = {
-    payment_id: "123456",
-    amount_to_pay: 299.70,
-    is_deposit: true,
-    booking_summary: {
-      room_name: "Deluxe Suite with Ocean View",
-      check_in: "2025-05-01",
-      check_out: "2025-05-05",
-      total_price: 999.00
-    }
-  };
-  
+  // Load payment details if not already loaded
   useEffect(() => {
-    // For testing - use mock data directly instead of API calls
-    const testMode = true; 
-    
-    if (testMode) {
-      setPaymentData(MOCK_PAYMENT_DATA);
-    } else if (!paymentData && paymentId) {
-      fetchPaymentDetails();
+    if (!paymentData && paymentId) {
+      dispatch(fetchPaymentDetail(paymentId));
     }
-    
-    if (testMode) {
-      setAvailablePaymentMethods({
-        credit_card: true,
-        paypal: true,
-        bank_transfer: true
-      });
-    } else {
-      fetchPaymentSettings();
-    }
-  }, [paymentId, paymentData]);
+  }, [dispatch, paymentId, paymentData]);
 
-  const fetchPaymentDetails = async () => {
-    try {
-      const response = await axiosInstance.get(`/payments/${paymentId}/`);
-      setPaymentData(response.data);
-    } catch (err) {
-      setError('Failed to load payment details. Please try again.');
+  //  error handling for missing location state
+  useEffect(() => {
+    if (!location.state?.paymentData && paymentId) {
+      console.log("Payment data not found in location state, fetching from API");
+      dispatch(fetchPaymentDetail(paymentId));
     }
-  };
+  }, [dispatch, paymentId, location.state]);
 
-  const fetchPaymentSettings = async () => {
-    try {
-      // For development/testing, use mock data instead of making the API call
-      if (process.env.NODE_ENV === 'development') {
-        console.log("Using mock payment settings data");
-        setAvailablePaymentMethods({
-          credit_card: true,
-          paypal: true,
-          bank_transfer: true
+  // Update local state when payment details are fetched from Redux
+  useEffect(() => {
+    if (paymentDetail && !paymentData) {
+      try {
+        setPaymentData({
+          payment_id: paymentId,
+          amount_to_pay: paymentDetail.summary?.total_price || 0,
+          is_deposit: location.state?.clientInfo?.payment_type === 'cash',
+          booking_summary: {
+            room_name: paymentDetail.items?.map(item => 
+              `${item.room_type?.room_type || 'Room'} (x${item.quantity || 1})`
+            ).join(', ') || 'Room',
+            check_in: paymentDetail.check_in || 'N/A',
+            check_out: paymentDetail.check_out || 'N/A',
+            total_price: paymentDetail.summary?.total_price || 
+                        paymentDetail.total_price || 0
+          }
         });
-        return;
+      } catch (err) {
+        console.error("Error setting payment data:", err);
+        setError("Could not process payment details");
       }
-      
-      // Otherwise make the real API call
-      const response = await axiosInstance.get('/payments/settings/');
-      setAvailablePaymentMethods({
-        credit_card: response.data.allow_card_payment,
-        paypal: response.data.allow_paypal,
-        bank_transfer: response.data.allow_bank_transfer
-      });
-    } catch (err) {
-      // Fallback to default settings if fetch fails
-      console.error('Failed to fetch payment settings:', err);
-      setAvailablePaymentMethods({
-        credit_card: true,
-        paypal: true,
-        bank_transfer: true
-      });
     }
-  };
+  }, [paymentDetail, paymentData, paymentId, location.state]);
 
   const handleMethodChange = (e) => {
     setSelectedMethod(e.target.value);
@@ -98,48 +70,56 @@ const PaymentMethod = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setProcessing(true);
+    setError(null);
     
     try {
-      const response = await axiosInstance.post('/payments/payment-method/', {
+      // Dispatch the payment method submission
+      const result = await dispatch(submitPaymentMethod({
         payment_id: paymentId,
         payment_method: selectedMethod
-      });
+      })).unwrap();
       
-      setSuccess(response.data);
+      // Show success for 2 seconds before redirecting
       setTimeout(() => {
-        navigate('/my-bookings');
+        navigate('/');
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.error || 'There was an error processing your payment.');
+      setError(err?.message || 'There was an error processing your payment.');
     } finally {
-      setLoading(false);
+      setProcessing(false);
     }
   };
 
-  if (!paymentData) {
+  if (loading || !paymentData) {
     return <div className="text-center mt-5">Loading payment details...</div>;
   }
+
+  // Calculate deposit amount if applicable
+  const depositAmount = paymentData.is_deposit 
+    ? (paymentData.booking_summary.total_price * 0.3).toFixed(2)
+    : paymentData.booking_summary.total_price;
 
   return (
     <Container className="py-5">
       <h1 className="text-center mb-4">Select Payment Method</h1>
       
-      {success && (
+      {paymentSuccess && (
         <Alert variant="success" className="mb-4">
           <Alert.Heading>Payment Successful!</Alert.Heading>
-          <p>Transaction ID: {success.transaction_id}</p>
-          <p>Amount Paid: ${success.amount_paid}</p>
-          {success.is_deposit && (
-            <p>Remaining Amount Due: ${success.remaining_amount}</p>
+          <p>Transaction ID: {paymentSuccess.transaction_id || 'Processing'}</p>
+          <p>Amount Paid: ${paymentSuccess.amount_paid || depositAmount}</p>
+          {paymentData.is_deposit && (
+            <p>Remaining Amount Due: ${(paymentData.booking_summary.total_price - depositAmount).toFixed(2)}</p>
           )}
           <p>Redirecting to your bookings...</p>
         </Alert>
       )}
       
-      {error && (
+      {(error || reduxError) && (
         <Alert variant="danger" className="mb-4">
-          {error}
+          {typeof error === 'object' ? JSON.stringify(error) : error}
+          {typeof reduxError === 'object' ? JSON.stringify(reduxError) : reduxError}
         </Alert>
       )}
       
@@ -153,7 +133,7 @@ const PaymentMethod = () => {
               {paymentData.is_deposit && (
                 <Alert variant="info" className="mb-4">
                   <i className="bi bi-info-circle-fill me-2"></i>
-                  You have selected cash payment. A 30% deposit of ${paymentData.amount_to_pay} is required to secure your booking.
+                  You have selected cash payment. A 30% deposit of ${depositAmount} is required to secure your booking.
                 </Alert>
               )}
               
@@ -307,10 +287,10 @@ const PaymentMethod = () => {
                   type="submit" 
                   size="lg" 
                   className="w-100"
-                  disabled={loading}
+                  disabled={processing}
                   style={{ backgroundColor: '#CD9A5E', borderColor: '#CD9A5E' }}
                 >
-                  {loading ? 'Processing...' : `Pay $${paymentData.amount_to_pay}`}
+                  {processing ? 'Processing...' : `Pay $${paymentData.is_deposit ? depositAmount : paymentData.booking_summary.total_price}`}
                 </Button>
               </Form>
             </Card.Body>
@@ -330,11 +310,11 @@ const PaymentMethod = () => {
               <div className="mb-3 border-bottom pb-3">
                 <div className="d-flex justify-content-between mb-2">
                   <span>Check-in:</span>
-                  <span>{new Date(paymentData.booking_summary.check_in).toLocaleDateString()}</span>
+                  <span>{paymentData.booking_summary.check_in}</span>
                 </div>
                 <div className="d-flex justify-content-between">
                   <span>Check-out:</span>
-                  <span>{new Date(paymentData.booking_summary.check_out).toLocaleDateString()}</span>
+                  <span>{paymentData.booking_summary.check_out}</span>
                 </div>
               </div>
               
@@ -348,7 +328,7 @@ const PaymentMethod = () => {
                   <>
                     <div className="d-flex justify-content-between">
                       <span>Deposit (30%):</span>
-                      <span>${paymentData.amount_to_pay}</span>
+                      <span>${depositAmount}</span>
                     </div>
                   </>
                 )}
@@ -357,11 +337,11 @@ const PaymentMethod = () => {
               <div className="border-top pt-3 mt-3">
                 <div className="d-flex justify-content-between">
                   <strong>Amount Due Now:</strong>
-                  <strong>${paymentData.amount_to_pay}</strong>
+                  <strong>${paymentData.is_deposit ? depositAmount : paymentData.booking_summary.total_price}</strong>
                 </div>
                 {paymentData.is_deposit && (
                   <div className="text-muted small mt-2">
-                    * Remaining balance of ${(paymentData.booking_summary.total_price - paymentData.amount_to_pay).toFixed(2)} to be paid upon arrival.
+                    * Remaining balance of ${(paymentData.booking_summary.total_price - depositAmount).toFixed(2)} to be paid upon arrival.
                   </div>
                 )}
               </div>

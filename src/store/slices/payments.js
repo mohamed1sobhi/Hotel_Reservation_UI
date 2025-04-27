@@ -6,12 +6,19 @@ import {
 
 
 // Fetch single payment details
+// In your payments.js slice
 export const fetchPaymentDetail = createAsyncThunk(
   "payments/fetchPaymentDetail",
   async (id, { rejectWithValue }) => {
     try {
       const response = await paymentData(id);
       console.log("Payment Detail Response:", response);
+      
+      // Validate response data structure
+      if (!response.data || !response.data.hotel) {
+        return rejectWithValue("Invalid payment data received");
+      }
+      
       return response.data;
     } catch (error) {
       console.error('Fetch Payment Detail Error:', error);
@@ -79,7 +86,10 @@ const paymentSlice = createSlice({
       })
       .addCase(fetchPaymentDetail.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        // Make sure error is always stored as a string
+        state.error = typeof action.payload === 'object' 
+          ? (action.payload.message || JSON.stringify(action.payload)) 
+          : action.payload || action.error.message;
       })
 
       .addCase(submitClientInfo.pending, (state) => {
@@ -109,6 +119,7 @@ const paymentSlice = createSlice({
         state.paymentMethodStatus = 'failed';
         state.error = action.payload || 'Failed to process payment';
       });
+      
       
   },
 });

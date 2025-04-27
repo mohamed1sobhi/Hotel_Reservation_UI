@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import './PaymentStyles.css';
 import { Card, Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import axiosInstance from '../../config/axios_conf.js';
+import { fetchPaymentDetail, submitClientInfo } from '../../store/slices/payments';
 
 const ClientInfoPayment = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { paymentDetail, loading, error: paymentError } = useSelector(state => state.payments);
+  
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -17,26 +21,18 @@ const ClientInfoPayment = () => {
     region: '',
     payment_type: 'online'
   });
-  const [bookingSummary, setBookingSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBookingDetails = async () => {
-      try {
-        const response = await axiosInstance.get(`/bookings/${bookingId}/`);
-        setBookingSummary(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to load booking details. Please try again.');
-        setLoading(false);
-      }
-    };
-
     if (bookingId) {
-      fetchBookingDetails();
+      dispatch(fetchPaymentDetail(bookingId))
+        .unwrap()
+        .catch(err => {
+          console.error("Error fetching payment details:", err);
+          setError("Failed to load booking details. Please try again.");
+        });
     }
-  }, [bookingId]);
+  }, [dispatch, bookingId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,23 +42,45 @@ const ClientInfoPayment = () => {
     }));
   };
 
+
+  const displayError = (err) => {
+    if (!err) return null;
+    
+    if (typeof err === 'object') {
+      // If it's an error object with a message property
+      if (err.message) return err.message;
+      // Otherwise stringify the object
+      return JSON.stringify(err);
+    }
+    
+    // If it's already a string
+    return err;
+  };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      const response = await axiosInstance.post('/payments/client-info/', {
+      const result = await dispatch(submitClientInfo({
         ...formData,
         booking_id: bookingId
-      });
+      })).unwrap();
       
-      navigate(`/payment-method/${response.data.payment_id}`, { 
-        state: { 
-          paymentData: response.data,
-          clientInfo: formData
-        }
-      });
+      // Make sure result contains payment_id before navigating
+      if (result && result.payment_id) {
+        navigate(`/payment-method/${result.payment_id}`, { 
+          state: { 
+            paymentData: result,
+            clientInfo: formData
+          }
+        });
+      } else {
+        console.error("Payment ID is missing in the response");
+        setError("Payment processing error: Missing payment ID");
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'There was an error processing your request.');
+      setError(typeof err === 'object' ? (err.message || JSON.stringify(err)) : err);
     }
   };
 
@@ -81,7 +99,11 @@ const ClientInfoPayment = () => {
               <h4>Client Information</h4>
             </Card.Header>
             <Card.Body>
-              {error && <Alert variant="danger">{error}</Alert>}
+            {(error || paymentError) && (
+              <Alert variant="danger">
+                {displayError(error) || displayError(paymentError)}
+              </Alert>
+            )}
               
               <Form onSubmit={handleSubmit}>
                 <Row>
@@ -224,37 +246,56 @@ const ClientInfoPayment = () => {
               <h4>Order Summary</h4>
             </Card.Header>
             <Card.Body>
-              {bookingSummary ? (
+              {paymentDetail ? (
                 <>
                   <div className="mb-3">
-                    <h5>{bookingSummary.room.name}</h5>
+                    <h5>{paymentDetail.hotel?.name || 'Hotel Name'}</h5>
                     <div className="text-muted">
-                      {bookingSummary.hotel.name}
+                      {paymentDetail.hotel?.description || ''}
                     </div>
                   </div>
                   
                   <div className="mb-3 border-bottom pb-3">
                     <div className="d-flex justify-content-between mb-2">
                       <span>Check-in:</span>
-                      <span>{new Date(bookingSummary.check_in_date).toLocaleDateString()}</span>
+                      <span>{paymentDetail.check_in || 'N/A'}</span>
                     </div>
                     <div className="d-flex justify-content-between">
                       <span>Check-out:</span>
-                      <span>{new Date(bookingSummary.check_out_date).toLocaleDateString()}</span>
+                      <span>{paymentDetail.check_out || 'N/A'}</span>
+                    </div>
+                    <div className="mt-3 mb-2">
+                      <span className="fw-bold">Items booked:</span>
+                    </div>
+                    
+                    {/* Add a conditional check for paymentDetail.items */}
+                    {paymentDetail.items && paymentDetail.items.length > 0 ? (
+                      paymentDetail.items.map((item, index) => (
+                        <div key={index} className="d-flex justify-content-between mb-1">
+                          <span>{item.room_type?.room_type || 'Standard'} Room</span>
+                          <span>x{item.quantity || 1}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div>No items found</div>
+                    )}
+                    <div className="d-flex justify-content-between mt-2">
+                      <span>Days:</span>
+                      <span>{paymentDetail.days || 0}</span>
                     </div>
                   </div>
                   
                   <div className="mb-3">
                     <div className="d-flex justify-content-between mb-2">
-                      <span>Room Price:</span>
-                      <span>${bookingSummary.total_price}</span>
+                      <span>Total Price:</span>
+                      <span>${paymentDetail.total_price || 0}</span>
                     </div>
                     
                     {formData.payment_type === 'cash' && (
                       <>
                         <div className="d-flex justify-content-between">
                           <span>Deposit (30%):</span>
-                          <span>${(bookingSummary.total_price * 0.3).toFixed(2)}</span>
+                          <span>${((paymentDetail.total_price || 0) * 0.3).toFixed(2)}</span>
                         </div>
                       </>
                     )}
@@ -265,19 +306,19 @@ const ClientInfoPayment = () => {
                       <strong>Total Amount:</strong>
                       <strong>
                         ${formData.payment_type === 'cash' 
-                          ? (bookingSummary.total_price * 0.3).toFixed(2) 
-                          : bookingSummary.total_price}
+                          ? ((paymentDetail.total_price || 0) * 0.3).toFixed(2) 
+                          : paymentDetail.total_price || 0}
                       </strong>
                     </div>
                     {formData.payment_type === 'cash' && (
                       <div className="text-muted small mt-2">
-                        * Remaining balance of ${(bookingSummary.total_price * 0.7).toFixed(2)} to be paid upon arrival.
+                        * Remaining balance of ${((paymentDetail.total_price || 0) * 0.7).toFixed(2)} to be paid upon arrival.
                       </div>
                     )}
                   </div>
                 </>
               ) : (
-                <div>No booking details available</div>
+                <div>Loading booking details...</div>
               )}
             </Card.Body>
             <Card.Footer className="bg-white">
