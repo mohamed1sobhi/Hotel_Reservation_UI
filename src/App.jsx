@@ -22,51 +22,62 @@ import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
 import RoomsPage from './pages/Hotel/Rooms';
 import ImageForm from './components/ImageForm.jsx';
+import Header from './components/Header';
+import Star from './pages/Hotel/star';
+import HotelDetails from './pages/Hotel/hoteldetails';
 import AddRoom from './components/addroom';
 import AddType from './components/addtype';
 import AddRoomImage from './components/addroomimage';
 import RoomDetails from './components/roomdetails';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import BookingForm  from './components/addbooking';
+import BookingDetail from './components/bookingdetails';
 
 function App() {
 
       
   return (
 
-<div className="d-flex flex-column min-vh-100">
-  <main className="flex-grow-1 mb-5">
-    {
+    <div className="d-flex flex-column min-vh-100">
     <BrowserRouter>
-     <Routes>
-     <Route path='/' element={<Home />} ></Route>
-     <Route path='/login' element={<Login />} ></Route>
-     {/* <Route path='/register' element={<RegisterUserForm />} ></Route> */}
-     <Route path="/about" element={<AboutUs />} />
-     <Route path="/contact" element={<ContactUs />} />
-     <Route path="/reviews" element={<ReviewList />} />
-     <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
-     <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
-     <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
-     <Route path="/bookings" element={<AddBooking />} />
-     <Route path="/my-bookings" element={<BookingsList />} />
-     <Route path="/my-bookings/:id" element={<BookingDetails />} />
-     <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
-     <Route path='/hotels' element={< All_hotels />} ></Route>
-    <Route path="/hotels/:id" element={<RoomsPage/>} />
-    <Route path = "/createImage/:Id" element = {<  ImageForm />} /> 
-    <Route path="/addroom/:HotelId" element={<AddRoom />} />
-    <Route path="/addtype/:hotel_id" element={< AddType />} />
-    <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
-    <Route path="/roomdetails/:_id" element={<RoomDetails />} />
-    <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
-    <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
-   </Routes>
-   </BrowserRouter>
-    }
-  </main>
-  <Footer />
-</div>
-
+      <Header />
+      <main className="flex-grow-1 mb-5">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          {/* <Route path='/register' element={<RegisterUserForm />} /> */}
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/reviews" element={<ReviewList />} />
+          <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
+          <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
+          <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
+          <Route path="/bookings" element={<AddBooking />} />
+          <Route path="/my-bookings" element={<BookingsList />} />
+          <Route path="/my-bookings/:id" element={<BookingDetails />} />
+          <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
+          <Route path="/hotels" element={<All_hotels />} />
+          <Route path="/hotels/:ID" element={<RoomsPage />} />
+          <Route path="/createImage/:Id" element={<ImageForm />} />
+          <Route path="/star" element= { <Star />} />
+          <Route path="/star/detail/:id" element={<HotelDetails />} />
+          <Route path="/addroom/:HotelId" element={<AddRoom />} />
+          <Route path="/addtype/:hotel_id" element={< AddType />} />
+          <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
+          <Route path="/roomdetails/:_id" element={<RoomDetails />} />
+          <Route path="/editroom/:roomId/" element={<AddRoom />} />
+          <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
+          <Route path="/bookingdetails/:UserId" element={< BookingDetail />}/>
+          <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
+          <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
+          {/* <ToastContainer position="top-center" autoClose={3000} /> */}
+        </Routes>
+      </main>
+      <Footer />
+    </BrowserRouter>
+  </div>
+ 
 
   )
 }

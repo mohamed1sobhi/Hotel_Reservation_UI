@@ -86,3 +86,24 @@ a:hover,
 a:focus {
     color: var(--bs-primary) !important;
 }
+
+.breadcrumb {
+    background-color: var(--bs-light); /* لون الخلفية */
+    border-radius: 0.25rem; /* زوايا مستديرة */
+    padding: 0.5rem 1rem; /* تباعد داخلي */
+    font-size: 1rem; /* حجم النص */
+}
+
+.breadcrumb-item a {
+    color: var(--bs-primary); /* لون الروابط */
+    text-decoration: none; /* إزالة التسطير */
+    transition: color 0.2s ease-in-out; /* تأثير عند التمرير */
+}
+
+.breadcrumb-item a:hover {
+    color: var(--bs-success); /* لون الروابط عند التمرير */
+}
+
+.breadcrumb-item.active {
+    color: var(--bs-secondary); /* لون النص النشط */
+}

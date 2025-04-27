@@ -1,5 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axios_conf.js';
+import { 
+  paymentData,
+} from "../../services/api";
+
+
+// Fetch single payment details
+export const fetchPaymentDetail = createAsyncThunk(
+  "payments/fetchPaymentDetail",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await paymentData(id);
+      console.log("Payment Detail Response:", response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch Payment Detail Error:', error);
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch payment detail");
+    }
+  }
+);
+
+
 
 export const submitClientInfo = createAsyncThunk(
   'payments/submitClientInfo',
@@ -27,6 +48,7 @@ export const submitPaymentMethod = createAsyncThunk(
 
 const initialState = {
   clientInfoStatus: 'idle', 
+  paymentDetail: [],
   paymentMethodStatus: 'idle',
   paymentData: null,
   error: null,
@@ -46,6 +68,20 @@ const paymentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      .addCase(fetchPaymentDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPaymentDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paymentDetail = action.payload;
+      })
+      .addCase(fetchPaymentDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       .addCase(submitClientInfo.pending, (state) => {
         state.clientInfoStatus = 'loading';
         state.error = null;
@@ -73,9 +109,13 @@ const paymentSlice = createSlice({
         state.paymentMethodStatus = 'failed';
         state.error = action.payload || 'Failed to process payment';
       });
+      
   },
 });
 
 export const { resetPaymentState } = paymentSlice.actions;
 export default paymentSlice.reducer;
+
+
+
 
