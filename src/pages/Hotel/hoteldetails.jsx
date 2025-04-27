@@ -5,8 +5,9 @@ import { Carousel } from 'react-bootstrap';
 import { Star, Edit3, Trash, ImagePlus, MessagesSquare, Loader } from 'lucide-react';
 import { fetchHotels, removeHotel } from '../../store/slices/hotels';
 import { useState } from "react";
-
+import HotelFormModal from "../../components/HotelFormModal";
 export default function HotelDetails() {
+  const [showModal,setShowModal] = useState(false)
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -142,9 +143,12 @@ export default function HotelDetails() {
           <button className="btn btn-primary border-0" style={{ border : "none"}} onClick={() => navigate(`/hotels/${hotel.id}/reviews`)}>
             <MessagesSquare className="me-2" size={18} /> Show Reviews
           </button>
-          <button className="btn btn-primary border-0" onClick={() => navigate(`/edit-hotel/${hotel.id}`)}>
+          <button className="btn btn-primary border-0" onClick={() => setShowModal(true)}>
             <Edit3 className="me-2" size={18} /> Edit
           </button>
+            {showModal && (
+              <HotelFormModal HOTEL_ID ={hotel.id} onClose={ ()=> setShowModal(false)}   />
+            )}
           <button
             className="btn btn-danger"
             onClick={() => setShowDeleteModal(true)}

@@ -5,6 +5,17 @@ import LogoutButton from "./logout";
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // const userId = JSON.parse(localStorage.getItem("user"))?.id;
+  
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const userId = JSON.parse(localStorage.getItem("user"))?.id;
+    if (userId){
+      setIsLoggedIn(true)
+    }
+    // setIsLoggedIn(!!token || !!userId);
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     setIsLoggedIn(!!token);

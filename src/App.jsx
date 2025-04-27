@@ -1,39 +1,37 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
- 
-import React, {useEffect} from 'react'
-import Home from './pages/Home'
- import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import AboutUs from './pages/AboutUs';
-import ContactUs from './pages/ContactUs';
-import ReviewList from './pages/Review/ReviewList';
-import ReviewDetail from './pages/Review/ReviewDetail';
-import HotelReviews from './pages/Review/HotelReviews';
-import AddReview from './pages/Review/AddReview';
-import Login from './components/login';
-// import RegisterUserForm from './pages/register';
-// import BookingForm from './pages/booking/create';
-// import PaymentsList from './pages/payment/paymentList';
-// import PaymentSettings from './pages/payment/paymentSettings';
-import AddBooking from './pages/booking/AddBooking';
-import BookingsList from './pages/booking/BookingList';
-import BookingDetails from './pages/booking/BookingDetails.jsx';
-import EditBooking from './pages/booking/EditingBooking';
-import Footer from './components/Footer';
-import RoomsPage from './pages/Hotel/Rooms';
-import ImageForm from './components/ImageForm';
-import Header from './components/Header';
-import Hotels from './pages/Hotel/all_hotels';
-import HotelDetails from './pages/Hotel/hoteldetails';
-import AddRoom from './components/addroom';
-import AddType from './components/addtype';
-import AddRoomImage from './components/addroomimage';
-import RoomDetails from './components/roomdetails';
+import './App.css';
+import React, { Suspense, useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import BookingForm  from './components/addbooking';
-import BookingDetail from './components/bookingdetails';
 
+// Lazy-loaded components
+const Home = React.lazy(() => import('./pages/Home'));
+const AboutUs = React.lazy(() => import('./pages/AboutUs'));
+const ContactUs = React.lazy(() => import('./pages/ContactUs'));
+const ReviewList = React.lazy(() => import('./pages/Review/ReviewList'));
+const ReviewDetail = React.lazy(() => import('./pages/Review/ReviewDetail'));
+const HotelReviews = React.lazy(() => import('./pages/Review/HotelReviews'));
+const AddReview = React.lazy(() => import('./pages/Review/AddReview'));
+const Login = React.lazy(() => import('./components/login'));
+const ClientInfoPayment = React.lazy(() => import('./pages/payment/ClientInfoPayment'));
+const PaymentMethod = React.lazy(() => import('./pages/payment/PaymentMethod'));
+const AddBooking = React.lazy(() => import('./pages/booking/AddBooking'));
+const BookingsList = React.lazy(() => import('./pages/booking/BookingList'));
+const BookingDetails = React.lazy(() => import('./pages/booking/BookingDetails.jsx'));
+const EditBooking = React.lazy(() => import('./pages/booking/EditingBooking'));
+const Footer = React.lazy(() => import('./components/Footer'));
+const RoomsPage = React.lazy(() => import('./pages/Hotel/Rooms'));
+const ImageForm = React.lazy(() => import('./components/ImageForm'));
+const Header = React.lazy(() => import('./components/Header'));
+const Hotels = React.lazy(() => import('./pages/Hotel/all_hotels'));
+const HotelDetails = React.lazy(() => import('./pages/Hotel/hoteldetails'));
+const AddRoom = React.lazy(() => import('./components/addroom'));
+const AddType = React.lazy(() => import('./components/addtype'));
+const AddRoomImage = React.lazy(() => import('./components/addroomimage'));
+const RoomDetails = React.lazy(() => import('./components/roomdetails'));
+const BookingForm = React.lazy(() => import('./components/addbooking'));
+const BookingDetail = React.lazy(() => import('./components/bookingdetails'));
 function App() {
 
       
@@ -68,6 +66,8 @@ function App() {
           <Route path="/editroom/:roomId/" element={<AddRoom />} />
           <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
           <Route path="/bookingdetails/:UserId" element={< BookingDetail />}/>
+          <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
+          <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
           {/* <ToastContainer position="top-center" autoClose={3000} /> */}
         </Routes>
       </main>
