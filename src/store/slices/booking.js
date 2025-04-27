@@ -20,6 +20,7 @@ export const fetchAllBookings = createAsyncThunk('bookings/fetchAll', async () =
 export const addBooking = createAsyncThunk('bookings/add', async (data, { rejectWithValue }) => {
   try {
     const response = await createBooking(data);
+    console.log("the booking data for id is ",response.data)
     return response.data;
   } catch (err) {
     // Ensure the error is properly passed to the frontend

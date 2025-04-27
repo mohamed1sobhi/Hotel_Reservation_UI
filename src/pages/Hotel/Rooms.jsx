@@ -17,7 +17,7 @@ export default function RoomsPage() {
 
   useEffect(() => {
     dispatch(fetchRoomsByHotel(ID));
-    dispatch(fetchPaymentDetail(1));
+    dispatch(fetchPaymentDetail(33));
     // dispatch(fetchRoomDetail(ID));
     dispatch(fetchRoomImages(ID));
   }, [dispatch, ID]);
