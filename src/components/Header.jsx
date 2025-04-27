@@ -9,6 +9,8 @@ const Header = () => {
     const token = localStorage.getItem("authToken");
     setIsLoggedIn(!!token);
   }, []);
+  console.log(isLoggedIn);
+  
 
   return (
     <nav className="navbar navbar-expand-lg bg-light shadow-sm border-bottom border-primary">
