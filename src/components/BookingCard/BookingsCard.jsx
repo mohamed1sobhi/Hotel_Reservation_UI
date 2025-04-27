@@ -20,7 +20,7 @@ export default function BookingsCard({
 }) {
   return (
     <div className="card booking-card d-flex flex-column flex-md-row align-items-start mb-4">
-      <img src={hotelimage} alt="Hotel" className="img-fluid booking-image" />
+      <img src={"#"} alt="Hotel" className="img-fluid booking-image" />
       <div className="booking-details p-3">
         <h4 className="hotel-name">{hotelname}</h4>
         <p className="hotel-address">{hoteladdress}</p>

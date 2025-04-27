@@ -1,0 +1,160 @@
+.admin-panel-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9f5f1; /* Cream background */
+  font-family: "Helvetica Neue", sans-serif;
+  color: #1a1a1a; /* Dark text */
+}
+
+.users-section,
+.bookings-section,
+.hotels-section {
+  flex: 1;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f9f5f1; /* Cream background */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px; /* fixed width */
+  min-width: 240px;
+  max-width: 240px;
+  background-color: #e8dfd5; /* Light beige */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  height: 100vh; /* Full viewport height */
+  position: sticky;
+  top: 0;
+}
+
+.sidebar button {
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border: none;
+  background-color: #cd9a5e; /* Warm Gold */
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+  background-color: #b45f3a; /* Terracotta hover */
+}
+
+/* Content Area */
+.content {
+  flex-grow: 1;
+  padding: 30px;
+  background-color: #f9f5f1;
+}
+
+/* Sections (users, bookings, hotels) */
+.user-cards,
+.bookings-list,
+.hotels-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Card Styles */
+.user-card,
+.booking-card,
+.hotel-card {
+  border: 1px solid #e8dfd5; /* Light beige border */
+  background-color: #ffffff;
+  padding: 20px;
+  width: 240px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.user-card:hover,
+.booking-card:hover,
+.hotel-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Buttons inside Cards */
+.edit-button {
+  background-color: #cd9a5e; /* Warm Gold */
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #b45f3a; /* Terracotta */
+}
+
+/* Form Styles */
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #e8dfd5;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+form button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #cd9a5e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button[type="submit"]:hover {
+  background-color: #b45f3a;
+}
+
+/* Headings */
+h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #1a1a1a;
+}
+
+/* Paragraphs */
+p {
+  color: #8a8a8a; /* Soft gray secondary text */
+  font-size: 14px;
+}
+
+/* Dropdowns (filters) */
+select {
+  padding: 10px;
+  border: 1px solid #e8dfd5;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.show-user-register-form {
+  max-width: 200px;
+  position: relative;
+  right: 0;
+}

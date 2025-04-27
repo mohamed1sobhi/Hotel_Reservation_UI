@@ -6,7 +6,10 @@ import {
   updateUser,
   deleteUser,
   registerUser,
+  registerUserForAdmin,
   updateCurrentUser,
+  getCurrentAdmin,
+  editCurrentAdmin,
 } from "../../services/api";
 
 // // Async thunks
@@ -46,6 +49,21 @@ export const fetchCurrentUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getCurrentUser();
+      return response.data;
+    } catch (error) {
+      console.error("Fetch Current User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch current user"
+      );
+    }
+  }
+);
+
+export const fetchCurrentAdmin = createAsyncThunk(
+  "accounts/fetchCurrentAdmin",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getCurrentAdmin();
       return response.data;
     } catch (error) {
       console.error("Fetch Current User Error:", error);
@@ -101,11 +119,41 @@ export const createUser = createAsyncThunk(
   }
 );
 
+export const createUserForAdmin = createAsyncThunk(
+  "accounts/createUserForAdmin",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await registerUserForAdmin(data);
+      return response.data;
+    } catch (error) {
+      console.error("Register User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to register user"
+      );
+    }
+  }
+);
+
 export const editCurrentUser = createAsyncThunk(
   "accounts/editCurrentUser",
   async (data, { rejectWithValue }) => {
     try {
       const response = await updateCurrentUser(data);
+      return response.data;
+    } catch (error) {
+      console.error("Update Current User Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update current user"
+      );
+    }
+  }
+);
+
+export const editCurrentAdmindata = createAsyncThunk(
+  "accounts/editCurrentAdmin",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await editCurrentAdmin(data);
       return response.data;
     } catch (error) {
       console.error("Update Current User Error:", error);
@@ -177,6 +225,34 @@ const accountsSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Fetch current admin detail
+      .addCase(fetchCurrentAdmin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userDetail = action.payload;
+      })
+      .addCase(fetchCurrentAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // edit current admin detail
+      .addCase(editCurrentAdmindata.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editCurrentAdmindata.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userDetail = action.payload;
+      })
+      .addCase(editCurrentAdmindata.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // Edit user
       .addCase(editUser.pending, (state) => {
         state.loading = true;
@@ -220,6 +296,20 @@ const accountsSlice = createSlice({
         state.users.push(action.payload);
       })
       .addCase(createUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Create new user for admin
+      .addCase(createUserForAdmin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createUserForAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users.push(action.payload);
+      })
+      .addCase(createUserForAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

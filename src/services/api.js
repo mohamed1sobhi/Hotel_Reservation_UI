@@ -152,6 +152,9 @@ export const deletePaymentSetting = (id) =>
 
 // USER functions
 export const getAllUsers = () => axiosInstance.get("/accounts/user/");
+export const getCurrentAdmin = () => axiosInstance.get("/accounts/user/admin/");
+export const editCurrentAdmin = (data) =>
+  axiosInstance.patch("/accounts/user/admin/", data);
 export const getUserDetail = (id) => axiosInstance.get(`/accounts/user/${id}/`);
 export const getCurrentUser = () => axiosInstance.get("/accounts/user/data");
 export const updateUser = (id, data) =>
@@ -161,6 +164,9 @@ export const deleteUser = (id) => axiosInstance.delete(`/accounts/user/${id}/`);
 // Register user (hotel owner or customer)
 export const registerUser = (data) =>
   axiosInstance.post("/accounts/user/register/", data);
+// register user (admin)
+export const registerUserForAdmin = (data) =>
+  axiosInstance.post("/accounts/user/", data);
 // Update current logged-in user's data
 export const updateCurrentUser = (data) =>
   axiosInstance.patch("/accounts/user/data", data);
