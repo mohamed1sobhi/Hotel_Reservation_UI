@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
- 
-import React, {useEffect} from 'react'
+ import React, {useEffect} from 'react'
 import Home from './pages/Home'
  import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AboutUs from './pages/AboutUs';
@@ -13,8 +12,8 @@ import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
 // import RegisterUserForm from './pages/register';
 // import BookingForm from './pages/booking/create';
-// import PaymentsList from './pages/payment/paymentList';
-// import PaymentSettings from './pages/payment/paymentSettings';
+import ClientInfoPayment from './pages/payment/ClientInfoPayment';
+import PaymentMethod from './pages/payment/PaymentMethod';
 import AddBooking from './pages/booking/AddBooking';
 import BookingsList from './pages/booking/BookingList';
 import BookingDetails from './pages/booking/BookingDetails.jsx';
@@ -68,6 +67,8 @@ function App() {
           <Route path="/editroom/:roomId/" element={<AddRoom />} />
           <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
           <Route path="/bookingdetails/:UserId" element={< BookingDetail />}/>
+          <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
+          <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
           {/* <ToastContainer position="top-center" autoClose={3000} /> */}
         </Routes>
       </main>

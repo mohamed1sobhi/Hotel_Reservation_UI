@@ -14,8 +14,11 @@ const BookingDetail = () => {
   }, [dispatch, UserId]);
 
   const handlePayment = () => {
-    // Example: Redirect to payment page
-    navigate(`/payment/${paymentDetail.id}`);
+    if (paymentDetail && paymentDetail.id) {
+      navigate(`/payment/client-info/${paymentDetail.id}`);
+    } else {
+      console.error("Payment detail or ID is missing");
+    }
   };
 
   if (!paymentDetail) {
