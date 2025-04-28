@@ -446,7 +446,7 @@ export default function AdminPanel() {
                       <Form.Control
                         type="password"
                         name="password"
-                        placeholder="Password"
+                        placeholder="Old Password"
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
                         }
@@ -458,7 +458,7 @@ export default function AdminPanel() {
                       <Form.Control
                         type="password"
                         name="password2"
-                        placeholder="Confirm Password"
+                        placeholder="New Password"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -475,7 +475,7 @@ export default function AdminPanel() {
                       >
                         Cancel
                       </Button>
-                      <Button variant="primary" type="submit">
+                      <Button variant="primary" className="border-0" type="submit">
                         Update Profile
                       </Button>
                     </div>

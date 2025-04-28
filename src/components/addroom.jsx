@@ -9,8 +9,8 @@ import {
   fetchHotelRoomsType,
 } from '../store/slices/rooms';
 import './AddRoom.css'; 
-
-const AddRoom = () => {
+import Loader from './Loader';
+const AddRoom = (Hotel_id) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { HotelId, roomId } = useParams(); 

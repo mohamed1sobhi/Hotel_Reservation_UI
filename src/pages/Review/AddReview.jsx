@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { addReview } from "../../store/slices/reviews";
 import { getHotelDetail } from "../../services/api";
 import Header from "../../components/Header";
+import { userIsOwner  , userIsCustomer , userIsAdmin} from "../../utils/permissions"; // Import the userIsOwner function
 
 const AddReview = () => {
   const { hotelId } = useParams();

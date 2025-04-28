@@ -7,6 +7,8 @@ import { Star } from "lucide-react";
 import SearchAndFilter from "../../components/SearchAndFilter"; //add search component 
 import Pagination from "../../components/Pagination";
 import { filterHotels } from "../../store/slices/hotels";
+import { userIsOwner } from "../../utils/permissions"; // Import the userIsOwner function
+import Loader from "../../components/Loader"; // Import the Loader component
 export default function SimpleHotelListingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,7 +22,13 @@ export default function SimpleHotelListingPage() {
   useEffect(() => {
     dispatch(fetchHotels());
   }, [dispatch]);
-
+  if (loading) {
+    return (
+       <>
+       < Loader />
+       </>
+    );
+  }
   const handleStarFilter = (stars) => {
     setFilterStars(stars);
     dispatch(filterHotels(stars));
@@ -39,30 +47,8 @@ export default function SimpleHotelListingPage() {
     console.log("the show modal is ", showModal);
   
   };
-
-  // const handleSubmit = (formData) => {
-  //   if (editingHotel) {
-  //     dispatch(editHotel({ id: editingHotel.id, data: formData }))
-  //       .unwrap()
-  //       .then(() => {
-  //         dispatch(fetchHotels());
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error updating hotel:", error);
-  //       });
-  //   } else {
-  //     dispatch(addHotel(formData))
-  //       .unwrap()
-  //       .then(() => {
-  //         dispatch(fetchHotels());
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error adding hotel:", error);
-  //       });
-  //   }
-  //   setShowModal(false);
-  // };
-
+ 
+  
   const filteredHotels = searchTerm
     ? hotels.filter(
       (hotel) =>
@@ -161,7 +147,7 @@ export default function SimpleHotelListingPage() {
       <nav aria-label="breadcrumb" className="bg-light py-2 px-3 rounded mt-4">
         <ol className="breadcrumb mb-0">
           <li className="breadcrumb-item">
-            <a href="/home" className="text-decoration-none text-primary">
+            <a href="/" className="text-decoration-none text-primary">
               Home
             </a>
           </li>
@@ -182,11 +168,11 @@ export default function SimpleHotelListingPage() {
         onFilter={handleStarFilter}
         onReset={resetFilters}
       />
-
+   {userIsOwner() && (
       <button className="btn btn-primary  m-5 border-0" onClick={handleAddHotel}>
         + Add Hotel
       </button>
-
+   )}
       {showModal && (
         <>
           <HotelFormModal onClose={ () => setShowModal(false) } />

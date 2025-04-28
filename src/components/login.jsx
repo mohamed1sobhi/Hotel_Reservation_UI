@@ -53,6 +53,9 @@ function Login() {
           </button>
           {error && <p className="text-danger mt-2 text-center">{error}</p>}
         </form>
+          <p className="mt-3 text-center">
+          Don't have an account? <a href="/register" className="text-primary">Register now</a>
+        </p>
       </div>
     </div>
   );

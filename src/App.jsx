@@ -3,45 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import { ToastContainer } from "react-toastify";
-
-// import Header from "./components/Header";
-// import Footer from "./components/Footer";
-// import ImageForm from "./components/ImageForm";
-// import BookingForm from "./components/addbooking";
-// import BookingDetail from "./components/bookingdetails";
-// import AddRoom from "./components/addroom";
-// import AddType from "./components/addtype";
-// import AddRoomImage from "./components/addroomimage";
-// import RoomDetails from "./components/roomdetails";
-// import Login from "./components/login";
-
-// const Home = React.lazy(() => import("./pages/Home"));
-// const AllHotels = React.lazy(() => import("./pages/Hotel/all_hotels"));
-// const AboutUs = React.lazy(() => import("./pages/AboutUs"));
-// const ContactUs = React.lazy(() => import("./pages/ContactUs"));
-// const ReviewList = React.lazy(() => import("./pages/Review/ReviewList"));
-// const ReviewDetail = React.lazy(() => import("./pages/Review/ReviewDetail"));
-// const HotelReviews = React.lazy(() => import("./pages/Review/HotelReviews"));
-// const AddReview = React.lazy(() => import("./pages/Review/AddReview"));
-// const RegisterUserForm = React.lazy(() => import("./pages/register"));
-// const CustomerProfile = React.lazy(() => import("./pages/Profiles/Customer"));
-// const AdminPanel = React.lazy(() => import("./pages/Profiles/AdminPanel"));
-// const HotelOwner = React.lazy(() => import("./pages/Profiles/HotelOwner"));
-// const AddBooking = React.lazy(() => import("./pages/booking/AddBooking"));
-// const BookingsList = React.lazy(() => import("./pages/booking/BookingList"));
-// const BookingDetails = React.lazy(() =>
-//   import("./pages/booking/BookingDetails")
-// );
-// const EditBooking = React.lazy(() => import("./pages/booking/EditingBooking"));
-// const RoomsPage = React.lazy(() => import("./pages/Hotel/Rooms"));
-// const ClientInfoPayment = React.lazy(() =>
-//   import("./pages/payment/ClientInfoPayment")
-// );
-// const PaymentMethod = React.lazy(() => import("./pages/payment/PaymentMethod"));
-// const HotelDetails = React.lazy(() => import("./pages/Hotel/hoteldetails"));
-
-// Lazy-loaded components
 const Home = React.lazy(() => import('./pages/Home'));
 const AboutUs = React.lazy(() => import('./pages/AboutUs'));
 const ContactUs = React.lazy(() => import('./pages/ContactUs'));
@@ -83,7 +44,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          {/* <Route path='/register' element={<RegisterUserForm />} /> */}
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/reviews" element={<ReviewList />} />
