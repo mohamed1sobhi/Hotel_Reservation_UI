@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchCurrentAdmin,
-  fetchUsers,
-  clearError,
-  editCurrentAdmindata,
-  createUserForAdmin,
+  fetchCurrentAdmin, // tmam
+  fetchUsers, // tmam
+  clearError, // tmam
+  editCurrentAdmindata, // tmam
+  createUserForAdmin, // tmam
 } from "../../store/slices/accounts";
 import { fetchAllBookings } from "../../store/slices/booking";
 import { fetchHotels } from "../../store/slices/hotels";
-import BookingsCard from "../../components/BookingCard/BookingsCard";
-import UserCard from "../../components/UsersCard/UsersCard";
-import HotelCard from "../../components/HotelCard/HotelCard";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Table } from "react-bootstrap";
 import "./AdminPanel.css";
 
 export default function AdminPanel() {
@@ -20,6 +17,8 @@ export default function AdminPanel() {
   const { userDetail, error, users } = useSelector((state) => state.accounts);
   const { bookings } = useSelector((state) => state.bookings);
   const { hotels } = useSelector((state) => state.hotels);
+
+  console.log("userDetail", userDetail);
 
   // Admin's personal data and form state
   const [formData, setFormData] = useState({
@@ -243,7 +242,7 @@ export default function AdminPanel() {
           <div className="users-section">
             <h2>Users</h2>
             <button
-              className="btn btn-custom show-user-register-form "
+              className="btn btn-custom show-user-register-form"
               onClick={() => setshowUserRegisterForm(!showUserRegisterForm)}
             >
               {showUserRegisterForm ? "Cancel" : "Register New User"}
@@ -317,6 +316,7 @@ export default function AdminPanel() {
                       }
                     />
                   </Form.Group>
+
                   <Form.Group controlId="password2">
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
@@ -331,6 +331,7 @@ export default function AdminPanel() {
                       }
                     />
                   </Form.Group>
+
                   <Form.Group controlId="role">
                     <Form.Label>Role</Form.Label>
                     <Form.Control
@@ -355,30 +356,43 @@ export default function AdminPanel() {
                 </Form>
               </Modal.Body>
             </Modal>
+
             <select
               onChange={handleUserRoleFilterChange}
               value={userRoleFilter}
+              className="form-select my-3"
             >
               <option value="all">All Roles</option>
               <option value="admin">Admin</option>
               <option value="hotel_owner">Hotel Owner</option>
               <option value="customer">Client</option>
             </select>
+
             {users && users.length > 0 ? (
-              <div className="user-cards">
-                {filteredUsers.map((user) => (
-                  <UserCard
-                    key={user.id}
-                    user={user}
-                    username={user.username}
-                    email={user.email}
-                    role={user.role}
-                    phone={user.phone}
-                    address={user.address}
-                    status={user.status ? "Active" : "Blocked"}
-                  />
-                ))}
-              </div>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phone}</td>
+                      <td>{user.address || "N/A"}</td>
+                      <td>{user.role}</td>
+                      <td>{user.status ? "Active" : "Blocked"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             ) : (
               <p>No users found.</p>
             )}
@@ -391,31 +405,50 @@ export default function AdminPanel() {
             <select
               onChange={handleBookingStatusFilterChange}
               value={bookingStatusFilter}
+              className="form-select my-3"
             >
               <option value="all">All Bookings</option>
               <option value="confirmed">Confirmed</option>
               <option value="pending">Pending</option>
             </select>
+
             {bookings && bookings.length > 0 ? (
-              <div className="bookings-list">
-                {filteredBookings.map((booking) => (
-                  <BookingsCard
-                    key={booking.id}
-                    hotelimage={booking.hotel_image}
-                    hotelname={booking.hotel_name}
-                    hoteladdress={booking.hotel_address}
-                    bookingDate={booking.created_at}
-                    clientName={booking.client_name}
-                    clientEmail={booking.client_email}
-                    roomtype={booking.room_type}
-                    checkinDate={booking.check_in}
-                    checkOutDate={booking.check_out}
-                    hotelrating={booking.hotelRating}
-                    bookingPrice={booking.total_price}
-                    bookingStatus={booking.status}
-                  />
-                ))}
-              </div>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>Hotel Name</th>
+                    <th>Hotel Address</th>
+                    <th>Client Name</th>
+                    <th>Client Email</th>
+                    <th>Room Type</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Booking Date</th>
+                    <th>Hotel Rating</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredBookings.map((booking) => (
+                    <tr key={booking.id}>
+                      <td>{booking.hotel_name}</td>
+                      <td>{booking.hotel_address}</td>
+                      <td>{booking.client_name}</td>
+                      <td>{booking.client_email}</td>
+                      <td>{booking.room_type}</td>
+                      <td>{booking.check_in}</td>
+                      <td>{booking.check_out}</td>
+                      <td>
+                        {new Date(booking.created_at).toLocaleDateString()}
+                      </td>
+                      <td>{booking.hotelRating} ★</td>
+                      <td>${booking.total_price}</td>
+                      <td>{booking.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             ) : (
               <p>No bookings found.</p>
             )}
@@ -425,7 +458,11 @@ export default function AdminPanel() {
         {activeSection === "hotels" && (
           <div className="hotels-section">
             <h2>Hotels</h2>
-            <select onChange={handleHotelFilterChange} value={hotelFilter}>
+            <select
+              onChange={handleHotelFilterChange}
+              value={hotelFilter}
+              className="form-select my-3"
+            >
               <option value="all">All Hotels</option>
               <option value="3">3 Stars</option>
               <option value="4">4 Stars</option>
@@ -433,21 +470,34 @@ export default function AdminPanel() {
               <option value="6">6 Stars</option>
               <option value="7">7 Stars</option>
             </select>
+
             {hotels && hotels.length > 0 ? (
-              <div className="hotels-list">
-                {filteredHotels.map((hotel) => (
-                  <HotelCard
-                    key={hotel.id}
-                    name={hotel.name}
-                    description={hotel.description}
-                    address={hotel.address}
-                    email={hotel.email}
-                    phone={hotel.phone}
-                    stars={hotel.stars}
-                    created_at={hotel.created_at}
-                  />
-                ))}
-              </div>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Stars</th>
+                    <th>Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredHotels.map((hotel) => (
+                    <tr key={hotel.id}>
+                      <td>{hotel.name}</td>
+                      <td>{hotel.description}</td>
+                      <td>{hotel.address}</td>
+                      <td>{hotel.email}</td>
+                      <td>{hotel.phone}</td>
+                      <td>{hotel.stars} ★</td>
+                      <td>{new Date(hotel.created_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             ) : (
               <p>No hotels found.</p>
             )}
