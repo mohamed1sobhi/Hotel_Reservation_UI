@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { 
-  getAllHotels, 
-  createHotel, 
-  updateHotel, 
-  getHotelDetail, 
-  deleteHotel, 
-  filterHotelsByStars 
+import {
+  getAllHotels,
+  createHotel,
+  updateHotel,
+  getHotelDetail,
+  deleteHotel,
+  filterHotelsByStars,
+  getOwnerHotelDetails,
 } from "../../services/api";
 
 // Fetch all hotels
@@ -14,11 +15,13 @@ export const fetchHotels = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllHotels();
-      console.log('Fetch Hotels Response:', response.data);
+      console.log("Fetch Hotels Response:", response.data);
       return response.data;
     } catch (error) {
-      console.error('Fetch Hotels Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch hotels");
+      console.error("Fetch Hotels Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch hotels"
+      );
     }
   }
 );
@@ -29,10 +32,8 @@ export const addHotel = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await createHotel(data);
-      console.log('Create Hotel Response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Create Hotel Error:', error.response?.data || error.message);
       return rejectWithValue(error.response?.data || "Failed to create hotel");
     }
   }
@@ -47,6 +48,12 @@ export const editHotel = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error('Update Hotel Error:', error);
+     if (response.data.email) {
+        return rejectWithValue(error.response.data.email[0]);
+        alert("Email already exists");
+      }
+
+
       return rejectWithValue(error.response?.data?.message || "Failed to update hotel");
     }
   }
@@ -60,8 +67,26 @@ export const fetchHotelDetail = createAsyncThunk(
       const response = await getHotelDetail(id);
       return response.data;
     } catch (error) {
-      console.error('Fetch Hotel Detail Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch hotel details");
+      console.error("Fetch Hotel Detail Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch hotel details"
+      );
+    }
+  }
+);
+
+// get owner hotel details
+export const fetchOwnerHotelDetails = createAsyncThunk(
+  "hotels/fetchOwnerHotelDetails",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getOwnerHotelDetails();
+      return response.data;
+    } catch (error) {
+      console.error("Fetch Owner Hotel Details Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch owner hotel details"
+      );
     }
   }
 );
@@ -74,8 +99,10 @@ export const removeHotel = createAsyncThunk(
       await deleteHotel(id);
       return id; // Just return the ID so we can remove it from state
     } catch (error) {
-      console.error('Delete Hotel Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to delete hotel");
+      console.error("Delete Hotel Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete hotel"
+      );
     }
   }
 );
@@ -88,8 +115,10 @@ export const filterHotels = createAsyncThunk(
       const response = await filterHotelsByStars(stars);
       return response.data;
     } catch (error) {
-      console.error('Filter Hotels Error:', error);
-      return rejectWithValue(error.response?.data?.message || "Failed to filter hotels");
+      console.error("Filter Hotels Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to filter hotels"
+      );
     }
   }
 );
@@ -99,6 +128,7 @@ const initialState = {
   hotels: [],
   loading: false,
   error: null,
+  formError:null,
   hotelDetail: null,
 };
 
@@ -131,11 +161,10 @@ const hotelsSlice = createSlice({
       .addCase(addHotel.fulfilled, (state, action) => {
         state.loading = false;
         state.hotels = [...state.hotels, action.payload];
-        // state.hotels.push(action.payload); // ✅ add new hotel to list
       })
       .addCase(addHotel.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.formError = action.payload || { error: "An error occurred" };
       })
 
       // Edit hotel
@@ -145,7 +174,9 @@ const hotelsSlice = createSlice({
       })
       .addCase(editHotel.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.hotels.findIndex(hotel => hotel.id === action.payload.id);
+        const index = state.hotels.findIndex(
+          (hotel) => hotel.id === action.payload.id
+        );
         if (index !== -1) {
           state.hotels[index] = action.payload;
         }
@@ -169,6 +200,20 @@ const hotelsSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Fetch owner hotel detail
+      .addCase(fetchOwnerHotelDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOwnerHotelDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.hotelDetail = action.payload;
+      })
+      .addCase(fetchOwnerHotelDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // Remove hotel
       .addCase(removeHotel.pending, (state) => {
         state.loading = true;
@@ -176,7 +221,9 @@ const hotelsSlice = createSlice({
       })
       .addCase(removeHotel.fulfilled, (state, action) => {
         state.loading = false;
-        state.hotels = state.hotels.filter(hotel => hotel.id !== action.payload);
+        state.hotels = state.hotels.filter(
+          (hotel) => hotel.id !== action.payload
+        );
       })
       .addCase(removeHotel.rejected, (state, action) => {
         state.loading = false;

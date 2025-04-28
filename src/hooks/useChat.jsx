@@ -1,5 +1,6 @@
 // hooks/useChat.js
 import { useState } from 'react';
+import { sendQuestion } from '../services/api';
 
 const useChat = () => {
   const [messages, setMessages] = useState([]);

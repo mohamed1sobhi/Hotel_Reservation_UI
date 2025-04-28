@@ -14,12 +14,12 @@ export default function RoomsPage() {
   const { rooms, loading, error } = useSelector((state) => state.rooms);
   const { paymentDetail } = useSelector((state) => state.payments || {});
   const [hoveredRoom, setHoveredRoom] = useState(null);
-
+    console.log("id" ,  ID)
   useEffect(() => {
     dispatch(fetchRoomsByHotel(ID));
-    dispatch(fetchPaymentDetail(33));
     // dispatch(fetchRoomDetail(ID));
     dispatch(fetchRoomImages(ID));
+
   }, [dispatch, ID]);
 
   const formatAmenities = (amenities) => {
@@ -238,6 +238,10 @@ export default function RoomsPage() {
                           <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
                         </svg>
                         Add
+                      </button>
+                      <button  onClick={() => navigate(`/editroom/${room.id}`)} className="btn py-2 px-3" style={{ backgroundColor: "#B45E3A", color: "#F9F5F1", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease", border: "none", boxShadow: "0 2px 5px rgba(0,0,0,0.1)" }}>
+                  
+Edit 
                       </button>
                     </div>
                   </div>

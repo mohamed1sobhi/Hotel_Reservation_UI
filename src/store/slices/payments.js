@@ -1,49 +1,25 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axiosInstance from '../../config/axios_conf.js';
 import { 
   paymentData,
-//   getAllPayments,
-//   createPayment,
-//   processPayment,
-//   refundPayment,
-//   createPaymentForReservation,
-//   getAllPaymentSettings,
+  getUserBookings,
 } from "../../services/api";
 
-// Fetch all payments
-// export const fetchPayments = createAsyncThunk(
-//   "payments/fetchPayments",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await getAllPayments();
-//       return response;
-//     } catch (error) {
-//       console.error('Fetch Payments Error:', error);
-//       return rejectWithValue(error.response?.data?.message || "Failed to fetch payments");
-//     }
-//   }
-// );
-
-// Create a new payment
-// export const addPayment = createAsyncThunk(
-//   "payments/addPayment",
-//   async (data, { rejectWithValue }) => {
-//     try {
-//       const response = await createPayment(data);
-//       return response;
-//     } catch (error) {
-//       console.error('Create Payment Error:', error);
-//       return rejectWithValue(error.response?.data?.message || "Failed to create payment");
-//     }
-//   }
-// );
 
 // Fetch single payment details
+// In your payments.js slice
 export const fetchPaymentDetail = createAsyncThunk(
   "payments/fetchPaymentDetail",
   async (id, { rejectWithValue }) => {
     try {
       const response = await paymentData(id);
       console.log("Payment Detail Response:", response);
+      
+      // Validate response data structure
+      if (!response.data || !response.data.hotel) {
+        return rejectWithValue("Invalid payment data received");
+      }
+      
       return response.data;
     } catch (error) {
       console.error('Fetch Payment Detail Error:', error);
@@ -52,107 +28,86 @@ export const fetchPaymentDetail = createAsyncThunk(
   }
 );
 
-// Process a payment
-// export const processSinglePayment = createAsyncThunk(
-//   "payments/processSinglePayment",
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await processPayment(id);
-//       return response;
-//     } catch (error) {
-//       console.error('Process Payment Error:', error);
-//       return rejectWithValue(error.response?.data?.message || "Failed to process payment");
-//     }
-//   }
-// );
+export const fetchUserPayments = createAsyncThunk(
+  "payments/fetchUserPayments",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getUserBookings();
+      console.log("User bookings response:", response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch User Payments Error:', error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch user payments"
+      );
+    }
+  }
+);
 
-// Refund a payment
-// export const refundSinglePayment = createAsyncThunk(
-//   "payments/refundSinglePayment",
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await refundPayment(id);
-//       return response;
-//     } catch (error) {
-//       console.error('Refund Payment Error:', error);
-//       return rejectWithValue(error.response?.data?.message || "Failed to refund payment");
-//     }
-//   }
-// );
+export const submitClientInfo = createAsyncThunk(
+  'payments/submitClientInfo',
+  async (clientData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/payments/client-info/', clientData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'An error occurred');
+    }
+  }
+);
 
-// Create payment for reservation
-// export const createReservationPayment = createAsyncThunk(
-//   "payments/createReservationPayment",
-//   async (data, { rejectWithValue }) => {
-//     try {
-//       const response = await createPaymentForReservation(data);
-//       return response;
-//     } catch (error) {
-//       console.error('Create Reservation Payment Error:', error);
-//       return rejectWithValue(error.response?.data?.message || "Failed to create reservation payment");
-//     }
-//   }
-// );
+export const submitPaymentMethod = createAsyncThunk(
+  'payments/submitPaymentMethod',
+  async (paymentData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/payments/payment-method/', paymentData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'An error occurred');
+    }
+  }
+);
 
-// Fetch all payment settings
-// export const fetchPaymentSettings = createAsyncThunk(
-//   "payments/fetchPaymentSettings",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await getAllPaymentSettings();
-//       return response;
-//     } catch (error) {
-//       console.error('Fetch Payment Settings Error:', error);
-//       return rejectWithValue(error.response?.data?.message || "Failed to fetch payment settings");
-//     }
-//   }
-// );
-
-// Initial State
 const initialState = {
-  payments: [],
+  clientInfoStatus: 'idle', 
   paymentDetail: [],
-  paymentSettings: [],
-  loading: false,
+  paymentMethodStatus: 'idle',
+  paymentData: null,
   error: null,
+  paymentSuccess: null,
+  payments: [], // Add this line
+  loading: false // Add this line if not already present
 };
 
-// Slice
-const paymentsSlice = createSlice({
-  name: "payments",
+const paymentSlice = createSlice({
+  name: 'payments',
   initialState,
-  reducers: {},
+  reducers: {
+    resetPaymentState: (state) => {
+      state.clientInfoStatus = 'idle';
+      state.paymentMethodStatus = 'idle';
+      state.error = null;
+      state.paymentSuccess = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      // Fetch all payments
-    //   .addCase(fetchPayments.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(fetchPayments.fulfilled, (state, action) => {
-    //     state.loading = false;
-    //     state.payments = action.payload;
-    //   })
-    //   .addCase(fetchPayments.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   })
 
-      // Add a payment
-    //   .addCase(addPayment.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(addPayment.fulfilled, (state, action) => {
-    //     state.loading = false;
-    //     state.payments.push(action.payload);
-    //   })
-    //   .addCase(addPayment.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   })
+      .addCase(fetchUserPayments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserPayments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.payments = action.payload;
+      })
+      .addCase(fetchUserPayments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = typeof action.payload === 'object'
+          ? (action.payload.message || JSON.stringify(action.payload))
+          : action.payload || action.error.message;
+      })
 
-      // Fetch single payment detail
       .addCase(fetchPaymentDetail.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -163,63 +118,47 @@ const paymentsSlice = createSlice({
       })
       .addCase(fetchPaymentDetail.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        // Make sure error is always stored as a string
+        state.error = typeof action.payload === 'object' 
+          ? (action.payload.message || JSON.stringify(action.payload)) 
+          : action.payload || action.error.message;
       })
 
-      // Process a payment
-    //   .addCase(processSinglePayment.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(processSinglePayment.fulfilled, (state) => {
-    //     state.loading = false;
-    //   })
-    //   .addCase(processSinglePayment.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   })
+      .addCase(submitClientInfo.pending, (state) => {
+        state.clientInfoStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(submitClientInfo.fulfilled, (state, action) => {
+        state.clientInfoStatus = 'succeeded';
+        state.paymentData = action.payload;
+        state.error = null;
+      })
+      .addCase(submitClientInfo.rejected, (state, action) => {
+        state.clientInfoStatus = 'failed';
+        state.error = action.payload || 'Failed to submit client information';
+      })
 
-    //   // Refund a payment
-    //   .addCase(refundSinglePayment.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(refundSinglePayment.fulfilled, (state) => {
-    //     state.loading = false;
-    //   })
-    //   .addCase(refundSinglePayment.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   })
-
-    //   // Create payment for reservation
-    //   .addCase(createReservationPayment.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(createReservationPayment.fulfilled, (state, action) => {
-    //     state.loading = false;
-    //     state.payments.push(action.payload);
-    //   })
-    //   .addCase(createReservationPayment.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   })
-
-    //   // Fetch payment settings
-    //   .addCase(fetchPaymentSettings.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(fetchPaymentSettings.fulfilled, (state, action) => {
-    //     state.loading = false;
-    //     state.paymentSettings = action.payload;
-    //   })
-    //   .addCase(fetchPaymentSettings.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   });
+      .addCase(submitPaymentMethod.pending, (state) => {
+        state.paymentMethodStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(submitPaymentMethod.fulfilled, (state, action) => {
+        state.paymentMethodStatus = 'succeeded';
+        state.paymentSuccess = action.payload;
+        state.error = null;
+      })
+      .addCase(submitPaymentMethod.rejected, (state, action) => {
+        state.paymentMethodStatus = 'failed';
+        state.error = action.payload || 'Failed to process payment';
+      });
+      
+      
   },
 });
 
-export default paymentsSlice.reducer;
+export const { resetPaymentState } = paymentSlice.actions;
+export default paymentSlice.reducer;
+
+
+
+
