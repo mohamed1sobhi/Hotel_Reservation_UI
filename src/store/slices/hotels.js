@@ -47,6 +47,12 @@ export const editHotel = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error('Update Hotel Error:', error);
+     if (response.data.email) {
+        return rejectWithValue(error.response.data.email[0]);
+        alert("Email already exists");
+      }
+
+
       return rejectWithValue(error.response?.data?.message || "Failed to update hotel");
     }
   }

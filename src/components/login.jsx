@@ -17,6 +17,7 @@ function Login() {
   
     if (loginUser.fulfilled.match(result)) {
       navigate('/');
+      window.location.reload();
     } else {
       alert('Login failed!');
     }

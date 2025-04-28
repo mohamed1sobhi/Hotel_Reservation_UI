@@ -12,27 +12,24 @@ const Header = () => {
     const userId = JSON.parse(localStorage.getItem("user"))?.id;
     if (userId){
       setIsLoggedIn(true)
+      console.log(userId) ;
     }
     // setIsLoggedIn(!!token || !!userId);
   }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    setIsLoggedIn(!!token);
-  }, []);
+ 
   console.log(isLoggedIn);
-  
+
 
   return (
-    <nav className="navbar navbar-expand-lg bg-light shadow-sm border-bottom border-primary">
+    <nav className="navbar navbar-expand-lg bg-light shadow-sm border-bottom border-primary p-4">
       <div className="container-fluid">
         {/* Brand Logo */}
         <Link className="navbar-brand fw-bold text-primary fs-3" to="/">
-          <img
+          {/* <img
             src="src/assests/HOTEL_LOGO.svg"
             alt="Royal Hotels Logo"
             style={{ width: "100px", height: "80px" }}
-          />
+          /> */}
           <span className="text-primary">Royal Hotels</span>
         </Link>
 
@@ -91,14 +88,7 @@ const Header = () => {
                   className="nav-link fw-semibold text-light btn bg-primary px-4 py-2 d-flex align-items-center gap-2"
                   to="/login"
                 >
-                  <img
-                    src="/src/assests/login.png"
-                    alt="Login"
-                    style={{
-                      width: "24px",
-                      height: "24px",
-                    }}
-                  />
+                  
                   <span>Login</span>
                 </Link>
               </li>

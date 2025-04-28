@@ -16,7 +16,7 @@ export default function BookingForm() {
   const [checkIn, setCheckIn] = useState("");
   const [days, setDays] = useState(1);
   const [items, setItems] = useState([{ room_type_id: "", quantity: 1 }]);
-  const [errorMessages, setErrorMessages] = useState(""); // State to store error messages
+  const [errorMessages, setErrorMessages] = useState("");
 
   useEffect(() => {
     dispatch(fetchHotelDetail(hotel_Id));
@@ -53,19 +53,17 @@ export default function BookingForm() {
     };
 
     try {
-      const response = await dispatch(addBooking(data)).unwrap(); // Wait for the response
-      console.log('Booking created successfully:', response);
+      const response = await dispatch(addBooking(data)).unwrap();
+      console.log("Booking created successfully:", response);
 
       const bookingId = response.booking_id;
       navigate(`/bookingdetails/${bookingId}/`);
     } catch (error) {
-      console.error('Error creating booking:', error);
-      
-      // Extract error messages from the error response
+      console.error("Error creating booking:", error);
+
       if (error?.response?.data) {
         const errorData = error.response.data;
 
-        // Check for specific errors (e.g., unique constraint violations)
         if (errorData?.non_field_errors) {
           setErrorMessages(errorData.non_field_errors.join(", "));
         } else {
@@ -76,80 +74,100 @@ export default function BookingForm() {
       }
     }
   };
-      if (errorMessages){
-        alert(errorMessages)
-      }
-        
-
 
   return (
-    <form onSubmit={handleSubmit} className="container">
-      <div>
-        <label>Check-in Date:</label>
-        <input
-          type="date"
-          value={checkIn}
-          onChange={(e) => setCheckIn(e.target.value)}
-          required
-        />
+    <div className="container py-5">
+      <div className="booking-form mx-auto p-4 shadow">
+        <h2 className="text-center mb-4 booking-title">Book Your Stay</h2>
+
+        {errorMessages && (
+          <div className="alert alert-danger text-center">
+            <strong>Error: </strong>
+            {errorMessages}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          {/* Check-in Date */}
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Check-in Date:</label>
+            <input
+              type="date"
+              className="form-control"
+              value={checkIn}
+              onChange={(e) => setCheckIn(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Days */}
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Days:</label>
+            <input
+              type="number"
+              className="form-control"
+              value={days}
+              onChange={(e) => setDays(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Room Items */}
+          <h4 className="mb-3">Room Items</h4>
+          {items.map((item, index) => (
+            <div key={index} className="row mb-3 align-items-center">
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">Room Type:</label>
+                <select
+                  name="room_type_id"
+                  className="form-select"
+                  value={item.room_type_id}
+                  onChange={(e) => handleItemChange(index, e)}
+                  required
+                >
+                  <option value="">Select Room Type</option>
+                  {hotelRoomTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.room_type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label className="form-label fw-semibold">Quantity:</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  value={item.quantity}
+                  onChange={(e) => handleItemChange(index, e)}
+                  required
+                />
+              </div>
+              <div className="col-md-2 text-end">
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => removeItem(index)}
+                >
+                  <i className="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+
+          <button type="button" className="btn btn-secondary mb-3" onClick={addItem}>
+            + Add Room
+          </button>
+
+          {/* Submit Button */}
+          <div className="text-center">
+            <button type="submit" className="btn booking-btn">
+              Book Now
+            </button>
+          </div>
+        </form>
       </div>
-
-      <div>
-        <label>Days:</label>
-        <input
-          type="number"
-          value={days}
-          onChange={(e) => setDays(e.target.value)}
-          required
-        />
-      </div>
-
-      <h4>Room Items</h4>
-      {items.map((item, index) => (
-        <div key={index} style={{ marginBottom: "10px" }}>
-          <label>Room Type:</label>
-          <select
-            name="room_type_id"
-            value={item.room_type_id}
-            onChange={(e) => handleItemChange(index, e)}
-            required
-          >
-            <option value="">Select Room Type</option>
-            {hotelRoomTypes.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.room_type}
-              </option>
-            ))}
-          </select>
-
-          <label>Quantity:</label>
-          <input
-            type="number"
-            name="quantity"
-            value={item.quantity}
-            onChange={(e) => handleItemChange(index, e)}
-            required
-          />
-        <button type="button" className="btn btn-danger" aria-label="Close" onClick={() => removeItem(index)} >
-           <i className="bi bi-x"></i>
-        </button>
-        </div>
-      ))}
-
-      <button type="button" onClick={addItem}>
-        + Add Room
-      </button>
-
-      <button type="submit" style={{ marginLeft: "10px" }}>
-        Book Now
-      </button>
-
-      {errorMessages && (
-        <div style={{ color: "red", marginTop: "10px" }}>
-          <strong>Error: </strong>{errorMessages}
-        
-        </div>
-      )}
-    </form>
+    </div>
   );
 }

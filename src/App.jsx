@@ -32,6 +32,7 @@ const AddRoomImage = React.lazy(() => import('./components/addroomimage'));
 const RoomDetails = React.lazy(() => import('./components/roomdetails'));
 const BookingForm = React.lazy(() => import('./components/addbooking'));
 const BookingDetail = React.lazy(() => import('./components/bookingdetails'));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
 function App() {
 
       
@@ -69,6 +70,7 @@ function App() {
           <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
           <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
           {/* <ToastContainer position="top-center" autoClose={3000} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
