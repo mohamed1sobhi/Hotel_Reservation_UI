@@ -91,4 +91,9 @@ export const getAllPayments = () => axiosInstance.get("/payments/create");
 export const getPayment = (id) => axiosInstance.get(`/payments/${id}/`);
 
 // Process a specific payment
-export const processPayment = (id) => axiosInstance.post(`/payments/${id}/`, { process_payment: true });
+export const sendQuestion = (question, model = 'gemini') => axiosInstance.post('/chat/query/', { question, model });
+
+export const fetchQueryHistory = (modelFilter = null) => {
+  const url = modelFilter ? `/chat/history/?model=${modelFilter}` : '/history/';
+  return axiosInstance.get(url);
+};

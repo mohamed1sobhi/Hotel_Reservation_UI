@@ -34,6 +34,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BookingForm  from './components/addbooking';
 import BookingDetail from './components/bookingdetails';
+import ChatbotWidget from './components/ChatbotWidget';
 
 function App() {
 
@@ -72,6 +73,7 @@ function App() {
           <Route path="/bookingdetails/:UserId" element={< BookingDetail />}/>
           {/* <ToastContainer position="top-center" autoClose={3000} /> */}
         </Routes>
+        <ChatbotWidget/>
       </main>
       <Footer />
     </BrowserRouter>
