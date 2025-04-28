@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { addHotel, editHotel, fetchHotelDetail, fetchHotels  , filterHotels} from "../store/slices/hotels";
+import { addHotel, editHotel, fetchHotelDetail, fetchHotels, filterHotels } from "../store/slices/hotels";
 
 const HotelFormModal = ({ HOTEL_ID, onClose }) => {
   const handleClose = () => {
     console.log("Cancel button clicked");
     onClose();
   };
-
+  const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const { HOTEL_ID } = useParams();
   const isEdit = !!HOTEL_ID;
 
-  const { hotelDetail } = useSelector((state) => state.hotels);
+  const { hotelDetail, loading, error } = useSelector((state) => state.hotels);
   const user = localStorage.getItem("user");
-  const [error , seterror ] = useState({})
+  // const [error , seterror ] = useState({})
   const [formData, setFormData] = useState({
     owner: user ? JSON.parse(user).id : "1",
     name: "",
@@ -84,100 +84,91 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    setErrorMessage(null);
     if (!validateForm()) return;
-  
+
     if (isEdit) {
       dispatch(editHotel({ id: HOTEL_ID, data: formData }));
     } else {
+      // First: Client-side validation
+      if (!validateForm()) {
+        return; // prevent submission if validation fails
+      }
       try {
         const response = await dispatch(addHotel(formData)).unwrap();
-          navigate("/");
-          window.location.reload();  
+        if (error) {
+          setErrorMessage(error);
+          return;
+        }
+        navigate("/");
+        window.location.reload();
       } catch (error) {
         console.error("Error adding hotel:", error);
       }
     }
     onClose();
   };
-  // const validateForm = () => {
-  //   const errors = {};
-    
-  //   if (!roomType.room_type.trim()) {
-  //     errors.room_type = "Room type is required";
-  //   } else {
-  //     const typeExists = hotelDetail.some(
-  //       type => type.room_type.toLowerCase() === roomType.room_type.toLowerCase()
-  //     );
-      
-  //     if (typeExists) {
-  //       errors.room_type = "This room type already exists";
-  //     }
-  //   }
-    
-  //   setFormErrors(errors);
-  //   return Object.keys(errors).length === 0;
-  // };
-    return (
-      <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{isEdit ? "Edit Hotel" : "Add Hotel"}</h5>
-              <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={handleSubmit}>
-                {[
-                  { label: "Name", name: "name", type: "text" },
-                  { label: "Description", name: "description", type: " biti text" },
-                  { label: "Address", name: "address", type: "text" },
-                  { label: "Email", name: "email", type: "email" },
-                  { label: "Price Range", name: "price_range", type: "text" },
-                  { label: "Phone", name: "phone", type: "text" },
-                ].map(({ label, name, type }) => (
-                  <div className="mb-3" key={name}>
-                    <label htmlFor={name} className="form-label">{label}</label>
-                    <input
-                      type={type}
-                      id={name}
-                      name={name}
-                      value={formData[name]}
-                      onChange={handleChange}
-                      className={`form-control ${formErrors[name] ? "is-invalid" : ""}`}
-                    />
-                    {formErrors[name] && <div className="invalid-feedback">{formErrors[name]}</div>}
-                  </div>
-                ))}
-
-                <div className="mb-3">
-                  <label htmlFor="stars" className="form-label">Stars</label>
+  return (
+    <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+      <div className="modal-dialog modal-dialog-centered" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">{isEdit ? "Edit Hotel" : "Add Hotel"}</h5>
+            <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+              {[
+                { label: "Name", name: "name", type: "text" },
+                { label: "Description", name: "description", type: " biti text" },
+                { label: "Address", name: "address", type: "text" },
+                { label: "Email", name: "email", type: "email" },
+                { label: "Price Range", name: "price_range", type: "text" },
+                { label: "Phone", name: "phone", type: "text" },
+              ].map(({ label, name, type }) => (
+                <div className="mb-3" key={name}>
+                  <label htmlFor={name} className="form-label">{label}</label>
                   <input
-                    type="number"
-                    id="stars"
-                    name="stars"
-                    min="3"
-                    max="7"
-                    value={formData.stars}
+                    type={type}
+                    id={name}
+                    name={name}
+                    value={formData[name]}
                     onChange={handleChange}
-                    className={`form-control ${formErrors.stars ? "is-invalid" : ""}`}
+                    className={`form-control ${formErrors[name] ? "is-invalid" : ""}`}
                   />
-                  {formErrors.stars && <div className="invalid-feedback">{formErrors.stars}</div>}
+                  {formErrors[name] && <div className="invalid-feedback">{formErrors[name]}</div>}
                 </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={handleClose}>
-                Cancel
-              </button>
-              <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-                {isEdit ? "Save Changes" : "Add Hotel"}
-              </button>
-            </div>
+              ))}
+
+              <div className="mb-3">
+                <label htmlFor="stars" className="form-label">Stars</label>
+                <input
+                  type="number"
+                  id="stars"
+                  name="stars"
+                  min="3"
+                  max="7"
+                  value={formData.stars}
+                  onChange={handleChange}
+                  className={`form-control ${formErrors.stars ? "is-invalid" : ""}`}
+                />
+                {formErrors.stars && <div className="invalid-feedback">{formErrors.stars}</div>}
+              </div>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={handleClose}>
+              Cancel
+            </button>
+            <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+              {isEdit ? "Save Changes" : "Add Hotel"}
+            </button>
           </div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
-  export default HotelFormModal;
+export default HotelFormModal;

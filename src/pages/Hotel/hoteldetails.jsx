@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Carousel } from 'react-bootstrap';
 import { Star, Edit3, Trash, ImagePlus, MessagesSquare, Loader } from 'lucide-react';
-import { fetchHotels, removeHotel } from '../../store/slices/hotels';
+import { fetchHotels, removeHotel ,fetchHotelDetail } from '../../store/slices/hotels';
 import { useState } from "react";
 import HotelFormModal from "../../components/HotelFormModal";
 export default function HotelDetails() {
@@ -12,34 +12,30 @@ export default function HotelDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const {hotelDetail} = useSelector((state) => state.hotels);
   const hotel = useSelector(state =>
     state.hotels.hotels.find(hotel => hotel.id === parseInt(id))
   );
-
   useEffect(() => {
     if (!hotel) {
       dispatch(fetchHotels());
     }
+    dispatch(fetchHotelDetail(id));
   }, [dispatch, hotel]);
+console.log("the hotel detail is ", hotelDetail);
 
-
-  const handleDelete = () => {
-    console.log("Deleting hotel with ID:", hotel.id);
-
-    dispatch(removeHotel(hotel.id))
-      .unwrap()
-      .then(() => {
-        console.log("Hotel deleted successfully.");
-        setShowDeleteModal(false);
-        navigate('/star');
-      })
-      .catch((error) => {
-        console.error("Error deleting hotel:", error);
-        alert("An error occurred while deleting the hotel. Please try again.");
-      });
-
-  };
+const handleDelete = () => {
+  dispatch(removeHotel(id))
+    .unwrap()
+    .then(() => {
+      setShowDeleteModal(false);
+      navigate("/hotels");
+    })
+    .catch((error) => {
+      console.error("Error deleting hotel:", error);
+      alert("An error occurred while deleting the hotel. Please try again.");
+    });
+};
   if (!hotel) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100">
