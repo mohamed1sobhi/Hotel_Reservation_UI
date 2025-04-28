@@ -14,12 +14,12 @@ export default function RoomsPage() {
   const { rooms, loading, error } = useSelector((state) => state.rooms);
   const { paymentDetail } = useSelector((state) => state.payments || {});
   const [hoveredRoom, setHoveredRoom] = useState(null);
-
+    console.log("id" ,  ID)
   useEffect(() => {
     dispatch(fetchRoomsByHotel(ID));
-    dispatch(fetchPaymentDetail(33));
     // dispatch(fetchRoomDetail(ID));
     dispatch(fetchRoomImages(ID));
+
   }, [dispatch, ID]);
 
   const formatAmenities = (amenities) => {

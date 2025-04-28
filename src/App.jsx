@@ -1,90 +1,98 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
+import React, { Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import { ToastContainer } from "react-toastify";
 
-import Home from './pages/Home';
-import All_hotels from './pages/Hotel/All_hotels';
-import AboutUs from './pages/AboutUs';
-import ContactUs from './pages/ContactUs';
-import ReviewList from './pages/Review/ReviewList';
-import ReviewDetail from './pages/Review/ReviewDetail';
-import HotelReviews from './pages/Review/HotelReviews';
-import AddReview from './pages/Review/AddReview';
-import Login from './components/login';
-import RegisterUserForm from './pages/register';
-import CustomerProfile from './pages/Profiles/Customer';
-import AdminPanel from './pages/Profiles/AdminPanel';
-import HotelOwner from './pages/Profiles/HotelOwner';
-import AddBooking from './pages/booking/AddBooking';
-import BookingsList from './pages/booking/BookingList';
-// import BookingDetails from './pages/booking/BookingDetails';
-import EditBooking from './pages/booking/EditingBooking';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import RoomsPage from './pages/Hotel/Rooms';
-import ImageForm from './components/ImageForm.jsx';
-import ClientInfoPayment from './pages/payment/ClientInfoPayment';
-import PaymentMethod from './pages/payment/PaymentMethod';
-import BookingForm from './components/addbooking';
-import BookingDetail from './components/bookingdetails';
-import Star from './pages/Hotel/star';
-import HotelDetails from './pages/Hotel/hoteldetails';
-import AddRoom from './components/addroom';
-import AddType from './components/addtype';
-import AddRoomImage from './components/addroomimage';
-import RoomDetails from './components/roomdetails';
-import { ToastContainer } from 'react-toastify';
-
-
+// Lazy-loaded components
+const Home = React.lazy(() => import("./pages/Home"));
+const AllHotels = React.lazy(() => import("./pages/Hotel/All_hotels"));
+const AboutUs = React.lazy(() => import("./pages/AboutUs"));
+const ContactUs = React.lazy(() => import("./pages/ContactUs"));
+const ReviewList = React.lazy(() => import("./pages/Review/ReviewList"));
+const ReviewDetail = React.lazy(() => import("./pages/Review/ReviewDetail"));
+const HotelReviews = React.lazy(() => import("./pages/Review/HotelReviews"));
+const AddReview = React.lazy(() => import("./pages/Review/AddReview"));
+const Login = React.lazy(() => import("./components/login"));
+const RegisterUserForm = React.lazy(() => import("./pages/register"));
+const CustomerProfile = React.lazy(() => import("./pages/Profiles/Customer"));
+const AdminPanel = React.lazy(() => import("./pages/Profiles/AdminPanel"));
+const HotelOwner = React.lazy(() => import("./pages/Profiles/HotelOwner"));
+const AddBooking = React.lazy(() => import("./pages/booking/AddBooking"));
+const BookingsList = React.lazy(() => import("./pages/booking/BookingList"));
+const BookingDetails = React.lazy(() =>
+  import("./pages/booking/BookingDetails")
+);
+const EditBooking = React.lazy(() => import("./pages/booking/EditingBooking"));
+const Header = React.lazy(() => import("./components/Header"));
+const Footer = React.lazy(() => import("./components/Footer"));
+const RoomsPage = React.lazy(() => import("./pages/Hotel/Rooms"));
+const ImageForm = React.lazy(() => import("./components/ImageForm"));
+const ClientInfoPayment = React.lazy(() =>
+  import("./pages/payment/ClientInfoPayment")
+);
+const PaymentMethod = React.lazy(() => import("./pages/payment/PaymentMethod"));
+const BookingForm = React.lazy(() => import("./components/addbooking"));
+const BookingDetail = React.lazy(() => import("./components/bookingdetails"));
+const Star = React.lazy(() => import("./pages/Hotel/star"));
+const HotelDetails = React.lazy(() => import("./pages/Hotel/hoteldetails"));
+const AddRoom = React.lazy(() => import("./components/addroom"));
+const AddType = React.lazy(() => import("./components/addtype"));
+const AddRoomImage = React.lazy(() => import("./components/addroomimage"));
+const RoomDetails = React.lazy(() => import("./components/roomdetails"));
 function App() {
   return (
-
     <div className="d-flex flex-column min-vh-100">
-    <BrowserRouter>
-      <Header />
-      <main className="flex-grow-1 mb-5">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<RegisterUserForm />} />
-          <Route path="/customerprofile" element={<CustomerProfile />} />
-          <Route path="/hotelownerprofile" element={<HotelOwner />} />
-          <Route path="/adminpanel" element={<AdminPanel />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/reviews" element={<ReviewList />} />
-          <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
-          <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
-          <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
-          <Route path="/bookings" element={<AddBooking />} />
-          <Route path="/my-bookings" element={<BookingsList />} />
-          {/* <Route path="/my-bookings/:id" element={<BookingDetails />} /> */}
-          <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
-          <Route path="/hotels" element={<All_hotels />} />
-          <Route path="/hotels/:ID" element={<RoomsPage />} />
-          <Route path="/createImage/:Id" element={<ImageForm />} />
-          <Route path="/star" element= { <Star />} />
-          <Route path="/star/detail/:id" element={<HotelDetails />} />
-          <Route path="/addroom/:HotelId" element={<AddRoom />} />
-          <Route path="/addtype/:hotel_id" element={< AddType />} />
-          <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
-          <Route path="/roomdetails/:_id" element={<RoomDetails />} />
-          <Route path="/editroom/:roomId/" element={<AddRoom />} />
-          <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
-          <Route path="/bookingdetails/:UserId" element={< BookingDetail />}/>
-          <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
-          <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
-          {/* <ToastContainer position="top-center" autoClose={3000} /> */}
-        </Routes>
-      </main>
-      <Footer />
-    </BrowserRouter>
-  </div>
- 
+      <BrowserRouter>
+        <Header />
+        <main className="flex-grow-1 mb-5">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<RegisterUserForm />} />
+            <Route path="/customerprofile" element={<CustomerProfile />} />
+            <Route path="/hotelownerprofile" element={<HotelOwner />} />
+            <Route path="/adminpanel" element={<AdminPanel />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/reviews" element={<ReviewList />} />
+            <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
+            <Route path="/hotels/:hotelId/star" element={<Star />} />
+            <Route path="/hotels/all" element={<AllHotels />} />
 
-  )
+            <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
+            <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
+            <Route path="/bookings" element={<AddBooking />} />
+            <Route path="/my-bookings" element={<BookingsList />} />
+            <Route path="/my-bookings/:id" element={<BookingDetails />} />
+            <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
+            <Route path="/hotels/:ID" element={<RoomsPage />} />
+            <Route path="/createImage/:Id" element={<ImageForm />} />
+            <Route path="/hotels" element={<Hotels />} />
+            <Route path="/hotels/detail/:id" element={<HotelDetails />} />
+            <Route path="/addroom/:HotelId" element={<AddRoom />} />
+            <Route path="/addtype/:hotel_id" element={<AddType />} />
+            <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
+            <Route path="/roomdetails/:_id" element={<RoomDetails />} />
+            <Route path="/editroom/:roomId/" element={<AddRoom />} />
+            <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
+            <Route path="/bookingdetails/:UserId" element={<BookingDetail />} />
+            <Route
+              path="/payment/client-info/:bookingId"
+              element={<ClientInfoPayment />}
+            />
+            <Route
+              path="/payment-method/:paymentId"
+              element={<PaymentMethod />}
+            />
+            {/* <ToastContainer position="top-center" autoClose={3000} /> */}
+          </Routes>
+        </main>
+        <Footer />
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
