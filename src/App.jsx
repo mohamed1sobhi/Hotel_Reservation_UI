@@ -73,6 +73,7 @@ const RegisterUserForm = React.lazy(() => import("./pages/register"));
 const CustomerProfile = React.lazy(() => import("./pages/Profiles/Customer"));
 const AdminPanel = React.lazy(() => import("./pages/Profiles/AdminPanel"));
 const HotelOwner = React.lazy(() => import("./pages/Profiles/HotelOwner"));
+const ChatbotWidget = React.lazy(() => import("./components/ChatbotWidget"));
 function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
