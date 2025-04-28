@@ -17,11 +17,9 @@ export default function RoomsPage() {
     console.log("id" ,  ID)
   useEffect(() => {
     dispatch(fetchRoomsByHotel(ID));
-    // dispatch(fetchRoomDetail(ID));
     dispatch(fetchRoomImages(ID));
 
   }, [dispatch, ID]);
-
   const formatAmenities = (amenities) => {
     if (!amenities) return ["No amenities listed"];
     
@@ -239,9 +237,8 @@ export default function RoomsPage() {
                         </svg>
                         Add
                       </button>
-                      <button  onClick={() => navigate(`/editroom/${room.id}`)} className="btn py-2 px-3" style={{ backgroundColor: "#B45E3A", color: "#F9F5F1", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease", border: "none", boxShadow: "0 2px 5px rgba(0,0,0,0.1)" }}>
-                  
-Edit 
+                      <button  onClick={() => navigate(`/editroom/${room.hotel}/${room.id}`)} className="btn py-2 px-3" style={{ backgroundColor: "#B45E3A", color: "#F9F5F1", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease", border: "none", boxShadow: "0 2px 5px rgba(0,0,0,0.1)" }}>
+                      Edit 
                       </button>
                     </div>
                   </div>

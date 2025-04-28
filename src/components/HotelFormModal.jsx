@@ -8,7 +8,7 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
   const navigate = useNavigate();
   const isEdit = !!HOTEL_ID;
   const { hotelDetail } = useSelector((state) => state.hotels);
-  const [formErrors, setFormErrors] = useState("");
+  const [formErrors, setFormErrors] = useState({});
   const user = localStorage.getItem("user");
 
   const [formData, setFormData] = useState({
@@ -21,6 +21,7 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
     phone: "",
     email: "",
   });
+
   useEffect(() => {
     if (isEdit) {
       dispatch(fetchHotelDetail(HOTEL_ID));
@@ -41,7 +42,11 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
       });
     }
   }, [hotelDetail, isEdit]);
- 
+
+  useEffect(() => {
+    console.log("Updated formErrors:", formErrors);
+  }, [formErrors]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -49,9 +54,9 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
       [name]: name === "stars" ? (value === "" ? "" : Number(value)) : value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (isEdit) {
         await dispatch(editHotel({ id: HOTEL_ID, data: formData })).unwrap();
@@ -60,22 +65,16 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
         navigate("/hotels");
         window.location.reload();
       }
-      setFormErrors("");
+      setFormErrors({});
       onClose();
     } catch (error) {
-      if(error.email){
-        alert(error.email[0])
+      if (typeof error === "object") {
+        console.log(error)
+        setFormErrors(error);
+        console.log(formErrors)
+      } else {
+        setFormErrors({ non_field_errors: ["An unknown error occurred."] });
       }
-      if(error.phone){
-        alert(error.phone[0])
-      }
-      if(error.name){
-        alert(error.name[0])
-      }
-      if(error.stars){
-        alert(error.stars[0])
-      }
-      
     }
   };
 
@@ -89,11 +88,15 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
-            {formErrors && Object.entries(formErrors).map(([field, messages], idx) => (
-              <div key={idx} className="text-danger mb-2">
-                {messages[0]}
-              </div>
-            ))}
+              
+              {/* General non-field errors */}
+              {formErrors.non_field_errors && (
+                <div className="alert alert-danger">
+                  {formErrors.non_field_errors[0]}
+                </div>
+              )}
+
+              {/* Input Fields */}
               {[
                 { label: "Name", name: "name", type: "text" },
                 { label: "Description", name: "description", type: "text" },
@@ -110,11 +113,17 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
                     name={name}
                     value={formData[name]}
                     onChange={handleChange}
-                    className={`form-control`}
+                    className={`form-control ${formErrors[name] ? 'is-invalid' : ''}`}
                   />
+                  {formErrors[name] && (
+                    <div className="invalid-feedback">
+                      {formErrors[name][0]}
+                    </div>
+                  )}
                 </div>
               ))}
 
+              {/* Stars Field */}
               <div className="mb-3">
                 <label htmlFor="stars" className="form-label">Stars</label>
                 <input
@@ -125,10 +134,16 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
                   max="7"
                   value={formData.stars}
                   onChange={handleChange}
-                  className={`form-control `}
+                  className={`form-control ${formErrors.stars ? 'is-invalid' : ''}`}
                 />
+                {formErrors.stars && (
+                  <div className="invalid-feedback">
+                    {formErrors.stars[0]}
+                  </div>
+                )}
               </div>
 
+              {/* Modal Footer */}
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={onClose}>
                   Cancel
@@ -137,6 +152,7 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
                   {isEdit ? "Save Changes" : "Add Hotel"}
                 </button>
               </div>
+
             </form>
           </div>
         </div>

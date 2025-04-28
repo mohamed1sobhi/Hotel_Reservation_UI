@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loader from './Loader';
 import {
   addRoom,
   editRoom,
@@ -12,10 +13,11 @@ import './AddRoom.css';
 const AddRoom = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {HotelId, roomId } = useParams(); 
+  const { HotelId, roomId } = useParams(); 
   const isEdit = !!roomId;
 
   const { roomDetail, hotelRoomTypes, loading } = useSelector((state) => state.rooms);
+
   const [roomData, setRoomData] = useState({
     hotel: HotelId,
     room_type: "",
@@ -27,19 +29,32 @@ const AddRoom = () => {
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
-    dispatch(fetchRoomDetail(roomId));
     dispatch(fetchHotelRoomsType(HotelId));
-    if (isEdit && roomDetail) {
-      dispatch(fetchHotelRoomsType(roomDetail.hotel));
+
+    if (isEdit) {
+      dispatch(fetchRoomDetail(roomId));
+    }
+  }, [dispatch, HotelId, roomId, isEdit]);
+
+  useEffect(() => {
+    if (isEdit && roomDetail && roomDetail.id) {
       setRoomData({
         hotel: roomDetail.hotel,
-        room_type: roomDetail.room_type,
+        room_type: roomDetail.room_type.id.toString(),
         price_per_night: roomDetail.price_per_night,
         total_rooms: roomDetail.total_rooms,
         amenities: roomDetail.amenities
       });
     }
-  }, [dispatch, HotelId, isEdit]);
+  }, [roomDetail, isEdit]);
+
+  if (loading) {
+    return (
+      <>
+        <Loader />
+      </>
+    );
+  }
 
   const handleChange = (e) => {
     setRoomData({
@@ -69,32 +84,30 @@ const AddRoom = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      if (isEdit) {
-        await dispatch(editRoom({ id: roomId, data: roomData })).unwrap();
-      } else {
-        if (validateForm()) {
+      if (validateForm()) {
+        if (isEdit) {
+          await dispatch(editRoom({ id: roomId, data: roomData })).unwrap();
+        } else {
           await dispatch(addRoom(roomData)).unwrap();
-          navigate(`/hotels/${HotelId}`);
-          window.location.reload();
         }
+        navigate(`/hotels/${HotelId}`);
+        window.location.reload();
       }
     } catch (error) {
-      if (error.room_type) {
-        alert(error.room_type[0]);
-      }
-      if (error.price_per_night) {
-        alert(error.price_per_night[0]);
-      }
-      if (error.amenities) {
-        alert(error.amenities[0]);
-      }
+      console.log('API Validation Error:', error);
 
+      if (error && typeof error === 'object') {
+        const serverErrors = {};
+        for (const key in error) {
+          serverErrors[key] = error[key][0];
+        }
+        setFormErrors(serverErrors);
+      }
     }
   };
-  
- 
+
   const selectedRoomTypeName = hotelRoomTypes.find(
     (type) => type.id.toString() === roomData.room_type
   )?.room_type;
@@ -102,7 +115,8 @@ const AddRoom = () => {
   return (
     <div className="add-room-container">
       <div className="add-room-card">
-        <h1 className="add-room-title">Add New Room</h1>
+        <h1 className="add-room-title">{isEdit ? "Edit Room" : "Add New Room"}</h1>
+
         <div className="progress-bar">
           <div className="progress-step active">Details</div>
           <div className="progress-step">Preview</div>
@@ -176,11 +190,17 @@ const AddRoom = () => {
               onChange={handleChange}
               placeholder="WiFi, Mini Bar, Ocean View, etc."
               rows="3"
+              className={formErrors.amenities ? "error" : ""}
             />
+            {formErrors.amenities && <span className="error-message">{formErrors.amenities}</span>}
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn-secondary" onClick={() => navigate('/')}>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate(`/hotels/${HotelId}`)}
+            >
               Cancel
             </button>
             <button type="submit" className="btn-primary">
@@ -194,4 +214,3 @@ const AddRoom = () => {
 };
 
 export default AddRoom;
-
