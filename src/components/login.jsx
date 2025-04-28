@@ -16,7 +16,8 @@ function Login() {
     const result = await dispatch(loginUser({ username, password }));
 
     if (loginUser.fulfilled.match(result)) {
-      navigate("/");
+      navigate('/');
+      window.location.reload();
     } else {
       alert("Login failed!");
     }

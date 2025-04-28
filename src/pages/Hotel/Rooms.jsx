@@ -239,6 +239,10 @@ export default function RoomsPage() {
                         </svg>
                         Add
                       </button>
+                      <button  onClick={() => navigate(`/editroom/${room.id}`)} className="btn py-2 px-3" style={{ backgroundColor: "#B45E3A", color: "#F9F5F1", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease", border: "none", boxShadow: "0 2px 5px rgba(0,0,0,0.1)" }}>
+                  
+Edit 
+                      </button>
                     </div>
                   </div>
 

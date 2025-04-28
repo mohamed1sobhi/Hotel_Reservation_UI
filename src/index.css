@@ -306,3 +306,57 @@ a:focus {
   background-color: var(--bs-secondary); /* Change background color on hover */
   transform: scale(1.05); /* Slight zoom effect on hover */
 }
+
+/* Booking Details Styling */
+.booking-details {
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--bs-dark);
+}
+
+.booking-title {
+  color: var(--bs-primary);
+  font-weight: bold;
+}
+
+.booking-card {
+  max-width: 800px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--bs-primary);
+}
+
+.booking-card .card-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.booking-card .card-body {
+  padding: 1.5rem;
+  background-color: var(--bs-light);
+}
+
+.booking-card .card-footer {
+  padding: 1.5rem;
+  background-color: var(--bs-info);
+  border-top: 1px solid var(--bs-primary);
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 5px;
+}
+
+.booking-btn {
+  background-color: var(--bs-primary);
+  color: white;
+  font-weight: bold;
+  padding: 0.6rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.booking-btn:hover {
+  background-color: var(--bs-secondary);
+  color: white;
+}
