@@ -1,27 +1,27 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import BookingsCard from "../../components/BookingCard/BookingsCard";
 import {
   fetchCurrentUser,
   editCurrentUser,
   clearError,
 } from "../../store/slices/accounts";
-import "./Customer.css";
 import { fetchUserBookings } from "../../store/slices/booking";
 import { Link } from "react-router-dom";
+import { Modal, Button, Form } from "react-bootstrap"; // Import React Bootstrap components
 
 export default function CustomerProfile() {
   const dispatch = useDispatch();
   const { userDetail, loading, error } = useSelector((state) => state.accounts);
   const { bookings } = useSelector((state) => state.bookings);
 
-  console.log(bookings, "bookings");
+  console.log("bookings", bookings);
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
-  // fetch user bookings
   useEffect(() => {
     if (userDetail) {
       dispatch(fetchUserBookings());
@@ -32,18 +32,13 @@ export default function CustomerProfile() {
     if (error) {
       const timer = setTimeout(() => {
         dispatch(clearError());
-      }, 5000); // Clear after 5 seconds
-
-      return () => clearTimeout(timer); // Cleanup on unmount or re-run
+      }, 5000);
+      return () => clearTimeout(timer);
     }
   }, [error, dispatch]);
 
-  const [showForm, setShowForm] = useState(false);
-
-  const handleButtonClick = () => setShowForm(true);
-
-  const handleFormSuccess = (e) => {
-    e.preventDefault(); // prevent default form submission
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
     const formData = {
       username: document.querySelector('input[name="name"]').value,
       email: document.querySelector('input[name="email"]').value,
@@ -52,15 +47,16 @@ export default function CustomerProfile() {
       password2: document.querySelector('input[name="confirmPassword"]').value,
     };
     dispatch(editCurrentUser(formData));
-    setShowForm(false);
+    setShowModal(false);
   };
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <h1>Your Profile</h1>
+    <div style={styles.profileContainer}>
+      <div style={styles.profileHeader}>
+        <h1 style={{ color: "#cd9a5e" }}>Your Profile</h1>
       </div>
-      <div className="profile-details">
+
+      <div>
         {userDetail ? (
           <>
             <p>
@@ -78,106 +74,129 @@ export default function CustomerProfile() {
             <p>
               <strong>Role:</strong> {userDetail.role}
             </p>
-            {!showForm ? (
-              <button className="btn btn-custom" onClick={handleButtonClick}>
-                Edit
-              </button>
-            ) : (
-              <button
-                className="btn btn-custom"
-                onClick={() => setShowForm(false)}
-              >
-                Cancel
-              </button>
-            )}
 
-            {showForm && (
-              <form className="mt-4" onSubmit={handleFormSuccess}>
-                <input
-                  type="text"
-                  className="form-control mb-2"
-                  name="name"
-                  placeholder="Name"
-                  defaultValue={userDetail.name}
-                />
-                <input
-                  type="email"
-                  className="form-control mb-2"
-                  name="email"
-                  placeholder="Email"
-                  defaultValue={userDetail.email}
-                />
-                <input
-                  type="text"
-                  className="form-control mb-2"
-                  name="phone"
-                  placeholder="Phone"
-                  defaultValue={userDetail.phone}
-                />
-                <input
-                  type="password"
-                  className="form-control mb-2"
-                  name="Password"
-                  placeholder="New Password"
-                />
-                <input
-                  type="password"
-                  className="form-control mb-2"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                />
-                <button type="submit" className="btn btn-custom">
-                  Update
-                </button>
-              </form>
-            )}
+            <Button
+              variant="primary"
+              style={styles.btnCustom}
+              onClick={() => setShowModal(true)}
+            >
+              Edit
+            </Button>
+
+            {/* React Bootstrap Modal */}
+            <Modal
+              show={showModal}
+              onHide={() => setShowModal(false)}
+              backdrop="static"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title style={{ color: "#cd9a5e" }}>
+                  Edit Profile
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={handleFormSubmit}>
+                  <Form.Group controlId="formName">
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      placeholder="Name"
+                      defaultValue={userDetail.username}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formEmail">
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      defaultValue={userDetail.email}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formPhone">
+                    <Form.Control
+                      type="text"
+                      name="phone"
+                      placeholder="Phone"
+                      defaultValue={userDetail.phone}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formPassword">
+                    <Form.Control
+                      type="password"
+                      name="Password"
+                      placeholder="New Password"
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formConfirmPassword">
+                    <Form.Control
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Confirm Password"
+                    />
+                  </Form.Group>
+                  <div className="d-flex justify-content-between">
+                    <Button
+                      variant="secondary"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" style={styles.btnCustom}>
+                      Update
+                    </Button>
+                  </div>
+                </Form>
+              </Modal.Body>
+            </Modal>
+
             {error && (
               <div className="alert alert-danger mt-3" role="alert">
                 {error}
               </div>
             )}
 
-            {/*   hotelimage,
-                  hotelname,
-                  roomtype,
-                  roomnumber,
-
-                  hoteladdress,
-                  hotelrating,
-
-                  bookingPrice,
-                  bookingDate,
-                  checkinDate,
-                  checkOutDate,
-                  bookingStatus,
-            */}
-
-            <div className="mt-5">
-              <h2>Your Bookings</h2>
+            {/* Bookings Section */}
+            <div style={{ marginTop: "3rem" }}>
+              <h2 style={{ color: "#cd9a5e" }}>Your Bookings</h2>
               {bookings && bookings.length > 0 ? (
                 bookings.map((booking) => (
                   <Link
-                    to={`/my-bookings/${booking.id}`}
-                    className="text-decoration-none text-dark"
+                    to={
+                      booking.status !== "confirmed"
+                        ? `/bookingdetails/${booking.id}`
+                        : ""
+                    }
+                    style={{ textDecoration: "none", color: "inherit" }}
                     key={booking.id}
                   >
-                    <BookingsCard
-                      key={booking.id}
-                      hotelimage={booking.hotel_image}
-                      bookingDate={booking.created_at}
-                      hotelname={booking.hotel_name}
-                      hoteladdress={booking.hotel_address}
-                      roomtype={booking.room_type}
-                      checkinDate={booking.check_in}
-                      checkOutDate={booking.check_out}
-                      hotelrating={booking.hotelRating}
-                      bookingPrice={booking.total_price}
-                      bookingStatus={booking.status}
-                    />
+                    <div style={styles.card}>
+                      <img
+                        src={booking.hotel_image}
+                        alt="Hotel"
+                        style={styles.cardImage}
+                      />
+                      <div style={styles.cardDetails}>
+                        <h4 style={styles.cardTitle}>{booking.hotel_name}</h4>
+                        <p>{booking.hotel_address}</p>
+                        <p>Date: {booking.created_at}</p>
+                        <p>Check In: {booking.check_in}</p>
+                        <p>Check Out: {booking.check_out}</p>
+                        <p>Price: {booking.total_price} $</p>
+                        <p
+                          style={{
+                            fontWeight: "bold",
+                            color: statusColors[booking.status] || "#8a8a8a",
+                          }}
+                        >
+                          Status: {booking.status}
+                        </p>
+                      </div>
+                    </div>
                   </Link>
                 ))
               ) : (
-                <p>No bookings Yet.</p>
+                <p>No bookings yet.</p>
               )}
             </div>
           </>
@@ -188,3 +207,59 @@ export default function CustomerProfile() {
     </div>
   );
 }
+
+const styles = {
+  profileContainer: {
+    maxWidth: "800px",
+    margin: "2rem auto",
+    padding: "2rem",
+    backgroundColor: "#e8dfd5",
+    borderRadius: "1rem",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    fontFamily: "Arial, sans-serif",
+    color: "#1a1a1a",
+  },
+  profileHeader: {
+    textAlign: "center",
+    marginBottom: "2rem",
+  },
+  btnCustom: {
+    backgroundColor: "#cd9a5e",
+    color: "white",
+    border: "none",
+    marginTop: "1rem",
+  },
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#f9f5f1",
+    border: "1px solid #e8dfd5",
+    borderRadius: "16px",
+    padding: "20px",
+    margin: "10px 0",
+    boxShadow: "0 4px 10px rgba(26,26,26,0.1)",
+    transition: "transform 0.3s, box-shadow 0.3s",
+  },
+  cardImage: {
+    width: "100%",
+    height: "220px",
+    objectFit: "cover",
+    borderRadius: "12px",
+    marginBottom: "12px",
+  },
+  cardDetails: {
+    flex: 1,
+    color: "#1a1a1a",
+  },
+  cardTitle: {
+    marginBottom: "10px",
+    fontSize: "1.7rem",
+    color: "#cd9a5e",
+  },
+};
+
+const statusColors = {
+  confirmed: "#4caf50",
+  pending: "#ff9800",
+  cancelled: "#f44336",
+};

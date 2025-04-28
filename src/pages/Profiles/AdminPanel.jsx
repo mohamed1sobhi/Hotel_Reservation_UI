@@ -18,7 +18,9 @@ export default function AdminPanel() {
   const { bookings } = useSelector((state) => state.bookings);
   const { hotels } = useSelector((state) => state.hotels);
 
+  console.log("bookings", bookings);
   console.log("userDetail", userDetail);
+  console.log("hotels", hotels);
 
   // Admin's personal data and form state
   const [formData, setFormData] = useState({
