@@ -67,19 +67,33 @@ const AddRoom = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEdit) {
-      dispatch(editRoom({ id: roomId, data: roomData }));
-    } else {
-      if (validateForm()) {
-        dispatch(addRoom(roomData));
-        navigate('/');
+  
+    try {
+      if (isEdit) {
+        await dispatch(editRoom({ id: roomId, data: roomData })).unwrap();
+      } else {
+        if (validateForm()) {
+          await dispatch(addRoom(roomData)).unwrap();
+          navigate(`/hotels/${HotelId}`);
+          window.location.reload();
+        }
       }
-    }
-    navigate('/');
-  };
+    } catch (error) {
+      if (error.room_type) {
+        alert(error.room_type[0]);
+      }
+      if (error.price_per_night) {
+        alert(error.price_per_night[0]);
+      }
+      if (error.amenities) {
+        alert(error.amenities[0]);
+      }
 
+    }
+  };
+  
  
   const selectedRoomTypeName = hotelRoomTypes.find(
     (type) => type.id.toString() === roomData.room_type

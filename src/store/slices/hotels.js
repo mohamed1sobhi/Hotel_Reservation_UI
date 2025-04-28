@@ -32,13 +32,8 @@ export const addHotel = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await createHotel(data);
-      console.log("Create Hotel Response:", response.data);
       return response.data;
     } catch (error) {
-      console.error(
-        "Create Hotel Error:",
-        error.response?.data || error.message
-      );
       return rejectWithValue(error.response?.data || "Failed to create hotel");
     }
   }
@@ -133,6 +128,7 @@ const initialState = {
   hotels: [],
   loading: false,
   error: null,
+  formError:null,
   hotelDetail: null,
 };
 
@@ -165,11 +161,10 @@ const hotelsSlice = createSlice({
       .addCase(addHotel.fulfilled, (state, action) => {
         state.loading = false;
         state.hotels = [...state.hotels, action.payload];
-        // state.hotels.push(action.payload); // ✅ add new hotel to list
       })
       .addCase(addHotel.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.formError = action.payload || { error: "An error occurred" };
       })
 
       // Edit hotel
