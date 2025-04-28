@@ -1,9 +1,11 @@
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
- import React, {useEffect} from 'react'
-import Home from './pages/Home'
-import All_hotels from  './pages/Hotel/All_hotels'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
+
+import Home from './pages/Home';
+import All_hotels from './pages/Hotel/All_hotels';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import ReviewList from './pages/Review/ReviewList';
@@ -11,18 +13,22 @@ import ReviewDetail from './pages/Review/ReviewDetail';
 import HotelReviews from './pages/Review/HotelReviews';
 import AddReview from './pages/Review/AddReview';
 import Login from './components/login';
-// import RegisterUserForm from './pages/register';
-// import BookingForm from './pages/booking/create';
-import ClientInfoPayment from './pages/payment/ClientInfoPayment';
-import PaymentMethod from './pages/payment/PaymentMethod';
+import RegisterUserForm from './pages/register';
+import CustomerProfile from './pages/Profiles/Customer';
+import AdminPanel from './pages/Profiles/AdminPanel';
+import HotelOwner from './pages/Profiles/HotelOwner';
 import AddBooking from './pages/booking/AddBooking';
 import BookingsList from './pages/booking/BookingList';
-import BookingDetails from './pages/booking/BookingDetails.jsx';
+// import BookingDetails from './pages/booking/BookingDetails';
 import EditBooking from './pages/booking/EditingBooking';
+import Header from './components/Header';
 import Footer from './components/Footer';
 import RoomsPage from './pages/Hotel/Rooms';
 import ImageForm from './components/ImageForm.jsx';
-import Header from './components/Header';
+import ClientInfoPayment from './pages/payment/ClientInfoPayment';
+import PaymentMethod from './pages/payment/PaymentMethod';
+import BookingForm from './components/addbooking';
+import BookingDetail from './components/bookingdetails';
 import Star from './pages/Hotel/star';
 import HotelDetails from './pages/Hotel/hoteldetails';
 import AddRoom from './components/addroom';
@@ -30,13 +36,9 @@ import AddType from './components/addtype';
 import AddRoomImage from './components/addroomimage';
 import RoomDetails from './components/roomdetails';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import BookingForm  from './components/addbooking';
-import BookingDetail from './components/bookingdetails';
+
 
 function App() {
-
-      
   return (
 
     <div className="d-flex flex-column min-vh-100">
@@ -46,7 +48,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          {/* <Route path='/register' element={<RegisterUserForm />} /> */}
+          <Route path="/register" element={<RegisterUserForm />} />
+          <Route path="/customerprofile" element={<CustomerProfile />} />
+          <Route path="/hotelownerprofile" element={<HotelOwner />} />
+          <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/reviews" element={<ReviewList />} />
@@ -55,7 +60,7 @@ function App() {
           <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
           <Route path="/bookings" element={<AddBooking />} />
           <Route path="/my-bookings" element={<BookingsList />} />
-          <Route path="/my-bookings/:id" element={<BookingDetails />} />
+          {/* <Route path="/my-bookings/:id" element={<BookingDetails />} /> */}
           <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
           <Route path="/hotels" element={<All_hotels />} />
           <Route path="/hotels/:ID" element={<RoomsPage />} />
@@ -82,4 +87,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

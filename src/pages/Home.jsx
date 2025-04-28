@@ -24,12 +24,12 @@ const Home = () => {
       <FilterWithStar selectedStars={selectedStars} setSelectedStars={setSelectedStars} />
       <Search hotels={hotels} setFilteredHotels={setFilteredHotels} />
 
-      <HotelList
-        hotels={filteredHotels.length > 0 ? filteredHotels : hotels}
-        loading={loading}
-        error={error}
-      />
-    </div>
+        <HotelList
+          hotels={filteredHotels.length > 0 ? filteredHotels : hotels}
+          loading={loading}
+          error={error}
+        />
+      </div>
     </>
   );
 };
