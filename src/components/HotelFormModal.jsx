@@ -8,15 +8,12 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
     console.log("Cancel button clicked");
     onClose();
   };
-  const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { HOTEL_ID } = useParams();
   const isEdit = !!HOTEL_ID;
-
   const { hotelDetail, loading, error } = useSelector((state) => state.hotels);
   const user = localStorage.getItem("user");
-  // const [error , seterror ] = useState({})
+
   const [formData, setFormData] = useState({
     owner: user ? JSON.parse(user).id : "1",
     name: "",
@@ -27,9 +24,6 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
     phone: "",
     email: "",
   });
-
-  const [formErrors, setFormErrors] = useState({});
-
   useEffect(() => {
     if (isEdit) {
       dispatch(fetchHotelDetail(HOTEL_ID));
@@ -50,63 +44,36 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
       });
     }
   }, [hotelDetail, isEdit]);
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: name === "stars" ? (value === "" ? "" : Number(value)) : value,
     }));
-
-    if (formErrors[name]) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: null,
-      }));
-    }
-  };
-
-  // const validateForm = () => {
-  //   const errors = {};
-
-  //   if (!formData.name) errors.name = "Name is required.";
-  //   if (!formData.address) errors.address = "Address is required.";
-  //   if (!formData.stars) errors.stars = "Stars rating is required.";
-
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   if (formData.email && !emailRegex.test(formData.email)) {
-  //     errors.email = "Invalid email address.";
-  //   }
-
-  //   setFormErrors(errors);
-  //   return Object.keys(errors).length === 0;
-  // };
-
+    };
+  const [formErrors, setFormErrors] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(null);
-    if (!validateForm()) return;
-
-    if (isEdit) {
-      dispatch(editHotel({ id: HOTEL_ID, data: formData }));
-    } else {
-      // First: Client-side validation
-      if (!validateForm()) {
-        return; // prevent submission if validation fails
-      }
-      try {
-        const response = await dispatch(addHotel(formData)).unwrap();
-        if (error) {
-          setErrorMessage(error);
-          return;
-        }
-        navigate("/");
-        window.location.reload();
-      } catch (error) {
-        console.error("Error adding hotel:", error);
-      }
+    if (Object.keys(formErrors).length > 0) {
+      alert ("Please fill all fields" );
+      return ;
     }
-    onClose();
+    try {
+      if (isEdit) {
+        await dispatch(editHotel({ id: HOTEL_ID, data: formData })).unwrap();
+        onClose();
+      } else {
+        await dispatch(addHotel(formData)).unwrap();
+        setFormErrors(null);
+        navigate("/hotels");
+        window.location.reload();
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error submitting hotel:", error);
+      setFormErrors(error);
+        }  
   };
   return (
     <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
@@ -118,7 +85,7 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
-              {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+              {formErrors && <p style={{ color: 'red' }}>{formErrors}</p>}
               {[
                 { label: "Name", name: "name", type: "text" },
                 { label: "Description", name: "description", type: " biti text" },
@@ -135,9 +102,10 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
                     name={name}
                     value={formData[name]}
                     onChange={handleChange}
-                    className={`form-control ${formErrors[name] ? "is-invalid" : ""}`}
+                    className={`form-control ${formErrors? "is-invalid" : ""}`}
+
                   />
-                  {formErrors[name] && <div className="invalid-feedback">{formErrors[name]}</div>}
+                   {formErrors && <p style={{ color: 'red' }}>{formErrors[0]}</p>}
                 </div>
               ))}
 
@@ -151,9 +119,9 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
                   max="7"
                   value={formData.stars}
                   onChange={handleChange}
-                  className={`form-control ${formErrors.stars ? "is-invalid" : ""}`}
+                 className={`form-control ${formErrors ? "is-invalid" : ""}`}
                 />
-                {formErrors.stars && <div className="invalid-feedback">{formErrors.stars}</div>}
+                {formErrors && <div className="invalid-feedback">{formErrors[0]}</div>}
               </div>
             </form>
           </div>

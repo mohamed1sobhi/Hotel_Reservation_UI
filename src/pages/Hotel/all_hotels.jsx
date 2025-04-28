@@ -183,7 +183,7 @@ export default function SimpleHotelListingPage() {
         onReset={resetFilters}
       />
 
-      <button className="btn btn-primary mb-4" onClick={handleAddHotel}>
+      <button className="btn btn-primary  m-5 border-0" onClick={handleAddHotel}>
         + Add Hotel
       </button>
 
