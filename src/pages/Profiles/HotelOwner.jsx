@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentUser, editCurrentUser } from "../../store/slices/accounts";
 import { fetchOwnerHotelBookings } from "../../store/slices/booking";
 import { Modal, Button, Form, Table, Badge } from "react-bootstrap";
-import "./AdminPanel.css";
 
 export default function HotelOwner() {
   const dispatch = useDispatch();
-  const { userDetail, error } = useSelector((state) => state.accounts);
+  const { userDetail } = useSelector((state) => state.accounts);
   const { bookings } = useSelector((state) => state.bookings);
 
   const [formData, setFormData] = useState({
@@ -82,35 +81,123 @@ export default function HotelOwner() {
     }
   };
 
+  const styles = {
+    container: {
+      display: "flex",
+      minHeight: "100vh",
+      backgroundColor: "#F9F5F1",
+      color: "#1A1A1A",
+      fontFamily: "Arial, sans-serif",
+    },
+    sidebar: {
+      width: "220px",
+      backgroundColor: "#E8DFD5",
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "10px",
+    },
+    sidebarButton: {
+      backgroundColor: "#CD9A5E",
+      color: "#F9F5F1",
+      border: "none",
+      padding: "10px 15px",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontWeight: "bold",
+    },
+    content: {
+      flex: 1,
+      padding: "30px",
+    },
+    profileSection: {
+      backgroundColor: "#FFFFFF",
+      padding: "30px",
+      borderRadius: "8px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    },
+    h2: {
+      color: "#B45F3A",
+      marginBottom: "20px",
+    },
+    paragraph: {
+      marginBottom: "10px",
+    },
+    editButton: {
+      backgroundColor: "#CD9A5E",
+      border: "none",
+      padding: "10px 20px",
+      color: "#F9F5F1",
+      fontWeight: "bold",
+      borderRadius: "5px",
+      marginTop: "15px",
+    },
+    filters: {
+      display: "flex",
+      gap: "10px",
+      marginBottom: "20px",
+    },
+    table: {
+      backgroundColor: "#FFFFFF",
+      border: "1px solid #dee2e6",
+      fontSize: "14px",
+      textAlign: "center",
+    },
+    tableHead: {
+      backgroundColor: "#E8DFD5",
+    },
+    tableCellBold: {
+      fontWeight: "bold",
+    },
+    noBookings: {
+      color: "#8A8A8A",
+      textAlign: "center",
+      marginTop: "20px",
+    },
+    select: {
+      padding: "8px",
+      borderRadius: "5px",
+      border: "1px solid #CD9A5E",
+    },
+  };
+
   return (
-    <div className="admin-panel-container">
-      <div className="sidebar">
-        <button onClick={() => setActiveSection("personal")}>
+    <div style={styles.container}>
+      <div style={styles.sidebar}>
+        <button
+          style={styles.sidebarButton}
+          onClick={() => setActiveSection("personal")}
+        >
           Hotel Owner Personal Data
         </button>
-        <button onClick={() => setActiveSection("bookings")}>Bookings</button>
+        <button
+          style={styles.sidebarButton}
+          onClick={() => setActiveSection("bookings")}
+        >
+          Bookings
+        </button>
       </div>
 
-      <div className="content">
+      <div style={styles.content}>
         {activeSection === "personal" && (
-          <div className="profile-section">
-            <h2>Hotel Owner Personal Info</h2>
+          <div style={styles.profileSection}>
+            <h2 style={styles.h2}>Hotel Owner Personal Info</h2>
             {userDetail ? (
               <div>
-                <p>
+                <p style={styles.paragraph}>
                   <strong>Name:</strong> {userDetail.username}
                 </p>
-                <p>
+                <p style={styles.paragraph}>
                   <strong>Email:</strong> {userDetail.email}
                 </p>
-                <p>
+                <p style={styles.paragraph}>
                   <strong>Phone:</strong> {userDetail.phone}
                 </p>
-                <p>
+                <p style={styles.paragraph}>
                   <strong>Role:</strong> {userDetail.role}
                 </p>
                 <button
-                  className="btn btn-custom"
+                  style={styles.editButton}
                   onClick={() => setshowUserDataEditForm(!showUserDataEditForm)}
                 >
                   {showUserDataEditForm ? "Cancel" : "Edit"}
@@ -204,17 +291,14 @@ export default function HotelOwner() {
         )}
 
         {activeSection === "bookings" && (
-          <div className="bookings-section">
-            <h2>Bookings</h2>
+          <div>
+            <h2 style={styles.h2}>Bookings</h2>
 
-            <div
-              className="filters"
-              style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-            >
+            <div style={styles.filters}>
               <select
                 onChange={handleBookingStatusFilterChange}
                 value={bookingStatusFilter}
-                className="form-select"
+                style={styles.select}
               >
                 <option value="all">All Bookings</option>
                 <option value="confirmed">Confirmed</option>
@@ -224,7 +308,7 @@ export default function HotelOwner() {
               <select
                 onChange={handleHotelFilterChange}
                 value={hotelFilter}
-                className="form-select"
+                style={styles.select}
               >
                 <option value="all">All Hotels</option>
                 {Array.from(new Set(bookings.map((b) => b.hotel_name))).map(
@@ -238,19 +322,8 @@ export default function HotelOwner() {
             </div>
 
             {filteredBookingsByHotel.length > 0 ? (
-              <Table
-                striped
-                bordered
-                hover
-                responsive
-                style={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #dee2e6",
-                  fontSize: "14px",
-                  textAlign: "center",
-                }}
-              >
-                <thead style={{ backgroundColor: "#f8f9fa" }}>
+              <Table striped bordered hover responsive style={styles.table}>
+                <thead style={styles.tableHead}>
                   <tr>
                     <th>Hotel Name</th>
                     <th>Check-In</th>
@@ -277,7 +350,7 @@ export default function HotelOwner() {
                       <td>{booking.client_name}</td>
                       <td>{booking.client_email}</td>
                       <td>{booking.client_phone}</td>
-                      <td style={{ fontWeight: "bold" }}>
+                      <td style={styles.tableCellBold}>
                         ${booking.total_price}
                       </td>
                       <td>{getStatusBadge(booking.status)}</td>
@@ -286,7 +359,7 @@ export default function HotelOwner() {
                 </tbody>
               </Table>
             ) : (
-              <p>No bookings found.</p>
+              <p style={styles.noBookings}>No bookings found.</p>
             )}
           </div>
         )}
