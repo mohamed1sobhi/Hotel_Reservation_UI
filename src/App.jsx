@@ -113,6 +113,7 @@ function App() {
           {/* <ToastContainer position="top-center" autoClose={3000} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatbotWidget/>
       </main>
       <Footer />
     </BrowserRouter>

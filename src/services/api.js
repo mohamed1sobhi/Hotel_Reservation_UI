@@ -163,3 +163,9 @@ export const refreshToken = (data) =>
   axiosInstance.post("/accounts/login/refresh/", data); // data = { refresh: "token" }
 export const logoutUser = (data) =>
   axiosInstance.post("/accounts/logout/", data); // data = { refresh: "token" }
+export const sendQuestion = (question, model = 'gemini') => axiosInstance.post('/chat/query/', { question, model });
+
+export const fetchQueryHistory = (modelFilter = null) => {
+  const url = modelFilter ? `/chat/history/?model=${modelFilter}` : '/history/';
+  return axiosInstance.get(url);
+};
