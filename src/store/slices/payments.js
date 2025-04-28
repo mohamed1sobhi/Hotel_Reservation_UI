@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axios_conf.js';
 import { 
   paymentData,
+  getUserBookings,
 } from "../../services/api";
 
 
@@ -27,7 +28,21 @@ export const fetchPaymentDetail = createAsyncThunk(
   }
 );
 
-
+export const fetchUserPayments = createAsyncThunk(
+  "payments/fetchUserPayments",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getUserBookings();
+      console.log("User bookings response:", response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch User Payments Error:', error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch user payments"
+      );
+    }
+  }
+);
 
 export const submitClientInfo = createAsyncThunk(
   'payments/submitClientInfo',
@@ -60,6 +75,8 @@ const initialState = {
   paymentData: null,
   error: null,
   paymentSuccess: null,
+  payments: [], // Add this line
+  loading: false // Add this line if not already present
 };
 
 const paymentSlice = createSlice({
@@ -75,6 +92,21 @@ const paymentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      .addCase(fetchUserPayments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserPayments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.payments = action.payload;
+      })
+      .addCase(fetchUserPayments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = typeof action.payload === 'object'
+          ? (action.payload.message || JSON.stringify(action.payload))
+          : action.payload || action.error.message;
+      })
 
       .addCase(fetchPaymentDetail.pending, (state) => {
         state.loading = true;
