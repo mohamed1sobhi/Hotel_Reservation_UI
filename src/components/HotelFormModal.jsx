@@ -16,7 +16,7 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
 
   const { hotelDetail } = useSelector((state) => state.hotels);
   const user = localStorage.getItem("user");
-
+  const [error , seterror ] = useState({})
   const [formData, setFormData] = useState({
     owner: user ? JSON.parse(user).id : "1",
     name: "",
@@ -66,21 +66,21 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
     }
   };
 
-  const validateForm = () => {
-    const errors = {};
+  // const validateForm = () => {
+  //   const errors = {};
 
-    if (!formData.name) errors.name = "Name is required.";
-    if (!formData.address) errors.address = "Address is required.";
-    if (!formData.stars) errors.stars = "Stars rating is required.";
+  //   if (!formData.name) errors.name = "Name is required.";
+  //   if (!formData.address) errors.address = "Address is required.";
+  //   if (!formData.stars) errors.stars = "Stars rating is required.";
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      errors.email = "Invalid email address.";
-    }
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (formData.email && !emailRegex.test(formData.email)) {
+  //     errors.email = "Invalid email address.";
+  //   }
 
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+  //   setFormErrors(errors);
+  //   return Object.keys(errors).length === 0;
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,6 +100,24 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
     }
     onClose();
   };
+  // const validateForm = () => {
+  //   const errors = {};
+    
+  //   if (!roomType.room_type.trim()) {
+  //     errors.room_type = "Room type is required";
+  //   } else {
+  //     const typeExists = hotelDetail.some(
+  //       type => type.room_type.toLowerCase() === roomType.room_type.toLowerCase()
+  //     );
+      
+  //     if (typeExists) {
+  //       errors.room_type = "This room type already exists";
+  //     }
+  //   }
+    
+  //   setFormErrors(errors);
+  //   return Object.keys(errors).length === 0;
+  // };
     return (
       <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
         <div className="modal-dialog modal-dialog-centered" role="document">

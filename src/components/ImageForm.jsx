@@ -46,6 +46,7 @@ const ImageForm = () => {
       .unwrap()
       .then(() => {
         navigate(`/hotels/detail/${Id}`); 
+        window.location.reload();
       })
       .catch((err) => {
         console.error("Error uploading image:", err);
