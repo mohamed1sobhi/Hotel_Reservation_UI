@@ -5,7 +5,10 @@ import "./RegisterUserForm.css";
 
 const RegisterUserForm = ({ onSuccess }) => {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.accounts);
+  const { loading } = useSelector((state) => state.accounts);
+  const [error, setError] = useState("");
+
+  // console.log("error", error);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -26,19 +29,27 @@ const RegisterUserForm = ({ onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createUser(formData))
-      .unwrap()
-      .then(() => {
-        setFormData({
-          username: "",
-          email: "",
-          phone: "",
-          password: "",
-          password2: "",
-          role: "customer",
-        });
-        if (onSuccess) onSuccess();
+    try {
+      await dispatch(createUser(formData)).unwrap(); // <-- await here
+      setFormData({
+        username: "",
+        email: "",
+        phone: "",
+        password: "",
+        password2: "",
+        role: "customer",
       });
+      if (onSuccess) onSuccess();
+      setError("");
+    } catch (err) {
+      // Clear error on success
+      console.log("Error:", err);
+      if (typeof err === "object") {
+        setError(err); // save the full error object
+      } else {
+        setError({ non_field_errors: ["Invalid data."] });
+      }
+    }
   };
 
   return (
@@ -102,7 +113,11 @@ const RegisterUserForm = ({ onSuccess }) => {
           {loading ? "Registering..." : "Register User"}
         </button>
 
-        {error && <p className="text-danger mt-2">{error}</p>}
+        {error && (
+          <div className="alert alert-warning text-center">
+            {error.non_field_errors.join(" ")}
+          </div>
+        )}
       </form>
     </div>
   );

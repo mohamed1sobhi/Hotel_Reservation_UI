@@ -111,9 +111,9 @@ export const createUser = createAsyncThunk(
       const response = await registerUser(data);
       return response.data;
     } catch (error) {
-      console.error("Register User Error:", error);
+      console.error("Register User Errorrrrrrrrrrrrrrrrrrrrrr:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to register user"
+        error.response?.data?.error || "Failed to register user"
       );
     }
   }
