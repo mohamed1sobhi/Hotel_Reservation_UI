@@ -7,6 +7,7 @@ import {
   deleteHotel,
   filterHotelsByStars,
   getOwnerHotelDetails,
+  getOwnerHotelBookings,
 } from "../../services/api";
 
 // Fetch all hotels
@@ -78,9 +79,9 @@ export const fetchHotelDetail = createAsyncThunk(
 // get owner hotel details
 export const fetchOwnerHotelDetails = createAsyncThunk(
   "hotels/fetchOwnerHotelDetails",
-  async (_, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await getOwnerHotelDetails();
+      const response = await getOwnerHotelBookings(id);
       return response.data;
     } catch (error) {
       console.error("Fetch Owner Hotel Details Error:", error);

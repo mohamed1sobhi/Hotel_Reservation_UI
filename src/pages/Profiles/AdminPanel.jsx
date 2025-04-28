@@ -120,10 +120,11 @@ export default function AdminPanel() {
       totalUsers: users.length,
       totalHotels: hotels.length,
       totalBookings: bookings.length,
-      pendingBookings: bookings.filter(b => b.status === 'pending').length,
-      confirmedBookings: bookings.filter(b => b.status === 'confirmed').length,
-      hotelOwners: users.filter(u => u.role === 'hotel_owner').length,
-      customers: users.filter(u => u.role === 'customer').length,
+      pendingBookings: bookings.filter((b) => b.status === "pending").length,
+      confirmedBookings: bookings.filter((b) => b.status === "confirmed")
+        .length,
+      hotelOwners: users.filter((u) => u.role === "hotel_owner").length,
+      customers: users.filter((u) => u.role === "customer").length,
     };
   };
 
@@ -131,13 +132,13 @@ export default function AdminPanel() {
 
   return (
     <div className="admin-dashboard">
-      <div className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+      <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
         <div className="sidebar-header">
           <div className="logo">
             <h2>HotelAdmin</h2>
           </div>
           <button className="toggle-sidebar-btn" onClick={toggleSidebar}>
-            {sidebarCollapsed ? '→' : '←'}
+            {sidebarCollapsed ? "→" : "←"}
           </button>
         </div>
         <div className="admin-info">
@@ -152,36 +153,36 @@ export default function AdminPanel() {
           )}
         </div>
         <nav className="sidebar-nav">
-          <button 
-            className={activeSection === "dashboard" ? "active" : ""} 
+          <button
+            className={activeSection === "dashboard" ? "active" : ""}
             onClick={() => setActiveSection("dashboard")}
           >
             <span className="nav-icon">📊</span>
             <span className="nav-text">Dashboard</span>
           </button>
-          <button 
-            className={activeSection === "personal" ? "active" : ""} 
+          <button
+            className={activeSection === "personal" ? "active" : ""}
             onClick={() => setActiveSection("personal")}
           >
             <span className="nav-icon">👤</span>
             <span className="nav-text">My Profile</span>
           </button>
-          <button 
-            className={activeSection === "users" ? "active" : ""} 
+          <button
+            className={activeSection === "users" ? "active" : ""}
             onClick={() => setActiveSection("users")}
           >
             <span className="nav-icon">👥</span>
             <span className="nav-text">Users</span>
           </button>
-          <button 
-            className={activeSection === "bookings" ? "active" : ""} 
+          <button
+            className={activeSection === "bookings" ? "active" : ""}
             onClick={() => setActiveSection("bookings")}
           >
             <span className="nav-icon">📅</span>
             <span className="nav-text">Bookings</span>
           </button>
-          <button 
-            className={activeSection === "hotels" ? "active" : ""} 
+          <button
+            className={activeSection === "hotels" ? "active" : ""}
             onClick={() => setActiveSection("hotels")}
           >
             <span className="nav-icon">🏨</span>
@@ -190,7 +191,7 @@ export default function AdminPanel() {
         </nav>
       </div>
 
-      <div className={`main-content ${sidebarCollapsed ? 'expanded' : ''}`}>
+      <div className={`main-content ${sidebarCollapsed ? "expanded" : ""}`}>
         <header className="dashboard-header">
           <div className="page-title">
             {activeSection === "dashboard" && <h1>Dashboard Overview</h1>}
@@ -244,14 +245,16 @@ export default function AdminPanel() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="dashboard-card recent-bookings">
                   <h3>Latest Bookings</h3>
                   <div className="recent-bookings-list">
                     {bookings.slice(0, 5).map((booking) => (
                       <div className="recent-booking" key={booking.id}>
                         <div className="booking-info">
-                          <div className="booking-hotel">{booking.hotel_name}</div>
+                          <div className="booking-hotel">
+                            {booking.hotel_name}
+                          </div>
                           <div className="booking-dates">
                             {booking.check_in} to {booking.check_out}
                           </div>
@@ -264,7 +267,7 @@ export default function AdminPanel() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="dashboard-row">
                 <div className="dashboard-card user-distribution">
                   <h3>User Distribution</h3>
@@ -272,32 +275,54 @@ export default function AdminPanel() {
                     <div className="distribution-item">
                       <div className="distribution-label">Hotel Owners</div>
                       <div className="distribution-bar">
-                        <div 
+                        <div
                           className="distribution-fill hotel-owners"
-                          style={{ width: `${(stats.hotelOwners / stats.totalUsers) * 100}%` }}
+                          style={{
+                            width: `${
+                              (stats.hotelOwners / stats.totalUsers) * 100
+                            }%`,
+                          }}
                         ></div>
                       </div>
-                      <div className="distribution-value">{stats.hotelOwners}</div>
+                      <div className="distribution-value">
+                        {stats.hotelOwners}
+                      </div>
                     </div>
                     <div className="distribution-item">
                       <div className="distribution-label">Customers</div>
                       <div className="distribution-bar">
-                        <div 
+                        <div
                           className="distribution-fill customers"
-                          style={{ width: `${(stats.customers / stats.totalUsers) * 100}%` }}
+                          style={{
+                            width: `${
+                              (stats.customers / stats.totalUsers) * 100
+                            }%`,
+                          }}
                         ></div>
                       </div>
-                      <div className="distribution-value">{stats.customers}</div>
+                      <div className="distribution-value">
+                        {stats.customers}
+                      </div>
                     </div>
                     <div className="distribution-item">
                       <div className="distribution-label">Admins</div>
                       <div className="distribution-bar">
-                        <div 
+                        <div
                           className="distribution-fill admins"
-                          style={{ width: `${((stats.totalUsers - stats.hotelOwners - stats.customers) / stats.totalUsers) * 100}%` }}
+                          style={{
+                            width: `${
+                              ((stats.totalUsers -
+                                stats.hotelOwners -
+                                stats.customers) /
+                                stats.totalUsers) *
+                              100
+                            }%`,
+                          }}
                         ></div>
                       </div>
-                      <div className="distribution-value">{stats.totalUsers - stats.hotelOwners - stats.customers}</div>
+                      <div className="distribution-value">
+                        {stats.totalUsers - stats.hotelOwners - stats.customers}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -319,7 +344,7 @@ export default function AdminPanel() {
                         <span className="admin-badge">{userDetail.role}</span>
                       </div>
                     </div>
-                    
+
                     <div className="profile-details">
                       <div className="detail-group">
                         <h3>Contact Information</h3>
@@ -329,10 +354,12 @@ export default function AdminPanel() {
                         </div>
                         <div className="detail-row">
                           <div className="detail-label">Phone</div>
-                          <div className="detail-value">{userDetail.phone || "Not provided"}</div>
+                          <div className="detail-value">
+                            {userDetail.phone || "Not provided"}
+                          </div>
                         </div>
                       </div>
-                      
+
                       <div className="detail-group">
                         <h3>Account Settings</h3>
                         <div className="detail-row">
@@ -347,9 +374,9 @@ export default function AdminPanel() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="profile-actions">
-                      <button 
+                      <button
                         className="primary-button"
                         onClick={() => setShowUserDataEditForm(true)}
                       >
@@ -358,7 +385,9 @@ export default function AdminPanel() {
                     </div>
                   </div>
                 ) : (
-                  <div className="loading-profile">Loading profile information...</div>
+                  <div className="loading-profile">
+                    Loading profile information...
+                  </div>
                 )}
               </div>
 
@@ -431,13 +460,19 @@ export default function AdminPanel() {
                         name="password2"
                         placeholder="Confirm Password"
                         onChange={(e) =>
-                          setFormData({ ...formData, password2: e.target.value })
+                          setFormData({
+                            ...formData,
+                            password2: e.target.value,
+                          })
                         }
                       />
                     </Form.Group>
 
                     <div className="modal-actions">
-                      <Button variant="secondary" onClick={() => setShowUserDataEditForm(false)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setShowUserDataEditForm(false)}
+                      >
                         Cancel
                       </Button>
                       <Button variant="primary" type="submit">
@@ -509,14 +544,20 @@ export default function AdminPanel() {
                             </span>
                           </td>
                           <td>
-                            <span className={`status-badge ${user.status ? "active" : "blocked"}`}>
+                            <span
+                              className={`status-badge ${
+                                user.status ? "active" : "blocked"
+                              }`}
+                            >
                               {user.status ? "Active" : "Blocked"}
                             </span>
                           </td>
                           <td>
                             <div className="action-buttons">
                               <button className="icon-button edit">Edit</button>
-                              <button className="icon-button delete">Delete</button>
+                              <button className="icon-button delete">
+                                Delete
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -633,7 +674,10 @@ export default function AdminPanel() {
                     </Form.Group>
 
                     <div className="modal-actions">
-                      <Button variant="secondary" onClick={() => setShowUserRegisterForm(false)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setShowUserRegisterForm(false)}
+                      >
                         Cancel
                       </Button>
                       <Button variant="primary" type="submit">
@@ -681,14 +725,22 @@ export default function AdminPanel() {
                         <tr key={booking.id}>
                           <td>
                             <div className="hotel-cell">
-                              <div className="hotel-name">{booking.hotel_name}</div>
-                              <div className="hotel-address">{booking.hotel_address}</div>
+                              <div className="hotel-name">
+                                {booking.hotel_name}
+                              </div>
+                              <div className="hotel-address">
+                                {booking.hotel_address}
+                              </div>
                             </div>
                           </td>
                           <td>
                             <div className="client-cell">
-                              <div className="client-name">{booking.client_name}</div>
-                              <div className="client-email">{booking.client_email}</div>
+                              <div className="client-name">
+                                {booking.client_name}
+                              </div>
+                              <div className="client-email">
+                                {booking.client_email}
+                              </div>
                             </div>
                           </td>
                           <td>{booking.room_type}</td>
@@ -700,8 +752,12 @@ export default function AdminPanel() {
                           </td>
                           <td>
                             <div className="price-cell">
-                              <div className="price-amount">${booking.total_price}</div>
-                              <div className="hotel-rating">{booking.hotelRating} ★</div>
+                              <div className="price-amount">
+                                ${booking.total_price}
+                              </div>
+                              <div className="hotel-rating">
+                                {booking.hotelRating} ★
+                              </div>
                             </div>
                           </td>
                           <td>
@@ -784,12 +840,16 @@ export default function AdminPanel() {
                               {hotel.stars} <span className="star-icon">★</span>
                             </div>
                           </td>
-                          <td>{new Date(hotel.created_at).toLocaleDateString()}</td>
+                          <td>
+                            {new Date(hotel.created_at).toLocaleDateString()}
+                          </td>
                           <td>
                             <div className="action-buttons">
                               <button className="icon-button view">View</button>
                               <button className="icon-button edit">Edit</button>
-                              <button className="icon-button delete">Delete</button>
+                              <button className="icon-button delete">
+                                Delete
+                              </button>
                             </div>
                           </td>
                         </tr>
