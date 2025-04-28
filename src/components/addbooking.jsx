@@ -23,6 +23,12 @@ export default function BookingForm() {
     dispatch(fetchHotelRoomsType(hotel_Id));
   }, [dispatch, hotel_Id]);
 
+  useEffect(() => {
+    if (errorMessages) {
+      alert(errorMessages);
+    }
+  }, [errorMessages]);
+
   const handleItemChange = (index, e) => {
     const newItems = [...items];
     newItems[index][e.target.name] = e.target.value;
@@ -54,13 +60,13 @@ export default function BookingForm() {
 
     try {
       const response = await dispatch(addBooking(data)).unwrap(); // Wait for the response
-      console.log('Booking created successfully:', response);
+      console.log("Booking created successfully:", response);
 
       const bookingId = response.booking_id;
       navigate(`/bookingdetails/${bookingId}/`);
     } catch (error) {
-      console.error('Error creating booking:', error);
-      
+      console.error("Error creating booking:", error);
+
       // Extract error messages from the error response
       if (error?.response?.data) {
         const errorData = error.response.data;
@@ -69,18 +75,17 @@ export default function BookingForm() {
         if (errorData?.non_field_errors) {
           setErrorMessages(errorData.non_field_errors.join(", "));
         } else {
-          setErrorMessages("An unexpected error occurred. Please try again later.");
+          setErrorMessages(
+            "An unexpected error occurred. Please try again later."
+          );
         }
       } else {
-        setErrorMessages("Network error. Please check your internet connection.");
+        setErrorMessages(
+          "Network error. Please check your internet connection."
+        );
       }
     }
   };
-      if (errorMessages){
-        alert(errorMessages)
-      }
-        
-
 
   return (
     <form onSubmit={handleSubmit} className="container">
@@ -130,9 +135,14 @@ export default function BookingForm() {
             onChange={(e) => handleItemChange(index, e)}
             required
           />
-        <button type="button" className="btn btn-danger" aria-label="Close" onClick={() => removeItem(index)} >
-           <i className="bi bi-x"></i>
-        </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            aria-label="Close"
+            onClick={() => removeItem(index)}
+          >
+            <i className="bi bi-x"></i>
+          </button>
         </div>
       ))}
 
@@ -146,8 +156,8 @@ export default function BookingForm() {
 
       {errorMessages && (
         <div style={{ color: "red", marginTop: "10px" }}>
-          <strong>Error: </strong>{errorMessages}
-        
+          <strong>Error: </strong>
+          {errorMessages}
         </div>
       )}
     </form>
