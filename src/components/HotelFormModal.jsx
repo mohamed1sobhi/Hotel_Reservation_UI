@@ -21,7 +21,6 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
     phone: "",
     email: "",
   });
-
   useEffect(() => {
     if (isEdit) {
       dispatch(fetchHotelDetail(HOTEL_ID));
@@ -42,7 +41,7 @@ const HotelFormModal = ({ HOTEL_ID, onClose }) => {
       });
     }
   }, [hotelDetail, isEdit]);
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({

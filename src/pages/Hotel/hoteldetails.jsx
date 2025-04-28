@@ -133,7 +133,7 @@ const handleDelete = () => {
         </div>
 
         <div className="d-flex flex-wrap gap-3 mb-5">
-          <button className="btn btn-warning" onClick={() => navigate(`/createimage/${hotel.id}`)}>
+          <button className="btn btn-primary border-0" onClick={() => navigate(`/createimage/${hotel.id}`)}>
             <ImagePlus className="me-2" size={18} /> Add Image
           </button>
           <button className="btn btn-primary border-0" style={{ border : "none"}} onClick={() => navigate(`/hotels/${hotel.id}/reviews`)}>
@@ -152,7 +152,7 @@ const handleDelete = () => {
             Delete
             </button>
          
-          <button className='btn btn-sm btn-primary mt-2' onClick={() => navigate(`/addbooking/${hotel.id}/`)}>
+          <button className='btn  btn-primary border-0' onClick={() => navigate(`/addbooking/${hotel.id}/`)}>
               AddBooking
           </button>
 

@@ -109,6 +109,9 @@ export const getAllPayments = () => axiosInstance.get("/payments/create");
 // Get single payment by id
 export const getPayment = (id) => axiosInstance.get(`/payments/${id}/`);
 
+// Add this to your api.js file
+export const getUserBookings = () => axiosInstance.get('/bookings/userbookings/');
+
 // Update payment by id
 export const updatePayment = (id, data) =>
   axiosInstance.put(`/payments/${id}/`, data);
