@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCurrentUser,
@@ -13,7 +12,7 @@ import { Modal, Button, Form } from "react-bootstrap"; // Import React Bootstrap
 export default function CustomerProfile() {
   const dispatch = useDispatch();
   const { userDetail, loading, error } = useSelector((state) => state.accounts);
-  const { payments } = useSelector((state) => state.payments);
+  const { bookings } = useSelector((state) => state.bookings);
 
   console.log("bookings", bookings);
 
@@ -25,7 +24,7 @@ export default function CustomerProfile() {
 
   useEffect(() => {
     if (userDetail) {
-      dispatch(fetchUserPayments());
+      dispatch(fetchUserBookings());
     }
   }, [dispatch, userDetail]);
 
@@ -33,8 +32,6 @@ export default function CustomerProfile() {
     if (error) {
       const timer = setTimeout(() => {
         dispatch(clearError());
-      }, 5000);
-      return () => clearTimeout(timer);
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -154,7 +151,7 @@ export default function CustomerProfile() {
             </Modal>
 
             {error && (
-              <div className="alert alert-danger" role="alert">
+              <div className="alert alert-danger mt-3" role="alert">
                 {error}
               </div>
             )}
@@ -204,9 +201,7 @@ export default function CustomerProfile() {
             </div>
           </>
         ) : (
-          <div className="empty-state">
-            <p>No user details found. Please try again later.</p>
-          </div>
+          <p>No user details found.</p>
         )}
       </div>
     </div>
