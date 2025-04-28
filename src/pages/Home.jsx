@@ -10,10 +10,11 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Loader from "../components/Loader";
-
+import { useParams, useNavigate } from 'react-router-dom';
+import { userIsAdmin } from "../utils/permissions";
 const Home = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   // Selectors for hotels and reviews
   const {
     hotels,
@@ -66,6 +67,19 @@ const Home = () => {
           </Link>
         </div>
       </div>
+   
+      {userIsAdmin() && (
+        <div className="text-center mt-4">
+          <Link
+            to="/adminpanel"
+            className="btn btn-primary btn-lg text-light btn-hover-light border-0"
+          >
+            <i className="bi bi-person-fill me-2 text-color"></i>
+            <span className="text-light">Admin Dashboard</span>
+          </Link>
+        </div>
+      )}
+      {/* Admin Dashboard Button */}
 
       {/* Other Sections */}
       <div className="py-5 top-hotels-section">

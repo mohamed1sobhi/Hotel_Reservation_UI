@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { fetchHotelReviews } from "../../store/slices/reviews";
 import { getHotelDetail } from "../../services/api";
 import Header from "../../components/Header";
+import { userIsCustomer } from "../../utils/permissions";
 const HotelReviews = () => {
   const { hotelId } = useParams();
   const dispatch = useDispatch();
@@ -240,6 +241,7 @@ const HotelReviews = () => {
             All Reviews ({hotelReviews?.length || 0})
           </h2>
           <div>
+                {userIsCustomer() && (
             <Link
               to={`/hotels/${hotelId}/add-review`}
               style={{
@@ -254,6 +256,7 @@ const HotelReviews = () => {
             >
               Write a Review
             </Link>
+                )}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -363,6 +366,7 @@ const HotelReviews = () => {
               }}
             >
               <p>No reviews available for this hotel yet.</p>
+                  {userIsCustomer() && (
               <Link
                 to={`/hotels/${hotelId}/add-review`}
                 style={{
@@ -378,6 +382,7 @@ const HotelReviews = () => {
               >
                 Be the First to Review
               </Link>
+                  )}
             </div>
           )}
         </div>

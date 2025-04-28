@@ -8,8 +8,8 @@ import {
   fetchHotelRoomsType,
 } from '../store/slices/rooms';
 import './AddRoom.css'; 
-
-const AddRoom = () => {
+import Loader from './Loader';
+const AddRoom = (Hotel_id) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {HotelId, roomId } = useParams(); 
@@ -40,6 +40,14 @@ const AddRoom = () => {
       });
     }
   }, [dispatch, HotelId, isEdit]);
+  
+  if (loading) {
+    return (
+      <> 
+      <Loader />
+      </>
+    )   }
+    console.log(" roomDetail:" , roomDetail);
 
   const handleChange = (e) => {
     setRoomData({
@@ -71,15 +79,18 @@ const AddRoom = () => {
     e.preventDefault();
   
     try {
-      if (isEdit) {
+      if (isEdit && loading) {
         await dispatch(editRoom({ id: roomId, data: roomData })).unwrap();
+        navigate(`/hotels/${HotelId}`);
       } else {
         if (validateForm()) {
           await dispatch(addRoom(roomData)).unwrap();
           navigate(`/hotels/${HotelId}`);
           window.location.reload();
         }
-      }
+
+            }
+
     } catch (error) {
       if (error.room_type) {
         alert(error.room_type[0]);

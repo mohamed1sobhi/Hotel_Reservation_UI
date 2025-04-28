@@ -6,6 +6,7 @@ import { Star, Edit3, Trash, ImagePlus, MessagesSquare, Loader } from 'lucide-re
 import { fetchHotels, removeHotel ,fetchHotelDetail } from '../../store/slices/hotels';
 import { useState } from "react";
 import HotelFormModal from "../../components/HotelFormModal";
+import { userIsOwner  , userIsCustomer , userIsAdmin} from "../../utils/permissions"; // Import the userIsOwner function
 export default function HotelDetails() {
   const [showModal,setShowModal] = useState(false)
   const { id } = useParams();
@@ -78,13 +79,13 @@ const handleDelete = () => {
       <nav aria-label="breadcrumb" className="bg-light py-2 px-3 rounded mt-4">
         <ol className="breadcrumb mb-0">
           <li className="breadcrumb-item">
-            <a href="/home" className="text-decoration-none text-primary">
+            <a href="/" className="text-decoration-none text-primary">
               Home
             </a>
 
           </li>
           <li className="breadcrumb-item">
-            <a href="/home" className="text-decoration-none text-primary">
+            <a href="/hotels" className="text-decoration-none text-primary">
               {hotel.name} 
             </a>
             
@@ -121,6 +122,12 @@ const handleDelete = () => {
           <h5 className="text-secondary">Description</h5>
           <p>{hotel.description || "No description provided."}</p>
         </div>
+        {userIsAdmin() && (
+        <div className="mb-4">
+          <h5 className="text-secondary">Email</h5>
+          <p>{hotel.email || "No email provided"}</p>
+     </div>
+       )} 
 
         <div className="d-flex align-items-center gap-3 mb-4">
           <span className="fw-bold text-primary">Price from: {hotel.price_range || 'N/A'} EGY /night</span>
@@ -133,46 +140,58 @@ const handleDelete = () => {
         </div>
 
         <div className="d-flex flex-wrap gap-3 mb-5">
+        {userIsOwner() && (
+
           <button className="btn btn-primary border-0" onClick={() => navigate(`/createimage/${hotel.id}`)}>
             <ImagePlus className="me-2" size={18} /> Add Image
           </button>
+        )}
+
           <button className="btn btn-primary border-0" style={{ border : "none"}} onClick={() => navigate(`/hotels/${hotel.id}/reviews`)}>
             <MessagesSquare className="me-2" size={18} /> Show Reviews
           </button>
+          {userIsOwner() && (
+
           <button className="btn btn-primary border-0" onClick={() => setShowModal(true)}>
             <Edit3 className="me-2" size={18} /> Edit
           </button>
+          )}
             {showModal && (
               <HotelFormModal HOTEL_ID ={hotel.id} onClose={ ()=> setShowModal(false)}   />
             )}
+              {userIsAdmin() && (
           <button
             className="btn btn-danger"
             onClick={() => setShowDeleteModal(true)}
           >
             Delete
             </button>
-         
+              )}
+                   {userIsCustomer() && ( 
           <button className='btn  btn-primary border-0' onClick={() => navigate(`/addbooking/${hotel.id}/`)}>
               AddBooking
           </button>
-
-      
+                   )}
+    {userIsOwner() && (
           <button
             className="btn btn-primary" style={{ marginLeft: "auto", border: "none" }}
             onClick={() => navigate(`/addroom/${hotel.id}`)}
           >
             Add Room
           </button>
+            )}
+        {userIsOwner() && (      
           <button
             className="btn btn-primary" style={{ border: "none" }}
             onClick={() => navigate(`/addtype/${hotel.id}`)}
           >
             Add Room Type
           </button>
+        )}
         </div>
-
+         
         <button
-          className="btn btn-outline-dark"
+          className="btn btn-outline-dark align-center"
           onClick={() => navigate(`/hotels/${hotel.id}`)}
         >
           Show All Rooms

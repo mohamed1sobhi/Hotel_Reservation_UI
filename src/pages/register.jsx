@@ -37,7 +37,8 @@ const RegisterUserForm = ({ onSuccess }) => {
           password2: "",
           role: "customer",
         });
-        if (onSuccess) onSuccess();
+        onSuccess && onSuccess();
+        window.location.href = "/login";
       });
   };
 
