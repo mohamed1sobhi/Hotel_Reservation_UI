@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from './Loader';
+
 import {
   addRoom,
   editRoom,
@@ -9,7 +10,6 @@ import {
   fetchHotelRoomsType,
 } from '../store/slices/rooms';
 import './AddRoom.css'; 
-import Loader from './Loader';
 const AddRoom = (Hotel_id) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

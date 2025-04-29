@@ -13,10 +13,6 @@ const AddReview = React.lazy(() => import('./pages/Review/AddReview'));
 const Login = React.lazy(() => import('./components/login'));
 const ClientInfoPayment = React.lazy(() => import('./pages/payment/ClientInfoPayment'));
 const PaymentMethod = React.lazy(() => import('./pages/payment/PaymentMethod'));
-const AddBooking = React.lazy(() => import('./pages/booking/AddBooking'));
-const BookingsList = React.lazy(() => import('./pages/booking/BookingList'));
-const BookingDetails = React.lazy(() => import('./pages/booking/BookingDetails.jsx'));
-const EditBooking = React.lazy(() => import('./pages/booking/EditingBooking'));
 const Footer = React.lazy(() => import('./components/Footer'));
 const RoomsPage = React.lazy(() => import('./pages/Hotel/Rooms'));
 const ImageForm = React.lazy(() => import('./components/ImageForm'));
@@ -50,10 +46,6 @@ function App() {
           <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
           <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
           <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
-          <Route path="/bookings" element={<AddBooking />} />
-          <Route path="/my-bookings" element={<BookingsList />} />
-          <Route path="/my-bookings/:id" element={<BookingDetails />} />
-          <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
           <Route path="/hotels/:ID" element={<RoomsPage />} />
           <Route path="/createImage/:Id" element={<ImageForm />} />
           <Route path="/hotels" element= { <Hotels />} />
@@ -71,7 +63,6 @@ function App() {
           <Route path="/customerprofile" element={<CustomerProfile />} />
           <Route path="/hotelownerprofile" element={<HotelOwner />} />
           <Route path="/adminpanel" element={<AdminPanel />} />
-          {/* <ToastContainer position="top-center" autoClose={3000} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatbotWidget/>

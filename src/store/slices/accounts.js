@@ -103,7 +103,7 @@ export const removeUser = createAsyncThunk(
     }
   }
 );
-
+export const errorResponse = {};
 export const createUser = createAsyncThunk(
   "accounts/createUser",
   async (data, { rejectWithValue }) => {
