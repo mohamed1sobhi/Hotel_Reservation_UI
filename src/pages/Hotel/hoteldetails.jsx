@@ -8,7 +8,6 @@ import { useState } from "react";
 import HotelFormModal from "../../components/HotelFormModal";
 import { userIsOwner  , userIsCustomer , userIsAdmin} from "../../utils/permissions"; // Import the userIsOwner function
 export default function HotelDetails() {
-  const [showModal,setShowModal] = useState(false)
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,7 +45,6 @@ const handleDelete = () => {
       </div>
     );
   }
-
 
   const firstImage =
     hotel.image && hotel.image.length > 0
@@ -152,13 +150,10 @@ const handleDelete = () => {
           </button>
           {userIsOwner() && (
 
-          <button className="btn btn-primary border-0" onClick={() => setShowModal(true)}>
+          <button className="btn btn-primary border-0" onClick={() => navigate(`/edithotel/${hotel.id}`)}>
             <Edit3 className="me-2" size={18} /> Edit
           </button>
           )}
-            {showModal && (
-              <HotelFormModal HOTEL_ID ={hotel.id} onClose={ ()=> setShowModal(false)}   />
-            )}
               {userIsAdmin() && (
           <button
             className="btn btn-danger"

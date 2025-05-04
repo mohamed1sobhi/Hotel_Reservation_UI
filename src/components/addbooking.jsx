@@ -10,13 +10,13 @@ export default function BookingForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { hotel_Id } = useParams();
-  const { hotel } = useSelector((state) => state.hotels);
   const { hotelRoomTypes } = useSelector((state) => state.rooms);
-
+  const { formError } = useSelector((state) => state.bookings);
+ 
   const [checkIn, setCheckIn] = useState("");
   const [days, setDays] = useState(1);
   const [items, setItems] = useState([{ room_type_id: "", quantity: 1 }]);
-  const [errorMessages, setErrorMessages] = useState("");
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     dispatch(fetchHotelDetail(hotel_Id));
@@ -24,27 +24,30 @@ export default function BookingForm() {
   }, [dispatch, hotel_Id]);
 
   useEffect(() => {
-    if (errorMessages) {
-      alert(errorMessages);
+    if (formError) {
+      console.log(formError)
+      setFormErrors(formError);
     }
-  }, [errorMessages]);
+    console.log("the errors is : ",formErrors)
+  }, [formError]);
 
   const handleItemChange = (index, e) => {
     const newItems = [...items];
     newItems[index][e.target.name] = e.target.value;
     setItems(newItems);
   };
-
   const addItem = () => {
     setItems([...items, { room_type_id: "", quantity: 1 }]);
   };
-
   const removeItem = (index) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-    setItems(newItems);
+    if (items.length > 1) {
+      const newItems = [...items];
+      newItems.splice(index, 1);
+      setItems(newItems);
+    }
   };
-
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -57,31 +60,13 @@ export default function BookingForm() {
         quantity: parseInt(item.quantity),
       })),
     };
-
     try {
       const response = await dispatch(addBooking(data)).unwrap();
       console.log("Booking created successfully:", response);
-
       const bookingId = response.booking_id;
       navigate(`/bookingdetails/${bookingId}/`);
-    } catch (error) {
-      console.error("Error creating booking:", error);
-
-      if (error?.response?.data) {
-        const errorData = error.response.data;
-
-        if (errorData?.non_field_errors) {
-          setErrorMessages(errorData.non_field_errors.join(", "));
-        } else {
-          setErrorMessages(
-            "An unexpected error occurred. Please try again later."
-          );
-        }
-      } else {
-        setErrorMessages(
-          "Network error. Please check your internet connection."
-        );
-      }
+    } catch(error){
+      console.error("Server error:", error);
     }
   };
 
@@ -89,28 +74,19 @@ export default function BookingForm() {
     <div className="container py-5">
       <div className="booking-form mx-auto p-4 shadow">
         <h2 className="text-center mb-4 booking-title">Book Your Stay</h2>
-
-        {errorMessages && (
-          <div className="alert alert-danger text-center">
-            <strong>Error: </strong>
-            {errorMessages}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit}>
-          {/* Check-in Date */}
           <div className="mb-3">
             <label className="form-label fw-semibold">Check-in Date:</label>
             <input
               type="date"
-              className="form-control"
+              className={`form-control ${formErrors.check_in ? "is-invalid" : ""}`}
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
               required
             />
+            {formErrors?.check_in?.[0] && (
+            <div className="invalid-feedback d-block">{formErrors.check_in[0]}</div>)}
           </div>
-
-          {/* Days */}
           <div className="mb-3">
             <label className="form-label fw-semibold">Days:</label>
             <input
@@ -121,16 +97,14 @@ export default function BookingForm() {
               required
             />
           </div>
-
-          {/* Room Items */}
           <h4 className="mb-3">Room Items</h4>
           {items.map((item, index) => (
-            <div key={index} className="row mb-3 align-items-center">
-              <div className="col-md-6">
+            <div key={index} className="row justify-content-between p-3 mb-2">
+              <div className="col-md-6 col-sm-12">
                 <label className="form-label fw-semibold">Room Type:</label>
                 <select
                   name="room_type_id"
-                  className="form-select"
+                  className={`form-select ${formErrors.room_type ? "is-invalid" : ""}`}
                   value={item.room_type_id}
                   onChange={(e) => handleItemChange(index, e)}
                   required
@@ -142,36 +116,33 @@ export default function BookingForm() {
                     </option>
                   ))}
                 </select>
+                {formErrors?.item_inputs?.[0] && (
+                <div className="invalid-feedback d-block">{formErrors.item_inputs}</div>)}
               </div>
-              <div className="col-md-4">
+              <div className="col-md-4 col-sm-12">
                 <label className="form-label fw-semibold">Quantity:</label>
                 <input
                   type="number"
                   name="quantity"
-                  className="form-control"
+                  className={`form-control ${formErrors.quantity ? "is-invalid" : ""}`}
                   value={item.quantity}
                   onChange={(e) => handleItemChange(index, e)}
                   required
                 />
+                {formErrors?.quantity?.[0] && (
+                <div className="invalid-feedback d-block">{formErrors.quantity}</div>)}
               </div>
-              <div className="col-md-2 text-end">
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => removeItem(index)}
-                >
+              <div className="col-1 d-flex justify-content-center">
+                <button type="button" className="btn btn-danger align-self-center" onClick={() => removeItem(index)}>
                   <i className="bi bi-x"></i>
                 </button>
               </div>
             </div>
           ))}
-
-          <button type="button" className="btn btn-secondary mb-3" onClick={addItem}>
+          <div className="d-flex justify-content-between p-3">
+          <button type="button" className="btn btn-secondary btn-sm m-3" onClick={addItem}>
             + Add Room
           </button>
-
-          {/* Submit Button */}
-          <div className="text-center">
             <button type="submit" className="btn booking-btn">
               Book Now
             </button>

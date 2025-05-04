@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHotels, addHotel, editHotel } from "../../store/slices/hotels";
+import { fetchHotels, filterHotels } from "../../store/slices/hotels";
 import { useNavigate } from "react-router-dom";
 import HotelFormModal from "../../components/HotelFormModal";
 import { Star } from "lucide-react";
-import SearchAndFilter from "../../components/SearchAndFilter"; //add search component 
+import SearchAndFilter from "../../components/SearchAndFilter";
 import Pagination from "../../components/Pagination";
-import { filterHotels } from "../../store/slices/hotels";
-import { userIsOwner } from "../../utils/permissions"; // Import the userIsOwner function
-import Loader from "../../components/Loader"; // Import the Loader component
+import { userIsOwner } from "../../utils/permissions";
+import Loader from "../../components/Loader";
+
 export default function SimpleHotelListingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { hotels, loading, error } = useSelector((state) => state.hotels);
-  // const [editingHotel, setEditingHotel] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStars, setFilterStars] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
   useEffect(() => {
     dispatch(fetchHotels());
   }, [dispatch]);
-  if (loading) {
-    return (
-       <>
-       < Loader />
-       </>
-    );
-  }
+
   const handleStarFilter = (stars) => {
     setFilterStars(stars);
     dispatch(filterHotels(stars));
@@ -40,50 +33,29 @@ export default function SimpleHotelListingPage() {
     dispatch(fetchHotels());
   };
 
-  const handleAddHotel = () => {
-    // setEditingHotel(null);
-    setShowModal(true);
-    console.log("Adding new hotel");
-    console.log("the show modal is ", showModal);
-  
-  };
- 
-  
   const filteredHotels = searchTerm
     ? hotels.filter(
-      (hotel) =>
-        hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        hotel.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        hotel.price_range?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+        (hotel) =>
+          hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          hotel.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          hotel.price_range?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     : hotels;
-
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
 
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100">
-        <div className="spinner-border text-primary" role="status"></div>
-      </div>
-    );
-  }
+  if (loading) return <Loader />;
 
   if (error) {
     return (
       <div className="container py-4">
         <div className="alert alert-danger">
           <p>Error: {error}</p>
-          <button
-            className="btn btn-primary mt-2"
-            onClick={() => dispatch(fetchHotels())}
-          >
+          <button className="btn btn-primary mt-2" onClick={() => dispatch(fetchHotels())}>
             Try Again
           </button>
         </div>
@@ -102,13 +74,9 @@ export default function SimpleHotelListingPage() {
               const imageUrl = hotel.image[0].image.startsWith("/media/")
                 ? `http://127.0.0.1:8000${hotel.image[0].image}`
                 : hotel.image[0].image;
-              
 
               return (
-                <div
-                  key={hotel.id}
-                  className={`carousel-item ${index === 0 ? "active" : ""}`}
-                >
+                <div key={hotel.id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
                   <img
                     src={imageUrl}
                     className="d-block w-100"
@@ -151,15 +119,13 @@ export default function SimpleHotelListingPage() {
               Home
             </a>
           </li>
-          <li
-            className="breadcrumb-item active text-secondary"
-            aria-current="page"
-          >
+          <li className="breadcrumb-item active text-secondary" aria-current="page">
             Hotels
           </li>
         </ol>
       </nav>
 
+      {/* Search & Filter Section */}
       <SearchAndFilter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -168,21 +134,26 @@ export default function SimpleHotelListingPage() {
         onFilter={handleStarFilter}
         onReset={resetFilters}
       />
-   {userIsOwner() && (
-      <button className="btn btn-primary  m-5 border-0" onClick={handleAddHotel}>
-        + Add Hotel
-      </button>
-   )}
-      {showModal && (
-        <>
-          <HotelFormModal onClose={ () => setShowModal(false) } />
-          <div className="modal-backdrop fade show"></div>
-        </>
+
+      {/* Add Hotel Button */}
+      {userIsOwner() && (
+        <button className="btn btn-primary m-5 border-0" onClick={() => navigate(`/addhotel`)}>
+          + Add Hotel
+        </button>
       )}
 
-      <h1 className="text-center p-3 m-2"> Discover Your Hotel </h1>
-      <div style={{ width: '80px', height: '4px', backgroundColor: '#CD9A5E', margin: '0 auto' }}></div>
-      {/* Hotels Section */}
+      {/* Heading */}
+      <h1 className="text-center p-3 m-2">Discover Your Hotel</h1>
+      <div
+        style={{
+          width: "80px",
+          height: "4px",
+          backgroundColor: "#CD9A5E",
+          margin: "0 auto",
+        }}
+      ></div>
+
+      {/* Hotels Grid */}
       <div className="container py-4">
         {currentHotels.length === 0 ? (
           <div className="text-center py-5">
@@ -196,7 +167,7 @@ export default function SimpleHotelListingPage() {
                   ? hotel.image[0].image.startsWith("/media/")
                     ? `http://127.0.0.1:8000${hotel.image[0].image}`
                     : hotel.image[0].image
-                  : hotel.name;
+                  : null;
 
               return (
                 <div key={hotel.id} className="col-md-6 col-lg-4">
@@ -243,14 +214,12 @@ export default function SimpleHotelListingPage() {
             })}
           </div>
         )}
-
+        {/* Pagination */}
         <Pagination
           currentPage={currentPage}
           totalPages={Math.ceil(filteredHotels.length / itemsPerPage)}
           onPageChange={handlePageChange}
         />
-
-
       </div>
     </div>
   );

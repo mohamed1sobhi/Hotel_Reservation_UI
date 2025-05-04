@@ -14,10 +14,10 @@ import "./AdminPanel.css";
 
 export default function AdminPanel() {
   const dispatch = useDispatch();
-  const { userDetail, error, users } = useSelector((state) => state.accounts);
+  const { userDetail, error, users ,formError } = useSelector((state) => state.accounts);
   const { bookings } = useSelector((state) => state.bookings);
   const { hotels } = useSelector((state) => state.hotels);
-
+  const [formErrors,setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -107,14 +107,28 @@ export default function AdminPanel() {
     dispatch(fetchCurrentAdmin());
     setShowUserDataEditForm(false);
   };
-
+  useEffect(()=>{
+    if(formError){
+      setFormErrors(formError)
+      console.log(formError)
+    }
+  },[formError])
   const handleUserRegisterFormSuccess = async (e) => {
     e.preventDefault();
-    await dispatch(createUserForAdmin(registerFormData));
-    dispatch(fetchUsers());
-    setShowUserRegisterForm(false);
+    try {
+      const resultAction = await dispatch(createUserForAdmin(registerFormData));
+      if (createUserForAdmin.fulfilled.match(resultAction)) {
+        dispatch(fetchUsers());
+        setShowUserRegisterForm(false);
+        setFormErrors({});
+      } else {
+        console.log("Form submission failed with errors.");
+      }
+    } catch (err) {
+      console.log("Unexpected error:", err);
+    }
   };
-
+  
   const getSummaryStats = () => {
     return {
       totalUsers: users.length,
@@ -190,7 +204,6 @@ export default function AdminPanel() {
           </button>
         </nav>
       </div>
-
       <div className={`main-content ${sidebarCollapsed ? "expanded" : ""}`}>
         <header className="dashboard-header">
           <div className="page-title">
@@ -200,12 +213,7 @@ export default function AdminPanel() {
             {activeSection === "bookings" && <h1>Booking Management</h1>}
             {activeSection === "hotels" && <h1>Hotel Management</h1>}
           </div>
-          {/* <div className="header-actions">
-            <button className="header-button">Notifications</button>
-            <button className="header-button">Settings</button>
-          </div> */}
         </header>
-
         <div className="content-wrapper">
           {activeSection === "dashboard" && (
             <div className="dashboard-section">
@@ -593,6 +601,8 @@ export default function AdminPanel() {
                           })
                         }
                       />
+                      {formErrors?.username?.[0] && (
+                      <div className="invalid-feedback d-block">{formErrors.username}</div>)}
                     </Form.Group>
 
                     <Form.Group controlId="email" className="form-group">
@@ -601,6 +611,7 @@ export default function AdminPanel() {
                         type="email"
                         name="email"
                         placeholder="Email"
+                        className={`form-group ${formErrors.email ? "is-invalid" : ""}`}
                         onChange={(e) =>
                           setRegisterFormData({
                             ...registerFormData,
@@ -608,6 +619,8 @@ export default function AdminPanel() {
                           })
                         }
                       />
+                      {formErrors?.email?.[0] && (
+                      <div className="invalid-feedback d-block">{formErrors.email}</div>)}
                     </Form.Group>
 
                     <Form.Group controlId="phone" className="form-group">
@@ -616,6 +629,7 @@ export default function AdminPanel() {
                         type="text"
                         name="phone"
                         placeholder="Phone"
+                        className={`form-group ${formErrors.phone ? "is-invalid" : ""}`}
                         onChange={(e) =>
                           setRegisterFormData({
                             ...registerFormData,
@@ -623,6 +637,8 @@ export default function AdminPanel() {
                           })
                         }
                       />
+                      {formErrors?.phone?.[0] && (
+                      <div className="invalid-feedback d-block">{formErrors.phone}</div>)}
                     </Form.Group>
 
                     <Form.Group controlId="role" className="form-group">
@@ -630,6 +646,7 @@ export default function AdminPanel() {
                       <Form.Control
                         as="select"
                         name="role"
+                        className={`form-group ${formErrors.role ? "is-invalid" : ""}`}
                         onChange={(e) =>
                           setRegisterFormData({
                             ...registerFormData,
@@ -641,6 +658,8 @@ export default function AdminPanel() {
                         <option value="hotel_owner">Hotel Owner</option>
                         <option value="admin">Admin</option>
                       </Form.Control>
+                      {formErrors?.role?.[0] && (
+                      <div className="invalid-feedback d-block">{formErrors.role}</div>)}
                     </Form.Group>
 
                     <Form.Group controlId="password" className="form-group">
@@ -649,6 +668,7 @@ export default function AdminPanel() {
                         type="password"
                         name="password"
                         placeholder="Password"
+                        className={`form-group ${formErrors.password ? "is-invalid" : ""}`}
                         onChange={(e) =>
                           setRegisterFormData({
                             ...registerFormData,
@@ -656,6 +676,8 @@ export default function AdminPanel() {
                           })
                         }
                       />
+                      {formErrors?.password?.[0] && (
+                      <div className="invalid-feedback d-block">{formErrors.password}</div>)}
                     </Form.Group>
 
                     <Form.Group controlId="password2" className="form-group">
@@ -663,6 +685,7 @@ export default function AdminPanel() {
                       <Form.Control
                         type="password"
                         name="password2"
+                        className={`form-group ${formErrors.password2 ? "is-invalid" : ""}`}
                         placeholder="Confirm Password"
                         onChange={(e) =>
                           setRegisterFormData({
@@ -671,12 +694,16 @@ export default function AdminPanel() {
                           })
                         }
                       />
+                      {formErrors?.password2?.[0] && (
+                      <div className="invalid-feedback d-block">{formErrors.password2}</div>)}
                     </Form.Group>
 
                     <div className="modal-actions">
                       <Button
                         variant="secondary"
-                        onClick={() => setShowUserRegisterForm(false)}
+                        onClick={() => {
+                          setFormErrors({});
+                          setShowUserRegisterForm(false)}}
                       >
                         Cancel
                       </Button>

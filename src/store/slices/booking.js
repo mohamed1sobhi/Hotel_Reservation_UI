@@ -17,6 +17,7 @@ const initialState = {
   selectedBooking: null,
   loading: false,
   error: null,
+  formError:null,
 };
 
 // Thunks for async actions
@@ -59,9 +60,8 @@ export const addBooking = createAsyncThunk(
       console.log("the booking data for id is ", response.data);
       return response.data;
     } catch (err) {
-      // Ensure the error is properly passed to the frontend
       if (err.response && err.response.data) {
-        return rejectWithValue(err.response.data); // Send the error data to the frontend
+        return rejectWithValue(err.response.data);
       }
       return rejectWithValue(
         "An unexpected error occurred. Please try again later."
@@ -158,12 +158,7 @@ const bookingSlice = createSlice({
     });
     builder.addCase(addBooking.rejected, (state, action) => {
       state.loading = false;
-      // If the action has a payload (from rejectWithValue), set it as the error
-      if (action.payload) {
-        state.error = action.payload;
-      } else {
-        state.error = action.error.message; // fallback to default error message
-      }
+      state.formError = action.payload;
     });
 
     builder.addCase(deleteBooking.fulfilled, (state, action) => {

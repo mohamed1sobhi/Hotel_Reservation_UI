@@ -6,7 +6,6 @@ import {
   getHotelDetail,
   deleteHotel,
   filterHotelsByStars,
-  getOwnerHotelDetails,
   getOwnerHotelBookings,
 } from "../../services/api";
 
@@ -19,7 +18,6 @@ export const fetchHotels = createAsyncThunk(
       console.log("Fetch Hotels Response:", response.data);
       return response.data;
     } catch (error) {
-      console.error("Fetch Hotels Error:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch hotels"
       );
@@ -35,7 +33,9 @@ export const addHotel = createAsyncThunk(
       const response = await createHotel(data);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to create hotel");
+      if (error && typeof error.response?.data === 'object') {
+        return rejectWithValue(error.response.data);
+      }
     }
   }
 );
@@ -48,13 +48,6 @@ export const editHotel = createAsyncThunk(
       const response = await updateHotel(id, data);
       return response.data;
     } catch (error) {
-      console.error('Update Hotel Error:', error);
-     if (response.data.email) {
-        return rejectWithValue(error.response.data.email[0]);
-        alert("Email already exists");
-      }
-
-
       return rejectWithValue(error.response?.data?.message || "Failed to update hotel");
     }
   }
@@ -68,7 +61,6 @@ export const fetchHotelDetail = createAsyncThunk(
       const response = await getHotelDetail(id);
       return response.data;
     } catch (error) {
-      console.error("Fetch Hotel Detail Error:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch hotel details"
       );
@@ -84,7 +76,6 @@ export const fetchOwnerHotelDetails = createAsyncThunk(
       const response = await getOwnerHotelBookings(id);
       return response.data;
     } catch (error) {
-      console.error("Fetch Owner Hotel Details Error:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch owner hotel details"
       );
@@ -98,9 +89,8 @@ export const removeHotel = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       await deleteHotel(id);
-      return id; // Just return the ID so we can remove it from state
+      return id;
     } catch (error) {
-      console.error("Delete Hotel Error:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to delete hotel"
       );
@@ -116,7 +106,6 @@ export const filterHotels = createAsyncThunk(
       const response = await filterHotelsByStars(stars);
       return response.data;
     } catch (error) {
-      console.error("Filter Hotels Error:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to filter hotels"
       );
@@ -165,7 +154,7 @@ const hotelsSlice = createSlice({
       })
       .addCase(addHotel.rejected, (state, action) => {
         state.loading = false;
-        state.formError = action.payload || { error: "An error occurred" };
+        state.formError = action.payload;
       })
 
       // Edit hotel

@@ -12,8 +12,6 @@ import {
   editCurrentAdmin,
 } from "../../services/api";
 
-// // Async thunks
-
 export const fetchUsers = createAsyncThunk(
   "accounts/fetchUsers",
   async (_, { rejectWithValue }) => {
@@ -111,10 +109,8 @@ export const createUser = createAsyncThunk(
       const response = await registerUser(data);
       return response.data;
     } catch (error) {
-      console.error("Register User", error);
-      return rejectWithValue(
-        error.response?.data?.error || "Failed to register user"
-      );
+      console.error("Register User", error.response.data);
+      return rejectWithValue(error.response?.data|| "Failed to register user");
     }
   }
 );
@@ -126,9 +122,9 @@ export const createUserForAdmin = createAsyncThunk(
       const response = await registerUserForAdmin(data);
       return response.data;
     } catch (error) {
-      console.error("Register User Error:", error);
+      console.error("Register User Error:", error.response.data);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to register user"
+        error.response.data || "Failed to register user"
       );
     }
   }
@@ -169,6 +165,7 @@ const initialState = {
   users: [],
   loading: false,
   error: null,
+  formError:null,
   userDetail: null,
 };
 
@@ -311,7 +308,7 @@ const accountsSlice = createSlice({
       })
       .addCase(createUserForAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.formError = action.payload;
       })
 
       // Edit current user

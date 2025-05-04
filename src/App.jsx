@@ -31,6 +31,7 @@ const CustomerProfile = React.lazy(() => import("./pages/Profiles/Customer"));
 const AdminPanel = React.lazy(() => import("./pages/Profiles/AdminPanel"));
 const HotelOwner = React.lazy(() => import("./pages/Profiles/HotelOwner"));
 const ChatbotWidget = React.lazy(() => import("./components/ChatbotWidget"));
+const HotelFormModal = React.lazy(() => import('./components/HotelFormModal'));
 function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -63,6 +64,8 @@ function App() {
           <Route path="/customerprofile" element={<CustomerProfile />} />
           <Route path="/hotelownerprofile" element={<HotelOwner />} />
           <Route path="/adminpanel" element={<AdminPanel />} />
+          <Route path="/addhotel" element={<HotelFormModal />}></Route>
+          <Route path="/edithotel/:HOTEL_ID" element={<HotelFormModal />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatbotWidget/>

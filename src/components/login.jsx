@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/slices/login";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,14 @@ function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [formErrors,setFormErrors] = useState({});
+
+  useEffect(()=>{
+    if(error){
+      setFormErrors(error)
+      console.log("the log in error is ",error)
+    }
+  },[error])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
