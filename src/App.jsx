@@ -21,10 +21,6 @@ import BookingsList from './pages/booking/BookingList';
 import BookingDetails from './pages/booking/BookingDetails.jsx';
 import EditBooking from './pages/booking/EditingBooking';
 import Footer from './components/Footer';
-<<<<<<< HEAD
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-=======
 import RoomsPage from './pages/Hotel/Rooms';
 import ImageForm from './components/ImageForm.jsx';
 import Header from './components/Header';
@@ -34,35 +30,11 @@ import AddRoom from './components/addroom';
 import AddType from './components/addtype';
 import AddRoomImage from './components/addroomimage';
 import RoomDetails from './components/roomdetails';
->>>>>>> origin/bookingCycle
 
 function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
     <BrowserRouter>
-<<<<<<< HEAD
-     <Routes>
-     <Route path='/' element={<Home />} ></Route>
-     <Route path='/login' element={<Login />} ></Route>
-     <Route path='/register' element={<RegisterUserForm />} ></Route>
-     <Route path="/about" element={<AboutUs />} />
-     <Route path="/contact" element={<ContactUs />} />
-     <Route path="/reviews" element={<ReviewList />} />
-     <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
-     <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
-     <Route path="/bookings" element={<AddBooking />} />
-     <Route path="/my-bookings" element={<BookingsList />} />
-     <Route path="/my-bookings/:id" element={<BookingDetails />} />
-     <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
-   </Routes>
-   <ToastContainer position="top-center" autoClose={3000} />
-   </BrowserRouter>
-    }
-  </main>
-  <Footer />
-</div>
-
-=======
       <Header />
       <main className="flex-grow-1 mb-5">
         <Routes>
@@ -102,7 +74,6 @@ function App() {
     </BrowserRouter>
   </div>
  
->>>>>>> origin/bookingCycle
 
   )
 }
