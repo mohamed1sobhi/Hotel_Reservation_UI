@@ -1,41 +1,68 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
-const Home = React.lazy(() => import('./pages/Home'));
-const AboutUs = React.lazy(() => import('./pages/AboutUs'));
-const ContactUs = React.lazy(() => import('./pages/ContactUs'));
-const ReviewList = React.lazy(() => import('./pages/Review/ReviewList'));
-const ReviewDetail = React.lazy(() => import('./pages/Review/ReviewDetail'));
-const HotelReviews = React.lazy(() => import('./pages/Review/HotelReviews'));
-const AddReview = React.lazy(() => import('./pages/Review/AddReview'));
-const Login = React.lazy(() => import('./components/login'));
-const ClientInfoPayment = React.lazy(() => import('./pages/payment/ClientInfoPayment'));
-const PaymentMethod = React.lazy(() => import('./pages/payment/PaymentMethod'));
-const Footer = React.lazy(() => import('./components/Footer'));
-const RoomsPage = React.lazy(() => import('./pages/Hotel/Rooms'));
-const ImageForm = React.lazy(() => import('./components/ImageForm'));
-const Header = React.lazy(() => import('./components/Header'));
-const Hotels = React.lazy(() => import('./pages/Hotel/all_hotels'));
-const HotelDetails = React.lazy(() => import('./pages/Hotel/hoteldetails'));
-const AddRoom = React.lazy(() => import('./components/addroom'));
-const AddType = React.lazy(() => import('./components/addtype'));
-const AddRoomImage = React.lazy(() => import('./components/addroomimage'));
-const RoomDetails = React.lazy(() => import('./components/roomdetails'));
-const BookingForm = React.lazy(() => import('./components/addbooking'));
-const BookingDetail = React.lazy(() => import('./components/bookingdetails'));
-const NotFound = React.lazy(() => import("./pages/NotFound"));
-const RegisterUserForm = React.lazy(() => import("./pages/register"));
-const CustomerProfile = React.lazy(() => import("./pages/Profiles/Customer"));
-const AdminPanel = React.lazy(() => import("./pages/Profiles/AdminPanel"));
-const HotelOwner = React.lazy(() => import("./pages/Profiles/HotelOwner"));
-const ChatbotWidget = React.lazy(() => import("./components/ChatbotWidget"));
-const HotelFormModal = React.lazy(() => import('./components/HotelFormModal'));
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
+ 
+import React, {useEffect} from 'react'
+import Home from './pages/Home'
+import All_hotels from  './pages/Hotel/All_hotels'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import AboutUs from './pages/AboutUs';
+import ContactUs from './pages/ContactUs';
+import ReviewList from './pages/Review/ReviewList';
+import ReviewDetail from './pages/Review/ReviewDetail';
+import HotelReviews from './pages/Review/HotelReviews';
+import AddReview from './pages/Review/AddReview';
+import Login from './components/login';
+// import RegisterUserForm from './pages/register';
+// import BookingForm from './pages/booking/create';
+// import PaymentsList from './pages/payment/paymentList';
+// import PaymentSettings from './pages/payment/paymentSettings';
+import AddBooking from './pages/booking/AddBooking';
+import BookingsList from './pages/booking/BookingList';
+import BookingDetails from './pages/booking/BookingDetails.jsx';
+import EditBooking from './pages/booking/EditingBooking';
+import Footer from './components/Footer';
+<<<<<<< HEAD
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+=======
+import RoomsPage from './pages/Hotel/Rooms';
+import ImageForm from './components/ImageForm.jsx';
+import Header from './components/Header';
+import Star from './pages/Hotel/star';
+import HotelDetails from './pages/Hotel/hoteldetails';
+import AddRoom from './components/addroom';
+import AddType from './components/addtype';
+import AddRoomImage from './components/addroomimage';
+import RoomDetails from './components/roomdetails';
+>>>>>>> origin/bookingCycle
+
 function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
     <BrowserRouter>
+<<<<<<< HEAD
+     <Routes>
+     <Route path='/' element={<Home />} ></Route>
+     <Route path='/login' element={<Login />} ></Route>
+     <Route path='/register' element={<RegisterUserForm />} ></Route>
+     <Route path="/about" element={<AboutUs />} />
+     <Route path="/contact" element={<ContactUs />} />
+     <Route path="/reviews" element={<ReviewList />} />
+     <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
+     <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
+     <Route path="/bookings" element={<AddBooking />} />
+     <Route path="/my-bookings" element={<BookingsList />} />
+     <Route path="/my-bookings/:id" element={<BookingDetails />} />
+     <Route path="/my-bookings/:id/edit" element={<EditBooking />} />
+   </Routes>
+   <ToastContainer position="top-center" autoClose={3000} />
+   </BrowserRouter>
+    }
+  </main>
+  <Footer />
+</div>
+
+=======
       <Header />
       <main className="flex-grow-1 mb-5">
         <Routes>
@@ -71,9 +98,11 @@ function App() {
         <ChatbotWidget/>
       </main>
       <Footer />
+      <ToastContainer position="top-center" autoClose={3000} />
     </BrowserRouter>
   </div>
  
+>>>>>>> origin/bookingCycle
 
   )
 }
