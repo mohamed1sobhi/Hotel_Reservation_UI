@@ -175,7 +175,7 @@ const AddRoomImage = () => {
                 {roomDetail?.room_type?.room_type || "Room"}
               </span>
               <span style={{
-                backgroundColor: '#CD9A5E',
+                backgroundColor: 'var(--bs-primary)',
                 color: '#FFFFFF',
                 padding: '4px 8px',
                 borderRadius: '4px',
@@ -267,9 +267,9 @@ const AddRoomImage = () => {
               onClick={() => document.getElementById('room-image-upload').click()}
             >
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="3" width="18" height="18" rx="2" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="8.5" cy="8.5" r="1.5" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M21 15L16 10L5 21" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="8.5" cy="8.5" r="1.5" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M21 15L16 10L5 21" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               
               <p style={{
@@ -279,7 +279,7 @@ const AddRoomImage = () => {
               }}>
                 <span style={{
                   fontWeight: '600',
-                  color: '#CD9A5E'
+                  color: 'var(--bs-primary)'
                 }}>Click to upload</span> or drag and drop
               </p>
               
@@ -418,7 +418,7 @@ const AddRoomImage = () => {
                 <div style={{
                   height: '100%',
                   width: `${uploadProgress}%`,
-                  backgroundColor: '#CD9A5E',
+                  backgroundColor: 'var(--bs-primary)',
                   borderRadius: '3px',
                   transition: 'width 0.3s ease'
                 }}></div>
@@ -455,7 +455,7 @@ const AddRoomImage = () => {
               style={{
                 flex: '1',
                 padding: '12px',
-                backgroundColor: (!imageFile || isUploading) ? '#E8DFD5' : '#CD9A5E',
+                backgroundColor: (!imageFile || isUploading) ? '#E8DFD5' : 'var(--bs-primary)',
                 color: (!imageFile || isUploading) ? '#8A8A8A' : '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
