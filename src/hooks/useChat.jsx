@@ -1,6 +1,6 @@
 // hooks/useChat.js
 import { useState } from 'react';
-import { sendQuestion } from '../services/api';
+import { sendQuestion } from '../services/user.service';
 
 const useChat = () => {
   const [messages, setMessages] = useState([]);
@@ -22,7 +22,7 @@ const useChat = () => {
     setError(null);
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/chat/query/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/chat/query/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

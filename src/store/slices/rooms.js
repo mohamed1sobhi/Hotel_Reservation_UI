@@ -13,7 +13,7 @@ import {
   getRoomDetail, 
   filterRoomsByType,
   getRoomsByHotel
-} from "../../services/api";
+} from "../../services/hotel.service";
 
 // Fetch all rooms
 // export const fetchRooms = createAsyncThunk(

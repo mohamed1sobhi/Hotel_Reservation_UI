@@ -92,7 +92,7 @@ const Home = () => {
             style={{
               width: "290px",
               height: "4px",
-              backgroundColor: "#CD9A5E",
+              backgroundColor: "var(--bs-primary)",
               margin: "20px auto",
             }}
           ></div>
@@ -116,13 +116,13 @@ const Home = () => {
                 <SwiperSlide key={hotel.id}>
                   <div
                     className="card h-100 shadow-sm hotel-card "
-                    style={{ backgroundColor: "#CD9A5E" }}
+                    style={{ backgroundColor: "var(--bs-primary)" }}
                   >
                     <img
                       src={
                         hotel.image.length > 0
                           ? hotel.image[0].image.startsWith("/media/")
-                            ? `http://127.0.0.1:8000${hotel.image[0].image}`
+                            ? `${import.meta.env.VITE_API_URL}${hotel.image[0].image}`
                             : hotel.image[0].image
                           : "https://via.placeholder.com/300x200"
                       }
@@ -176,7 +176,7 @@ const Home = () => {
             style={{
               width: "290px",
               height: "4px",
-              backgroundColor: "#CD9A5E",
+              backgroundColor: "var(--bs-primary)",
               margin: "20px auto",
             }}
           ></div>
@@ -226,7 +226,7 @@ const Home = () => {
             style={{
               width: "290px",
               height: "4px",
-              backgroundColor: "#CD9A5E",
+              backgroundColor: "var(--bs-primary)",
               margin: "20px auto",
             }}
           ></div>

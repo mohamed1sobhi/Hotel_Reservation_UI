@@ -67,7 +67,7 @@ body {
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #CD9A5E;
+  color: var(--bs-primary);
   margin-bottom: 0.5rem;
 }
 
@@ -120,7 +120,7 @@ body {
 }
 
 .btn-custom {
-  background-color: #CD9A5E;
+  background-color: var(--bs-primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -177,7 +177,7 @@ body {
 }
 
 .form-control:focus {
-  border-color: #CD9A5E;
+  border-color: var(--bs-primary);
   box-shadow: 0 0 0 0.2rem rgba(205, 154, 94, 0.15);
   outline: none;
 }
@@ -199,7 +199,7 @@ body {
   color: #1A1A1A;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #CD9A5E;
+  border-bottom: 2px solid var(--bs-primary);
 }
 
 .filter-controls {
@@ -223,7 +223,7 @@ body {
 }
 
 .filter-select:focus {
-  border-color: #CD9A5E;
+  border-color: var(--bs-primary);
   outline: none;
 }
 
@@ -283,7 +283,7 @@ body {
 
 .price-amount {
   font-weight: 700;
-  color: #CD9A5E;
+  color: var(--bs-primary);
 }
 
 .hotel-rating {
@@ -334,7 +334,7 @@ body {
 }
 
 .icon-button.view {
-  color: #CD9A5E;
+  color: var(--bs-primary);
   background-color: rgba(205, 154, 94, 0.1);
 }
 
@@ -419,13 +419,13 @@ body {
 .price {
   font-weight: 700;
   font-size: 1.2rem;
-  color: #CD9A5E;
+  color: var(--bs-primary);
 }
 
 .rating {
   display: flex;
   align-items: center;
-  color: #CD9A5E;
+  color: var(--bs-primary);
   font-weight: 600;
 }
 
@@ -475,7 +475,7 @@ body {
 }
 
 .view-toggle button.active {
-  background-color: #CD9A5E;
+  background-color: var(--bs-primary);
   color: white;
 }
 

@@ -327,7 +327,7 @@ const ClientInfoPayment = () => {
                 size="lg" 
                 className="w-100"
                 onClick={handleSubmit}
-                style={{ backgroundColor: '#CD9A5E', borderColor: '#CD9A5E' }}
+                style={{ backgroundColor: 'var(--bs-primary)', borderColor: 'var(--bs-primary)' }}
               >
                 Proceed to Checkout
               </Button>

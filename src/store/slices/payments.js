@@ -3,7 +3,7 @@ import axiosInstance from '../../config/axios_conf.js';
 import { 
   paymentData,
   getUserBookings,
-} from "../../services/api";
+} from "../../services/booking.service";
 
 
 // Fetch single payment details

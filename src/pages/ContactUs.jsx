@@ -4,7 +4,7 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/f
 const iconWrapperStyle = {
     width: '36px',
     height: '36px',
-    backgroundColor: '#CD9A5E',
+    backgroundColor: 'var(--bs-primary)',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
@@ -54,7 +54,7 @@ const ContactUs = () => {
     <div className="contact-container" style={{ backgroundColor: '#F9F5F1', color: '#1A1A1A', padding: '2rem' }}>
       <div className="contact-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ color: '#1A1A1A', fontSize: '2.5rem', marginBottom: '1rem' }}>Contact Us</h1>
-        <div style={{ width: '80px', height: '4px', backgroundColor: '#CD9A5E', margin: '0 auto' }}></div>
+        <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--bs-primary)', margin: '0 auto' }}></div>
         <p style={{ color: '#8A8A8A', maxWidth: '600px', margin: '1rem auto', lineHeight: '1.6' }}>
           Have questions or feedback? We'd love to hear from you. Fill out the form below or reach out through one of our contact channels.
         </p>
@@ -62,7 +62,7 @@ const ContactUs = () => {
 
       <div className="contact-content" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
         <div className="contact-form" style={{ flex: '1', minWidth: '300px' }}>
-          <h2 style={{ color: '#CD9A5E', marginBottom: '1.5rem' }}>Send us a Message</h2>
+          <h2 style={{ color: 'var(--bs-primary)', marginBottom: '1.5rem' }}>Send us a Message</h2>
           
           {isSubmitted && (
             <div style={{ 
@@ -157,7 +157,7 @@ const ContactUs = () => {
             <button 
               type="submit"
               style={{ 
-                backgroundColor: '#CD9A5E', 
+                backgroundColor: 'var(--bs-primary)', 
                 color: '#F9F5F1', 
                 padding: '0.8rem 2rem', 
                 borderRadius: '4px', 
@@ -174,10 +174,10 @@ const ContactUs = () => {
         
         <div className="contact-info" style={{ flex: '1', minWidth: '300px' }}>
           <div style={{ backgroundColor: '#1A1A1A', padding: '2rem', borderRadius: '8px', color: '#F9F5F1', height: '100%' }}>
-            <h2 style={{ color: '#CD9A5E', marginBottom: '1.5rem' }}>Get in Touch</h2>
+            <h2 style={{ color: 'var(--bs-primary)', marginBottom: '1.5rem' }}>Get in Touch</h2>
             
             <div style={{ marginBottom: '1.5rem' }}>
-              <h3 style={{ color: '#CD9A5E', marginBottom: '0.5rem' }}>Our Office</h3>
+              <h3 style={{ color: 'var(--bs-primary)', marginBottom: '0.5rem' }}>Our Office</h3>
               <p style={{ lineHeight: '1.6' }}>
                 123 Hotel Avenue<br />
                 Suite 456<br />
@@ -186,7 +186,7 @@ const ContactUs = () => {
             </div>
             
             <div style={{ marginBottom: '1.5rem' }}>
-              <h3 style={{ color: '#CD9A5E', marginBottom: '0.5rem' }}>Customer Support</h3>
+              <h3 style={{ color: 'var(--bs-primary)', marginBottom: '0.5rem' }}>Customer Support</h3>
               <p style={{ lineHeight: '1.6' }}>
                 Email: support@hotelreservation.com<br />
                 Phone: (555) 123-4567<br />
@@ -195,7 +195,7 @@ const ContactUs = () => {
             </div>
             
             <div style={{ marginBottom: '1.5rem' }}>
-              <h3 style={{ color: '#CD9A5E', marginBottom: '0.5rem' }}>Business Inquiries</h3>
+              <h3 style={{ color: 'var(--bs-primary)', marginBottom: '0.5rem' }}>Business Inquiries</h3>
               <p style={{ lineHeight: '1.6' }}>
                 Email: partnerships@hotelreservation.com<br />
                 Phone: (555) 765-4321<br />
@@ -204,7 +204,7 @@ const ContactUs = () => {
             </div>
             
             <div>
-                <h3 style={{ color: '#CD9A5E', marginBottom: '0.5rem' }}>Follow Us</h3>
+                <h3 style={{ color: 'var(--bs-primary)', marginBottom: '0.5rem' }}>Follow Us</h3>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook" style={iconWrapperStyle}>
                     <FaFacebookF style={iconStyle} />
@@ -225,7 +225,7 @@ const ContactUs = () => {
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '3rem auto' }}>
-        <h2 style={{ color: '#CD9A5E', marginBottom: '1.5rem', textAlign: 'center' }}>Frequently Asked Questions</h2>
+        <h2 style={{ color: 'var(--bs-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Frequently Asked Questions</h2>
         
         {[
           {
@@ -252,7 +252,7 @@ const ContactUs = () => {
               padding: '1.5rem',
               backgroundColor: index % 2 === 0 ? '#E8DFD5' : '#F9F5F1',
               borderRadius: '8px',
-              borderLeft: `4px solid ${index % 2 === 0 ? '#B45F3A' : '#CD9A5E'}`
+              borderLeft: `4px solid ${index % 2 === 0 ? '#B45F3A' : 'var(--bs-primary)'}`
             }}
           >
             <h3 style={{ color: '#1A1A1A', marginBottom: '0.5rem' }}>{faq.q}</h3>

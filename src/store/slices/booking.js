@@ -7,8 +7,8 @@ import {
   getBookingDetail as getBookingDetailAPI,
   updateBooking as updateBookingAPI,
   getOwnerHotelBookings,
-} from "../../services/api";
-import { getCurrentUserBookings, getHotelBookings } from "../../services/api"; // Adjust the import path as necessary
+} from "../../services/booking.service";
+import { getCurrentUserBookings, getHotelBookings } from "../../services/booking.service"; // Adjust the import path as necessary
 import axios from "axios";
 
 // Initial state for the booking slice

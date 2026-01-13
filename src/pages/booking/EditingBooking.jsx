@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookingDetail, updateBooking } from '../../store/slices/booking';
-import { getAllHotels } from '../../services/api'; // Assuming you have an API file with this function.
+import { getAllHotels } from '../../services/hotel.service'; // Assuming you have an API file with this function.
 import { FaCalendarAlt, FaBed, FaMoneyBillWave, FaHotel } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -139,7 +139,7 @@ const EditBooking = () => {
       .then(() => {
         toast.success('Booking updated successfully!', {
           style: {
-            background: '#CD9A5E', // Warm gold
+            background: 'var(--bs-primary)', // Warm gold
             color: '#fff',         // White text
             fontWeight: 'bold',
           }
@@ -167,7 +167,7 @@ const EditBooking = () => {
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <div className="p-4 shadow rounded" style={{ backgroundColor: '#FFFDF8', border: '1px solid #e7ddd2' }}>
-            <h2 className="text-center mb-4 fw-bold" style={{ color: '#CD9A5E' }}>
+            <h2 className="text-center mb-4 fw-bold" style={{ color: 'var(--bs-primary)' }}>
               ✏️ Edit Your Booking
             </h2>
 

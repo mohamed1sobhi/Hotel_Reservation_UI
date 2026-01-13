@@ -6,8 +6,8 @@ import {
   getHotelDetail,
   deleteHotel,
   filterHotelsByStars,
-  getOwnerHotelBookings,
-} from "../../services/api";
+} from "../../services/hotel.service";
+import { getOwnerHotelBookings } from "../../services/booking.service";
 
 // Fetch all hotels
 export const fetchHotels = createAsyncThunk(

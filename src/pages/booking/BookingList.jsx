@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllBookings, deleteBooking } from '../../store/slices/booking';
 import { useNavigate } from 'react-router-dom';
-import { getAllHotels } from '../../services/api';
+import { getAllHotels } from '../../services/hotel.service';
 import { FaBed, FaCalendarCheck, FaCalendarTimes, FaEdit, FaTimesCircle, FaEye } from 'react-icons/fa';
 import { format } from 'date-fns';
 
@@ -10,25 +10,21 @@ const BookingsList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { bookings } = useSelector((state) => state.bookings);
-  const token = localStorage.getItem('access');
-  const user = localStorage.getItem('user');
+  // const token = localStorage.getItem('access');
+  // const user = localStorage.getItem('user');
   const [hotels, setHotels] = useState([]);
   const [deleteBookingId, setDeleteBookingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState('all'); // 👈 Filter state
 
   useEffect(() => {
-    if (!token || !user) {
-      navigate('/login');
-    } else {
       dispatch(fetchAllBookings());
       getAllHotels()
         .then((res) => {
           setHotels(res.data);
         })
         .catch(() => console.error('Failed to load hotels.'));
-    }
-  }, [dispatch, user, navigate]);
+  }, [dispatch, navigate]);
 
   const getBookingTitle = (hotelId, roomId) => {
     const hotel = hotels.find(h => h.id === Number(hotelId));
@@ -49,7 +45,7 @@ const BookingsList = () => {
 
   const getBadgeColor = (status) => {
     switch (status) {
-      case 'confirmed': return '#CD9A5E';
+      case 'confirmed': return 'var(--bs-primary)';
       case 'pending': return '#8A8A8A';
       default: return '#8A8A8A';
     }
@@ -80,7 +76,7 @@ const BookingsList = () => {
         </button>
       </div>
 
-      <h1 className="text-center mb-4 fw-bold" style={{ color: '#CD9A5E', fontFamily: 'Segoe UI' }}>
+      <h1 className="text-center mb-4 fw-bold" style={{ color: 'var(--bs-primary)', fontFamily: 'Segoe UI' }}>
         🛎️ Your Bookings
       </h1>
 
@@ -129,9 +125,9 @@ const BookingsList = () => {
                         {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                       </span>
                       <p className="text-muted">
-                        <FaCalendarCheck className="me-2" style={{ color: '#CD9A5E' }} />
+                        <FaCalendarCheck className="me-2" style={{ color: 'var(--bs-primary)' }} />
                         Check-in: {formattedCheckIn} <br />
-                        <FaCalendarTimes className="me-2" style={{ color: '#CD9A5E' }} />
+                        <FaCalendarTimes className="me-2" style={{ color: 'var(--bs-primary)' }} />
                         Check-out: {formattedCheckOut}
                       </p>
                     </div>
@@ -139,7 +135,7 @@ const BookingsList = () => {
                     <div className="d-flex justify-content-between gap-2 mt-3">
                       <button
                         className="btn btn-sm d-flex align-items-center justify-content-center fw-bold"
-                        style={{ backgroundColor: '#CD9A5E', color: 'white', flex: 1 }}
+                        style={{ backgroundColor: 'var(--bs-primary)', color: 'white', flex: 1 }}
                         onClick={() => navigate(`/my-bookings/${booking.id}`)}
                       >
                         <FaEye className="me-2" /> Details

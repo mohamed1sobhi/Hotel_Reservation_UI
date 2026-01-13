@@ -33,7 +33,7 @@ const ReviewList = () => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       stars.push(
-        <span key={i} style={{ color: i < rating ? "#CD9A5E" : "#E8DFD5" }}>
+        <span key={i} style={{ color: i < rating ? "var(--bs-primary)" : "#E8DFD5" }}>
           ★
         </span>
       );
@@ -179,7 +179,7 @@ const ReviewList = () => {
                   <Link
                     to={`/reviews/${review.id}`}
                     style={{
-                      color: "#CD9A5E",
+                      color: "var(--bs-primary)",
                       textDecoration: "none",
                       fontWeight: "500",
                     }}
@@ -206,7 +206,7 @@ const ReviewList = () => {
                   display: "inline-block",
                   marginTop: "1rem",
                   padding: "0.75rem 1.5rem",
-                  backgroundColor: "#CD9A5E",
+                  backgroundColor: "var(--bs-primary)",
                   color: "white",
                   borderRadius: "4px",
                   textDecoration: "none",

@@ -107,7 +107,7 @@ const RoomDetails = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            color: '#CD9A5E',
+            color: 'var(--bs-primary)',
             fontSize: '16px',
             cursor: 'pointer',
             marginBottom: '20px',
@@ -115,8 +115,8 @@ const RoomDetails = () => {
           }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 12H5" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 19L5 12L12 5" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M19 12H5" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 19L5 12L12 5" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           Back to Rooms
         </button>
@@ -139,7 +139,7 @@ const RoomDetails = () => {
                 overflow: 'hidden'
               }}>
                 <img
-                  src={`http://127.0.0.1:8000${images[selectedImage]?.image}`}
+                  src={`${import.meta.env.VITE_API_URL}${images[selectedImage]?.image}`}
                   alt="Room"
                   style={{
                     width: '100%',
@@ -238,7 +238,7 @@ const RoomDetails = () => {
                     }}
                   >
                     <img
-                      src={`http://127.0.0.1:8000${image.image}`}
+                      src={`${import.meta.env.VITE_API_URL}${image.image}`}
                       alt={`Room thumbnail ${index + 1}`}
                       style={{
                         width: '100%',
@@ -294,7 +294,7 @@ const RoomDetails = () => {
             }}>
               <span style={{
                 padding: '6px 12px',
-                backgroundColor: '#CD9A5E',
+                backgroundColor: 'var(--bs-primary)',
                 color: '#FFFFFF',
                 borderRadius: '20px',
                 fontSize: '18px',
@@ -323,7 +323,7 @@ const RoomDetails = () => {
             </div>
               {userIsCustomer() && (
             <button onClick={() => navigate(`/addbooking/${_id}/`)}style={{
-              backgroundColor: '#CD9A5E',
+              backgroundColor: 'var(--bs-primary)',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '8px',
@@ -376,7 +376,7 @@ const RoomDetails = () => {
                     flexShrink: 0
                   }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M20 6L9 17L4 12" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M20 6L9 17L4 12" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                   <span style={{color: '#1A1A1A'}}>{amenity}</span>
@@ -417,8 +417,8 @@ const RoomDetails = () => {
                     marginTop: '2px'
                   }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 6V12L16 14" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 6V12L16 14" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                   <div>
@@ -453,8 +453,8 @@ const RoomDetails = () => {
                     marginTop: '2px'
                   }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19 9V7C19 5.89543 18.1046 5 17 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V17" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 15L16 11M16 11H13M16 11V14" stroke="#CD9A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M19 9V7C19 5.89543 18.1046 5 17 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V17" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 15L16 11M16 11H13M16 11V14" stroke="var(--bs-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                   <div>

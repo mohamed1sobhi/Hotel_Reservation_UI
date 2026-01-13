@@ -5,12 +5,14 @@ import {
   getCurrentUser,
   updateUser,
   deleteUser,
-  registerUser,
-  registerUserForAdmin,
   updateCurrentUser,
   getCurrentAdmin,
   editCurrentAdmin,
-} from "../../services/api";
+} from "../../services/user.service";
+import {
+  registerUser,
+  registerUserForAdmin,
+} from "../../services/auth.service";
 
 export const fetchUsers = createAsyncThunk(
   "accounts/fetchUsers",

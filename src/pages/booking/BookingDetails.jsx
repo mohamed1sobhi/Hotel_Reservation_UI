@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBookingDetail, deleteBooking } from '../../store/slices/booking';
-import { getAllHotels } from '../../services/api';
+import { getAllHotels } from '../../services/hotel.service';
 import { FaCalendarAlt, FaArrowRight, FaTimesCircle, FaEdit, FaMoneyBillWave, FaCheckCircle, FaArrowLeft, FaHome, FaDollarSign } from 'react-icons/fa';
 import { format } from 'date-fns';
 
@@ -13,22 +13,18 @@ const BookingDetails = () => {
   const booking = useSelector((state) => state.bookings.selectedBooking);
   const [hotels, setHotels] = useState([]);
   const [showModal, setShowModal] = useState(false); // State to toggle modal visibility
-  const token = localStorage.getItem('access');
-  const user = localStorage.getItem('user');
+  // const token = localStorage.getItem('access');
+  // const user = localStorage.getItem('user');
   const [showDatePassedMessage, setShowDatePassedMessage] = useState(false);
   const today = new Date();
   const [filter, setFilter] = useState('all'); // 'all', 'pending', 'confirmed'
 
   useEffect(() => {
-    if (!token || !user) {
-      navigate('/login');
-    } else {
       dispatch(fetchBookingDetail(id));
       getAllHotels()
         .then((res) => setHotels(res.data))
         .catch(() => console.error('Failed to load hotels.'));
-    }
-  }, [id, navigate, dispatch, token, user]);
+  }, [dispatch, id]);
 
   const getBookingTitle = (hotelId, roomId) => {
     const hotel = hotels.find(h => h.id === Number(hotelId));
@@ -125,27 +121,27 @@ const BookingDetails = () => {
             </button>
           </div>
 
-          <h3 className="text-center fw-bold mb-4" style={{ color: '#CD9A5E' }}>
+          <h3 className="text-center fw-bold mb-4" style={{ color: 'var(--bs-primary)' }}>
             {getBookingTitle(booking.hotel, booking.room)}
           </h3>
 
           <div className="row text-center mb-4 g-3">
             <div className="col-md-4">
               <div className="p-3 rounded" style={{ backgroundColor: '#E8DFD5' }}>
-                <FaCalendarAlt className="mb-2" size={20} color="#CD9A5E" />
+                <FaCalendarAlt className="mb-2" size={20} color="var(--bs-primary)" />
                 <div><strong>Check-in:</strong></div>
                 <div>{formattedCheckInDate}</div>
               </div>
             </div>
 
             <div className="col-md-4 d-flex flex-column justify-content-center align-items-center">
-              <FaArrowRight size={24} color="#CD9A5E" />
+              <FaArrowRight size={24} color="var(--bs-primary)" />
               <span className="mt-2">{calculateNights()} Day{calculateNights() !== 1 ? 's' : ''}</span>
             </div>
 
             <div className="col-md-4">
               <div className="p-3 rounded" style={{ backgroundColor: '#E8DFD5' }}>
-                <FaCalendarAlt className="mb-2" size={20} color="#CD9A5E" />
+                <FaCalendarAlt className="mb-2" size={20} color="var(--bs-primary)" />
                 <div><strong>Check-out:</strong></div>
                 <div>{formattedCheckOutDate}</div>
               </div>
@@ -202,7 +198,7 @@ const BookingDetails = () => {
             {!isDisabled && (
               <button
                 className="btn text-white flex-fill"
-                style={{ backgroundColor: '#CD9A5E' }}
+                style={{ backgroundColor: 'var(--bs-primary)' }}
                 onClick={() => navigate(`/my-bookings/${id}/edit`)}
               >
                 <FaEdit className="me-2" /> Edit Booking

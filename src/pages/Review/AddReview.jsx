@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { addReview } from "../../store/slices/reviews";
-import { getHotelDetail } from "../../services/api";
+import { getHotelDetail } from "../../services/hotel.service";
 import Header from "../../components/Header";
 import { userIsOwner  , userIsCustomer , userIsAdmin} from "../../utils/permissions"; // Import the userIsOwner function
 
@@ -92,7 +92,7 @@ const AddReview = () => {
             onChange={handleChange}
             style={{ display: "none" }}
           />
-          <span style={{ color: formData.rating >= i ? "#CD9A5E" : "#E8DFD5" }}>
+          <span style={{ color: formData.rating >= i ? "var(--bs-primary)" : "#E8DFD5" }}>
             ★
           </span>
         </label>

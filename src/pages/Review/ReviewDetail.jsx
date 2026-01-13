@@ -24,7 +24,7 @@ const ReviewDetail = () => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       stars.push(
-        <span key={i} style={{ color: i < rating ? '#CD9A5E' : '#E8DFD5', fontSize: '1.5rem' }}>
+        <span key={i} style={{ color: i < rating ? 'var(--bs-primary)' : '#E8DFD5', fontSize: '1.5rem' }}>
           ★
         </span>
       );
@@ -128,7 +128,7 @@ const ReviewDetail = () => {
               <Link 
                 to={`/hotels/detail/${reviewDetail.hotel_id}`}
                 style={{
-                  backgroundColor: '#CD9A5E',
+                  backgroundColor: 'var(--bs-primary)',
                   color: 'black',
                   padding: '0.75rem 1.25rem',
                   borderRadius: '4px',

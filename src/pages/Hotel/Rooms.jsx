@@ -42,7 +42,7 @@ export default function RoomsPage() {
         <div
           className="spinner-border"
           role="status"
-          style={{ color: "#CD9A5E" }}
+          style={{ color: "var(--bs-primary)" }}
         ></div>
       </div>
     );
@@ -63,7 +63,7 @@ export default function RoomsPage() {
           <p>We encountered an error: {error}</p>
           <button
             className="btn mt-2"
-            style={{ backgroundColor: "#CD9A5E", color: "#F9F5F1" }}
+            style={{ backgroundColor: "var(--bs-primary)", color: "#F9F5F1" }}
             onClick={() => window.location.reload()}
           >
             Try Again
@@ -290,7 +290,7 @@ export default function RoomsPage() {
                         <button
                           className="btn py-2 px-3"
                           style={{
-                            backgroundColor: "#CD9A5E",
+                            backgroundColor: "var(--bs-primary)",
                             color: "#F9F5F1",
                             borderRadius: "6px",
                             display: "flex",

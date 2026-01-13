@@ -5,7 +5,7 @@ import {
   updateRoomImage, 
   deleteRoomImage, 
   listRoomImages 
-} from "../../services/api";
+} from "../../services/hotel.service";
 
 // Fetch all images
 export const fetchRoomImages = createAsyncThunk(

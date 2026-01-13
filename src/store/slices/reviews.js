@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllReviews, createReview, getReviewDetail, getHotelReviews } from "../../services/api";
+import { getAllReviews, createReview, getReviewDetail, getHotelReviews } from "../../services/hotel.service";
 
 // Fetch all reviews
 export const fetchReviews = createAsyncThunk(

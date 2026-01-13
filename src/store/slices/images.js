@@ -4,7 +4,7 @@ import {
   updateHotelImage, 
   deleteHotelImage, 
   listHotelImages 
-} from "../../services/api";
+} from "../../services/hotel.service";
 
 // Fetch all images
 export const fetchImages = createAsyncThunk(

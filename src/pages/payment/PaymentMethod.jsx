@@ -143,7 +143,7 @@ const PaymentMethod = () => {
                     <Card 
                       className={`mb-3 payment-method-card ${selectedMethod === 'credit_card' ? 'border-primary' : ''}`}
                       onClick={() => setSelectedMethod('credit_card')}
-                      style={selectedMethod === 'credit_card' ? {borderColor: '#CD9A5E'} : {}}
+                      style={selectedMethod === 'credit_card' ? {borderColor: 'var(--bs-primary)'} : {}}
                     >
                       <Card.Body>
                         <Form.Check
@@ -156,7 +156,7 @@ const PaymentMethod = () => {
                           label={
                             <div className="d-flex align-items-center">
                               <div className="payment-icon me-3">
-                                <i className="bi bi-credit-card fs-3" style={{color: '#CD9A5E'}}></i>
+                                <i className="bi bi-credit-card fs-3" style={{color: 'var(--bs-primary)'}}></i>
                               </div>
                               <div>
                                 <strong>Credit Card</strong>
@@ -173,7 +173,7 @@ const PaymentMethod = () => {
                     <Card 
                       className={`mb-3 payment-method-card ${selectedMethod === 'paypal' ? 'border-primary' : ''}`}
                       onClick={() => setSelectedMethod('paypal')}
-                      style={selectedMethod === 'paypal' ? {borderColor: '#CD9A5E'} : {}}
+                      style={selectedMethod === 'paypal' ? {borderColor: 'var(--bs-primary)'} : {}}
                     >
                       <Card.Body>
                         <Form.Check
@@ -186,7 +186,7 @@ const PaymentMethod = () => {
                           label={
                             <div className="d-flex align-items-center">
                               <div className="payment-icon me-3">
-                                <i className="bi bi-paypal fs-3" style={{color: '#CD9A5E'}}></i>
+                                <i className="bi bi-paypal fs-3" style={{color: 'var(--bs-primary)'}}></i>
                               </div>
                               <div>
                                 <strong>PayPal</strong>
@@ -203,7 +203,7 @@ const PaymentMethod = () => {
                     <Card 
                       className={`mb-3 payment-method-card ${selectedMethod === 'bank_transfer' ? 'border-primary' : ''}`}
                       onClick={() => setSelectedMethod('bank_transfer')}
-                      style={selectedMethod === 'bank_transfer' ? {borderColor: '#CD9A5E'} : {}}
+                      style={selectedMethod === 'bank_transfer' ? {borderColor: 'var(--bs-primary)'} : {}}
                     >
                       <Card.Body>
                         <Form.Check
@@ -216,7 +216,7 @@ const PaymentMethod = () => {
                           label={
                             <div className="d-flex align-items-center">
                               <div className="payment-icon me-3">
-                                <i className="bi bi-bank fs-3" style={{color: '#CD9A5E'}}></i>
+                                <i className="bi bi-bank fs-3" style={{color: 'var(--bs-primary)'}}></i>
                               </div>
                               <div>
                                 <strong>Bank Transfer</strong>
@@ -288,7 +288,7 @@ const PaymentMethod = () => {
                   size="lg" 
                   className="w-100"
                   disabled={processing}
-                  style={{ backgroundColor: '#CD9A5E', borderColor: '#CD9A5E' }}
+                  style={{ backgroundColor: 'var(--bs-primary)', borderColor: 'var(--bs-primary)' }}
                 >
                   {processing ? 'Processing...' : `Pay $${paymentData.is_deposit ? depositAmount : paymentData.booking_summary.total_price}`}
                 </Button>

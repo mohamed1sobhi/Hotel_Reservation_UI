@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { fetchHotelReviews } from "../../store/slices/reviews";
-import { getHotelDetail } from "../../services/api";
+import { getHotelDetail } from "../../services/hotel.service";
 import Header from "../../components/Header";
 import { userIsCustomer } from "../../utils/permissions";
 const HotelReviews = () => {
@@ -62,7 +62,7 @@ const HotelReviews = () => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       stars.push(
-        <span key={i} style={{ color: i < rating ? "#CD9A5E" : "#E8DFD5" }}>
+        <span key={i} style={{ color: i < rating ? "var(--bs-primary)" : "#E8DFD5" }}>
           ★
         </span>
       );
@@ -208,7 +208,7 @@ const HotelReviews = () => {
                           style={{
                             width: `${percentage}%`,
                             height: "100%",
-                            backgroundColor: "#CD9A5E",
+                            backgroundColor: "var(--bs-primary)",
                           }}
                         />
                       </div>
@@ -373,7 +373,7 @@ const HotelReviews = () => {
                   display: "inline-block",
                   marginTop: "1rem",
                   padding: "0.75rem 1.5rem",
-                  backgroundColor: "#CD9A5E",
+                  backgroundColor: "var(--bs-primary)",
                   color: "white",
                   borderRadius: "4px",
                   textDecoration: "none",
