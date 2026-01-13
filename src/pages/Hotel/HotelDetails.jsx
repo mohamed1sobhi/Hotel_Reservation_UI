@@ -1,7 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Loader from '../../components/Loader';
+import Loader from '../../components/Common/Loader';
 import { fetchHotels, removeHotel ,fetchHotelDetail } from '../../store/slices/hotels';
 
 import HotelHero from "../../components/HotelDetails/HotelHero";

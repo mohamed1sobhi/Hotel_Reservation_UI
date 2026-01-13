@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHotels, filterHotels } from "../../store/slices/hotels";
 import { useNavigate } from "react-router-dom";
-import HotelFormModal from "../../components/HotelFormModal";
+import HotelFormModal from "../../components/Hotel/HotelFormModal";
 import { Star } from "lucide-react";
-import SearchAndFilter from "../../components/SearchAndFilter";
-import Pagination from "../../components/Pagination";
+import SearchAndFilter from "../../components/Common/SearchAndFilter";
+import Pagination from "../../components/Common/Pagination";
 import { userIsOwner } from "../../utils/permissions";
-import Loader from "../../components/Loader";
+import Loader from "../../components/Common/Loader";
 
 export default function SimpleHotelListingPage() {
   const dispatch = useDispatch();
