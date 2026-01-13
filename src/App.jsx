@@ -11,31 +11,35 @@ import { ToastContainer } from 'react-toastify';
 import { checkAuth } from './store/slices/login';
 
 // Components
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Login from './components/LoginModal';
+import Header from './components/Layout/Header';
+import Footer from './components/Layout/Footer';
+import Login from './components/Auth/LoginModal';
 import ChatbotWidget from './components/Chat/ChatbotWidget';
 import ProtectedRoute from './components/Routing/ProtectedRoute';
-import BookingForm from './components/BookingForm';
-import BookingDetail from './components/BookingDetailsView';
-import ImageForm from './components/ImageForm';
-import AddRoom from './components/AddRoomForm';
-import AddType from './components/AddTypeForm';
-import AddRoomImage from './components/AddRoomImageForm';
-import RoomDetails from './components/roomdetails';
-import HotelFormModal from './components/HotelFormModal';
 
 // Pages
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import NotFound from './pages/NotFound';
-import RegisterUserForm from './pages/register';
+import RegisterUserForm from './pages/Register';
+
+// Booking Pages
+import AddBookingPage from './pages/Booking/AddBookingPage';
+import BookingOverviewPage from './pages/Booking/BookingOverviewPage';
+
+// Common Pages
+import ImageUploadPage from './pages/Common/ImageUploadPage';
 
 // Hotel Pages
-import All_hotels from './pages/Hotel/all_hotels';
-import HotelDetails from './pages/Hotel/hoteldetails';
+import All_hotels from './pages/Hotel/AllHotels';
+import HotelDetails from './pages/Hotel/HotelDetails';
 import RoomsPage from './pages/Hotel/Rooms';
+import ManageHotelPage from './pages/Hotel/ManageHotelPage';
+import ManageRoomPage from './pages/Hotel/Room/ManageRoomPage';
+import AddRoomTypePage from './pages/Hotel/Room/AddRoomTypePage';
+import AddRoomImagePage from './pages/Hotel/Room/AddRoomImagePage';
+import RoomDetailsPage from './pages/Hotel/Room/RoomDetailsPage';
 
 // Review Pages
 import ReviewList from './pages/Review/ReviewList';
@@ -44,8 +48,8 @@ import HotelReviews from './pages/Review/HotelReviews';
 import AddReview from './pages/Review/AddReview';
 
 // Payment Pages
-import ClientInfoPayment from './pages/payment/ClientInfoPayment';
-import PaymentMethod from './pages/payment/PaymentMethod';
+import ClientInfoPayment from './pages/Payment/ClientInfoPayment';
+import PaymentMethod from './pages/Payment/PaymentMethod';
 
 // Profiles
 import CustomerProfile from './pages/Profiles/Customer';
@@ -79,7 +83,7 @@ function App() {
             <Route path="/hotels/detail/:id" element={<HotelDetails />} />
             <Route path="/hotels/:ID" element={<RoomsPage />} />
             <Route path="/hotels/:hotelId/reviews" element={<HotelReviews />} />
-            <Route path="/roomdetails/:_id" element={<RoomDetails />} />
+            <Route path="/roomdetails/:_id" element={<RoomDetailsPage />} />
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
@@ -88,17 +92,17 @@ function App() {
                 <Route path="/hotelownerprofile" element={<HotelOwner />} />
                 
                 <Route path="/hotels/:hotelId/add-review" element={<AddReview />} />
-                <Route path="/addhotel" element={<HotelFormModal />} />
-                <Route path="/edithotel/:HOTEL_ID" element={<HotelFormModal />} />
+                <Route path="/addhotel" element={<ManageHotelPage />} />
+                <Route path="/edithotel/:HOTEL_ID" element={<ManageHotelPage />} />
                 
-                <Route path="/addroom/:HotelId" element={<AddRoom />} />
-                <Route path="/addtype/:hotel_id" element={<AddType />} />
-                <Route path="/addroomimage/:room_id" element={<AddRoomImage />} />
-                <Route path="/editroom/:HotelId/:roomId/" element={<AddRoom />} />
-                <Route path="/createImage/:Id" element={<ImageForm />} />
+                <Route path="/addroom/:HotelId" element={<ManageRoomPage />} />
+                <Route path="/addtype/:hotel_id" element={<AddRoomTypePage />} />
+                <Route path="/addroomimage/:room_id" element={<AddRoomImagePage />} />
+                <Route path="/editroom/:HotelId/:roomId/" element={<ManageRoomPage />} />
+                <Route path="/createImage/:Id" element={<ImageUploadPage />} />
                 
-                <Route path="/addbooking/:hotel_Id" element={<BookingForm />} />
-                <Route path="/bookingdetails/:UserId" element={<BookingDetail />} />
+                <Route path="/addbooking/:hotel_Id" element={<AddBookingPage />} />
+                <Route path="/bookingdetails/:UserId" element={<BookingOverviewPage />} />
                 
                 <Route path="/payment/client-info/:bookingId" element={<ClientInfoPayment />} />
                 <Route path="/payment-method/:paymentId" element={<PaymentMethod />} />
