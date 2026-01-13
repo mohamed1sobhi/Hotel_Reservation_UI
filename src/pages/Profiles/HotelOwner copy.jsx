@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BookingsCard from "../../components/BookingsCard";
+import BookingsCard from "../../components/Booking/BookingCard/BookingsCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCurrentUser,

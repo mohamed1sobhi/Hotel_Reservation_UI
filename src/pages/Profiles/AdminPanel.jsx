@@ -16,12 +16,12 @@ import {
 
 import api from "../../services/api";
 
-import AdminSidebar from "../../components/AdminSidebar";
-import AdminDashboard from "../../components/AdminDashboard";
-import AdminProfile from "../../components/AdminProfile";
-import UserTable from "../../components/UserTable";
-import BookingTable from "../../components/BookingTable";
-import HotelTable from "../../components/HotelTable";
+import AdminSidebar from "../../components/Admin/AdminSidebar";
+import AdminDashboard from "../../components/Admin/AdminDashboard";
+import AdminProfile from "../../components/Admin/AdminProfile";
+import UserTable from "../../components/Admin/UserTable";
+import BookingTable from "../../components/Booking/BookingTable";
+import HotelTable from "../../components/Hotel/HotelTable";
 
 export default function AdminPanel() {
   const dispatch = useDispatch();

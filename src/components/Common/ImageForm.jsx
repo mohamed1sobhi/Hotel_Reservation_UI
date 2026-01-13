@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addImage } from "../store/slices/images"; 
-import { fetchHotels } from "../store/slices/hotels"; 
+import { addImage } from "../../store/slices/images"; 
+import { fetchHotels } from "../../store/slices/hotels"; 
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "./Loader";
 const ImageForm = () => {

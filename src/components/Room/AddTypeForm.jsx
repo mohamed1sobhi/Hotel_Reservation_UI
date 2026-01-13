@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { createtype, fetchHotelRoomsType } from "../store/slices/rooms";
+import { createtype, fetchHotelRoomsType } from "../../store/slices/rooms";
 import './AddType.css';
 
 const AddType = () => {

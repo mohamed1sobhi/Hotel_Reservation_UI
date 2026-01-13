@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store/slices/login";
+import { loginUser } from "../../store/slices/login";
 import { useNavigate } from "react-router-dom";
 import "./LoginForm.css"; // Import the CSS
 

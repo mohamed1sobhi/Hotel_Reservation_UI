@@ -1,7 +1,7 @@
 // src/components/HotelList.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import Loader from "./Loader";
+import Loader from "../Common/Loader";
 
 const HotelList = ({ hotels, loading, error }) => {
   if (loading) {

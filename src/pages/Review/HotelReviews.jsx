@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { fetchHotelReviews } from "../../store/slices/reviews";
 import { getHotelDetail } from "../../services/hotel.service";
-import Header from "../../components/Header";
+import Header from "../../components/Layout/Header";
 import { userIsCustomer } from "../../utils/permissions";
 const HotelReviews = () => {
   const { hotelId } = useParams();

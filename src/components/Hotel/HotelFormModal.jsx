@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addHotel, editHotel, fetchHotelDetail } from "../store/slices/hotels";
+import { addHotel, editHotel, fetchHotelDetail } from "../../store/slices/hotels";
 
 const HotelFormPage = () => {
   const { HOTEL_ID } = useParams();

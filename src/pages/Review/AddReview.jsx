@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { addReview } from "../../store/slices/reviews";
 import { getHotelDetail } from "../../services/hotel.service";
-import Header from "../../components/Header";
+import Header from "../../components/Layout/Header";
 import { userIsOwner  , userIsCustomer , userIsAdmin} from "../../utils/permissions"; // Import the userIsOwner function
 
 const AddReview = () => {

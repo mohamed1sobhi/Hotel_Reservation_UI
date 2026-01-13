@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { editCurrentAdmindata, fetchCurrentAdmin } from '../store/slices/accounts';
+import { editCurrentAdmindata, fetchCurrentAdmin } from '../../store/slices/accounts';
 
 const AdminProfile = ({ userDetail }) => {
     const dispatch = useDispatch();

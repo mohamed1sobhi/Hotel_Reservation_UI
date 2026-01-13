@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import Loader from './Loader';
+import Loader from '../Common/Loader';
 
 import {
   addRoom,
   editRoom,
   fetchRoomDetail,
   fetchHotelRoomsType,
-} from '../store/slices/rooms';
+} from '../../store/slices/rooms';
 import './AddRoom.css'; 
 const AddRoom = (Hotel_id) => {
   const navigate = useNavigate();

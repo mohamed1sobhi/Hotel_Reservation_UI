@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviewDetail } from '../../store/slices/reviews';
-import Header from '../../components/Header';
+import Header from '../../components/Layout/Header';
 
 const ReviewDetail = () => {
   const { reviewId } = useParams();

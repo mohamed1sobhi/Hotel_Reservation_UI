@@ -1,7 +1,7 @@
 // src/components/FilterWithStar.jsx
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { filterHotels, fetchHotels } from "../store/slices/hotels";
+import { filterHotels, fetchHotels } from "../../store/slices/hotels";
 
 const FilterWithStar = ({ selectedStars, setSelectedStars }) => {
   const dispatch = useDispatch();

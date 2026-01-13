@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addRoomImage } from "../store/slices/room_images";
-import { fetchRoomDetail } from "../store/slices/rooms";
+import { addRoomImage } from "../../store/slices/room_images";
+import { fetchRoomDetail } from "../../store/slices/rooms";
 
 const AddRoomImage = () => {
   const { room_id } = useParams();

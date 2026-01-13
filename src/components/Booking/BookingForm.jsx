@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHotelDetail } from "../store/slices/hotels";
-import { addBooking } from "../store/slices/booking";
-import { fetchHotelRoomsType } from "../store/slices/rooms";
+import { fetchHotelDetail } from "../../store/slices/hotels";
+import { addBooking } from "../../store/slices/booking";
+import { fetchHotelRoomsType } from "../../store/slices/rooms";
 
 export default function BookingForm() {
   const userId = JSON.parse(localStorage.getItem("user"))?.id;

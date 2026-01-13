@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import Loader from "../components/Loader";
+import Loader from "../components/Common/Loader";
 import { useParams, useNavigate } from 'react-router-dom';
 import { userIsAdmin } from "../utils/permissions";
 const Home = () => {

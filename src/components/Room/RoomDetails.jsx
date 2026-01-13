@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomDetail } from "../store/slices/rooms";
-import { fetchRoomImages } from "../store/slices/room_images";
+import { fetchRoomDetail } from "../../store/slices/rooms";
+import { fetchRoomImages } from "../../store/slices/room_images";
 import { useParams, useNavigate } from "react-router-dom";
-import {   userIsCustomer } from  "../utils/permissions"; 
+import {   userIsCustomer } from  "../../utils/permissions"; 
 
 const RoomDetails = () => {
   const { _id } = useParams();

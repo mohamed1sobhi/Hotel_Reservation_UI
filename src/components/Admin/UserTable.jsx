@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { createUserForAdmin, fetchUsers } from '../store/slices/accounts';
+import { createUserForAdmin, fetchUsers } from '../../store/slices/accounts';
 
 const UserTable = ({ users }) => {
     const dispatch = useDispatch();
