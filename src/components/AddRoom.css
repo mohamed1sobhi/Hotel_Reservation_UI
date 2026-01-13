@@ -1,5 +1,5 @@
 :root {
-    --primary-gold: #CD9A5E;
+    --primary-gold: var(--bs-primary);
     --primary-cream: #F9F5F1;
     --primary-brown: #1A1A1A;
     --secondary-beige: #E8DF5;
