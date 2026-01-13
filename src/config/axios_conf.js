@@ -1,21 +1,18 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: API_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
-    // 'Authorization': `Bearer ${token}`
   },
   timeout: 10000,
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access");
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-      console.log("Sending token:", config.headers["Authorization"]);
-    }
     return config;
   },
   (error) => {
@@ -31,33 +28,15 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refresh = localStorage.getItem("refresh");
-        if (refresh) {
-          const response = await axios.post(
-            "http://127.0.0.1:8000/accounts/login/refresh/",
-            {
-              refresh: refresh,
-            }
-          );
-          localStorage.setItem("access", response.data.access);
-          axiosInstance.defaults.headers[
-            "Authorization"
-          ] = `Bearer ${response.data.access}`;
-          originalRequest.headers[
-            "Authorization"
-          ] = `Bearer ${response.data.access}`;
-          return axiosInstance(originalRequest); // Retry the original request
-        } else {
-          // No refresh token available
-          localStorage.removeItem("access");
-          localStorage.removeItem("refresh");
-          //   window.location.href = "/login";
-        }
+        await axios.post(
+          `${API_URL}/accounts/login/refresh/`,
+          {},
+          { withCredentials: true }
+        );
+        return axiosInstance(originalRequest);
       } catch (err) {
-        // Refresh token is invalid or expired
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
         window.location.href = "/";
+        return Promise.reject(err);
       }
     }
 
