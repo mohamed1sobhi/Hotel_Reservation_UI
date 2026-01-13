@@ -8,7 +8,7 @@
 
 
 :root {
-    --bs-primary: #CD9A5E;
+    --bs-primary: var(--bs-primary);
     --bs-secondary: #8A8A8A;
     --bs-success: #B45F3A;
     --bs-info: #E8DFD5;
@@ -17,7 +17,7 @@
   
     --bs-body-bg: #F9F5F1;
     --bs-body-color: #1A1A1A;
-    --bs-link-color: #CD9A5E;
+    --bs-link-color: var(--bs-primary);
   }
  .btn-color {
   background-color: var(--bs-info) !important;

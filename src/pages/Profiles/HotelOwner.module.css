@@ -1,0 +1,90 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #F9F5F1;
+  color: #1A1A1A;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #E8DFD5;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebarButton {
+  background-color: var(--bs-primary);
+  color: #F9F5F1;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+}
+
+.profileSection {
+  background-color: #FFFFFF;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.h2 {
+  color: #B45F3A;
+  margin-bottom: 20px;
+}
+
+.paragraph {
+  margin-bottom: 10px;
+}
+
+.editButton {
+  background-color: var(--bs-primary);
+  border: none;
+  padding: 10px 20px;
+  color: #F9F5F1;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.table {
+  background-color: #FFFFFF;
+  border: 1px solid #dee2e6;
+  font-size: 14px;
+  text-align: center;
+}
+
+.tableHead {
+  background-color: #E8DFD5;
+}
+
+.tableCellBold {
+  font-weight: bold;
+}
+
+.noBookings {
+  color: #8A8A8A;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--bs-primary);
+}
